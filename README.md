@@ -9,7 +9,7 @@ tiện lợi.
 
 # Hướng dẫn clone và commit code
 
-**Bước 1:** Clone git `git clone https://github.com/dat13298/EProject2_ProSmiles.git`
+**Bước 1:** Clone git `https://github.com/hungha1512/LibraryManagement_OOP_16.git`
 
 **Bước 2:** Tạo branch
 
