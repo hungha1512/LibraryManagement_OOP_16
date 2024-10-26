@@ -1,6 +1,6 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
-public abstract class Document {
+abstract class Document {
     protected String id;
     protected String title;
     protected String author;
