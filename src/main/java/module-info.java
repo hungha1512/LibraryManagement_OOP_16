@@ -8,6 +8,7 @@ module com.hunghq.librarymanagement {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires java.sql;
 
     opens com.hunghq.librarymanagement to javafx.fxml;
     exports com.hunghq.librarymanagement;

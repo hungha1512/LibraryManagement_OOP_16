@@ -1,42 +1,28 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Role {
-    private int id;
+
+    private int roleId;
     private String title;
     private String slug;
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<Permission> permissionList;
+    private String content;
+    private boolean isDeleted;
 
-    public Role() {
-        ;
+    public int getRoleId() {
+        return this.roleId;
     }
 
-    public Role(int id, String title, String slug, String description,
-                LocalDateTime createdAt, LocalDateTime updatedAt, List<Permission> permissionList) {
-        this.id = id;
-        this.title = title;
-        this.slug = slug;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.permissionList = permissionList;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -44,7 +30,7 @@ public class Role {
     }
 
     public String getSlug() {
-        return slug;
+        return this.slug;
     }
 
     public void setSlug(String slug) {
@@ -52,7 +38,7 @@ public class Role {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -60,7 +46,7 @@ public class Role {
     }
 
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
@@ -68,23 +54,56 @@ public class Role {
     }
 
     public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+        return this.updatedAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public List<Permission> getPermissionList() {
-        return permissionList;
+    public String getContent() {
+        return this.content;
     }
 
-    public void setPermissionList(List<Permission> permissionList) {
-        this.permissionList = permissionList;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    @Override
+    public boolean isIsDeleted() {
+        return this.isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public Role() {
+        this.isDeleted = false;
+    }
+
+    public Role(int roleId, String title, String slug, String description,
+    LocalDateTime createdAt, LocalDateTime updatedAt, String content, boolean isDeleted) {
+        this.roleId = roleId;
+        this.title = title;
+        this.slug = slug;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.content = content;
+        this.isDeleted = isDeleted;
+    }
+
     public String toString() {
-        return title;
+        return "Role[roleId=" + roleId
+        + ",title" + title
+        + ",slug" + slug
+        + ",description" + description
+        + ",createdAt" + createdAt
+        + ",updatedAt" + updatedAt
+        + ",content" + content
+        + ",isDeleted" + isDeleted
+        + "]";
     }
+
+
 }

@@ -1,43 +1,28 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
-import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
-
 import java.time.LocalDateTime;
 
 public class Permission {
-    private int id;
+    
+    private int permissionId;
     private String title;
     private String slug;
     private String description;
-    private EIsDeleted isDeleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String content;
+    private boolean isDeleted;
 
-    public Permission() {
-        ;
+    public int getPermissionId() {
+        return this.permissionId;
     }
 
-    public Permission(int id, String title, String slug, String description,
-                      EIsDeleted isDeleted, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.slug = slug;
-        this.description = description;
-        this.isDeleted = isDeleted;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setPermissionId(int permissionId) {
+        this.permissionId = permissionId;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -45,7 +30,7 @@ public class Permission {
     }
 
     public String getSlug() {
-        return slug;
+        return this.slug;
     }
 
     public void setSlug(String slug) {
@@ -53,23 +38,15 @@ public class Permission {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public EIsDeleted getActive() {
-        return isDeleted;
-    }
-
-    public void setActive(EIsDeleted isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
@@ -77,22 +54,55 @@ public class Permission {
     }
 
     public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+        return this.updatedAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    @Override
+    public String getContent() {
+        return this.content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public boolean isIsDeleted() {
+        return this.isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public Permission() {
+
+    }
+
+    public Permission(int permissionId, String title, String slug, String description,
+    LocalDateTime createdAt, LocalDateTime updatedAt, String content,
+    boolean isDeleted) {
+        this.permissionId = permissionId;
+        this.title = title;
+        this.slug = slug;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.content = content;
+        this.isDeleted = isDeleted;
+    }
+
     public String toString() {
-        return "Permission[id=" + id
-                + ", title=" + title
-                + ", slug=" + slug
-                + ", description=" + description
-                + ", isDeleted=" + isDeleted
-                + ", createdAt=" + createdAt
-                + ", updatedAt=" + updatedAt
-                + "]";
+        return "Permission[permissionId=" + permissionId
+        + ",title" + title
+        + ",slug" + slug
+        + ",description" + description
+        + ",createdAt" + createdAt
+        + ",updatedAt" + updatedAt
+        + ",content" + content
+        + ",isDeleted" + isDeleted
+        + "]";
     }
 }
