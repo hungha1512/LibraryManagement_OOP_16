@@ -1,4 +1,4 @@
-package com.hunghq.librarymanagement.Interface;
+package com.hunghq.librarymanagement;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

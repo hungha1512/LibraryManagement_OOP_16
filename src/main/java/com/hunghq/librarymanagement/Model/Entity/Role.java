@@ -4,11 +4,7 @@ import java.time.LocalDateTime;
 
 public class Role {
 
-<<<<<<< HEAD
     private String roleId;
-=======
-    private int roleId;
->>>>>>> cc31ce91e1f43171ca1bb986dee1f79adab998e0
     private String title;
     private String slug;
     private String description;
@@ -17,19 +13,11 @@ public class Role {
     private String content;
     private boolean isDeleted;
 
-<<<<<<< HEAD
     public String getRoleId() {
         return this.roleId;
     }
 
     public void setRoleId(String roleId) {
-=======
-    public int getRoleId() {
-        return this.roleId;
-    }
-
-    public void setRoleId(int roleId) {
->>>>>>> cc31ce91e1f43171ca1bb986dee1f79adab998e0
         this.roleId = roleId;
     }
 
@@ -93,14 +81,9 @@ public class Role {
         this.isDeleted = false;
     }
 
-<<<<<<< HEAD
     public Role(String roleId, String title, String slug, String description,
     LocalDateTime createdAt, LocalDateTime updatedAt, String content,
     boolean isDeleted) {
-=======
-    public Role(int roleId, String title, String slug, String description,
-    LocalDateTime createdAt, LocalDateTime updatedAt, String content, boolean isDeleted) {
->>>>>>> cc31ce91e1f43171ca1bb986dee1f79adab998e0
         this.roleId = roleId;
         this.title = title;
         this.slug = slug;
@@ -113,7 +96,6 @@ public class Role {
 
     public String toString() {
         return "Role[roleId=" + roleId
-<<<<<<< HEAD
         + ", title" + title
         + ", slug" + slug
         + ", description" + description
@@ -121,15 +103,6 @@ public class Role {
         + ", updatedAt" + updatedAt
         + ", content" + content
         + ", isDeleted" + isDeleted
-=======
-        + ",title" + title
-        + ",slug" + slug
-        + ",description" + description
-        + ",createdAt" + createdAt
-        + ",updatedAt" + updatedAt
-        + ",content" + content
-        + ",isDeleted" + isDeleted
->>>>>>> cc31ce91e1f43171ca1bb986dee1f79adab998e0
         + "]";
     }
 

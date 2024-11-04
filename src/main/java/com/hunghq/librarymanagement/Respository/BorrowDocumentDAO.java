@@ -73,11 +73,11 @@ public class BorrowDocumentDAO implements IRepository{
     }
 
     @Override
-    public BorrowDocument GetById(int borrowId) {
+    public BorrowDocument GetById(String borrowId) {
         String sql = "SELECT * FROM borrowDocuments WHERE borrowId = ?";
         BorrowDocument borrowDocument = null;
         try (PreparedStatement prS = con.prepareStatement(sql)){
-            prS.setInt(1, borrowId);
+            prS.setString(1, borrowId);
             ResultSet reS = prS.executeQuery();
 
             borrowDocument = Make(reS);
