@@ -72,11 +72,11 @@ public class Document {
         this.description = description;
     }
 
-    public int getnumRatings() {
+    public int getNumRatings() {
         return this.numRatings;
     }
 
-    public void setnumRatings(int numRatings) {
+    public void setNumRatings(int numRatings) {
         this.numRatings = numRatings;
     }
 

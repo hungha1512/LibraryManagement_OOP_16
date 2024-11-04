@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import com.hunghq.librarymanagement.IGeneric.IRepository;
 
+@SuppressWarnings("rawtypes")
 public class RoleDAO implements IRepository{
 
     @Override

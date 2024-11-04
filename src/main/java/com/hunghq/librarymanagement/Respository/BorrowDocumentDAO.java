@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
 import com.hunghq.librarymanagement.Enum.State;
@@ -24,30 +23,26 @@ public class BorrowDocumentDAO implements IRepository{
 
     @Override
     public BorrowDocument Make(ResultSet reS) {
-        BorrowDocument borrowDocument = null;
         try {
-            if (reS.next()) { 
-                borrowDocument = new BorrowDocument(); 
-                
-                borrowDocument.setBorrowId(reS.getString("borrowId"));
-
-                Document document = new Document(); 
-                document.setDocumentId(reS.getString("documentId")); 
-                borrowDocument.setDocument(Optional.of(document)); 
-                
-                User user = new User(); 
-                user.setUserId(reS.getString("userId")); 
-                borrowDocument.setUser(Optional.of(user));
-                
-                borrowDocument.setBorrowDate(reS.getTimestamp("borrowDate").toLocalDateTime()); 
-                borrowDocument.setDueDate(reS.getTimestamp("dueDate").toLocalDateTime()); 
-                borrowDocument.setReturnDate(reS.getTimestamp("returnDate").toLocalDateTime()); 
-                borrowDocument.setState(State.fromValue(reS.getString("state"))); 
-            }
+            DocumentDAO documentDAO = new DocumentDAO();
+            Document document = (Document) documentDAO.GetById(reS.getString("documentId"));
+    
+            UserDAO userDAO = new UserDAO();
+            User user = (User) userDAO.GetById(reS.getString("userId"));
+    
+            return new BorrowDocument(
+                reS.getString("borrowId"),
+                document,
+                user,
+                reS.getTimestamp("borrowDate").toLocalDateTime(),
+                reS.getTimestamp("dueDate").toLocalDateTime(),
+                reS.getTimestamp("returnDate").toLocalDateTime(),
+                State.fromValue(reS.getString("state"))
+            );
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
+            return null;
         }
-        return borrowDocument; 
     }
     
     @Override
@@ -80,7 +75,9 @@ public class BorrowDocumentDAO implements IRepository{
             prS.setString(1, borrowId);
             ResultSet reS = prS.executeQuery();
 
-            borrowDocument = Make(reS);
+            if (reS.next()) {
+                borrowDocument = Make(reS);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -132,71 +129,48 @@ public class BorrowDocumentDAO implements IRepository{
             return borrowDocuments;
         }
     
-        @Override
-        public void Update(Object entity) {
-            BorrowDocument borrowDocument = (BorrowDocument) entity;
-            String sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, borrowDate = ?, dueDate = ?, returnDate = ?, state = ? WHERE borrowId = ?";
+    @Override
+    public void Update(Object entity) {
+        BorrowDocument borrowDocument = (BorrowDocument) entity;
+        String sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, borrowDate = ?, dueDate = ?, returnDate = ?, state = ? WHERE borrowId = ?";
         
-            try (PreparedStatement prS = con.prepareStatement(sql)) {
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
                 
-                prS.setString(1, borrowDocument.getDocument().getDocumentId());
-                prS.setString(2, borrowDocument.getUser().getUserId());
-                prS.setTimestamp(3, Timestamp.valueOf(borrowDocument.getBorrowDate()));
-                prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getDueDate()));
-                prS.setTimestamp(5, Timestamp.valueOf(borrowDocument.getReturnDate()));
-                prS.setString(6, borrowDocument.getState().getState()); 
-                prS.setString(7, borrowDocument.getBorrowId()); 
+            prS.setString(1, borrowDocument.getDocument().getDocumentId());
+            prS.setString(2, borrowDocument.getUser().getUserId());
+            prS.setTimestamp(3, Timestamp.valueOf(borrowDocument.getBorrowDate()));
+            prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getDueDate()));
+            prS.setTimestamp(5, Timestamp.valueOf(borrowDocument.getReturnDate()));
+            prS.setString(6, borrowDocument.getState().getState()); 
+            prS.setString(7, borrowDocument.getBorrowId()); 
         
-                prS.executeUpdate();
+            prS.executeUpdate();
                 
-            } catch (SQLException e) {
+        } catch (SQLException e) {
                 e.printStackTrace();
-            }
         }
+    }
     
-        @Override
-        public void Delete(int id) {
-            String sql = "DELETE FROM borrowDocuments WHERE borrowId = ?";
-            try (PreparedStatement prS = con.prepareStatement(sql)) {
-                prS.setInt(1, id);
-    
-                prS.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    @Override
+    public void Delete(int id) {
+        String sql = "DELETE FROM borrowDocuments WHERE borrowId = ?";
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
+            prS.setInt(1, id);
+            prS.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    }
     
-        @Override
-        public Object Save(Object entity) {
-            BorrowDocument borrowDocument = (BorrowDocument) entity;
-            String sql;
-            
-            if (borrowDocument.getBorrowId() == null || borrowDocument.getBorrowId().isEmpty()) {
-                sql = "INSERT INTO borrowDocuments (documentId, userId, borrowDate," 
-                + " dueDate, returnDate, state) VALUES (?, ?, ?, ?, ?, ?)";
-            } else {
-                sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, borrowDate = ?," 
-                +" dueDate = ?, returnDate = ?, state = ? WHERE borrowId = ?";
-            }
-            
-            try (PreparedStatement prS = con.prepareStatement(sql)) {
-                
-                prS.setString(1, borrowDocument.getDocument().getDocumentId());
-                prS.setString(2, borrowDocument.getUser().getUserId());
-                prS.setTimestamp(3, Timestamp.valueOf(borrowDocument.getBorrowDate()));
-                prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getDueDate()));
-                prS.setTimestamp(5, Timestamp.valueOf(borrowDocument.getReturnDate()));
-                prS.setString(6, borrowDocument.getState().getState());
-        
-                if (borrowDocument.getBorrowId() != null && borrowDocument.getBorrowId().isEmpty()) {
-                    prS.setString(7, borrowDocument.getBorrowId());
-                }
-        
-                prS.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        
-            return borrowDocument;
-        }     
+    @Override
+    public Object Save(Object entity) {
+        BorrowDocument borrowDocument = (BorrowDocument) entity; 
+        if (GetById(borrowDocument.getBorrowId()) != null) {
+            Update(borrowDocument);
+        } else {
+            Add(borrowDocument);
+        }
+        return borrowDocument;
+    }
+
 }
