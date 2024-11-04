@@ -18,23 +18,21 @@ public class DocumentDAO implements IRepository{
     public Document Make(ResultSet reS) {
         Document document = null;
         try {
-            if (reS.next()) { 
-                document = new Document(
-                    reS.getString("documentId"), 
-                    reS.getString("title"),
-                    reS.getString("authorName"),
-                    reS.getDouble("rating"),
-                    reS.getString("genre"),
-                    reS.getString("language"),
-                    reS.getString("description"),
-                    reS.getInt("voterAmount"),
-                    reS.getString("publisher"),
-                    reS.getString("isbn"),
-                    reS.getTimestamp("publishedDate").toLocalDateTime(),
-                    reS.getString("award"),
-                    reS.getString("coverImg")
-                );
-            }
+            document = new Document(
+                reS.getString("documentId"), 
+                reS.getString("title"),
+                reS.getString("author"),
+                reS.getDouble("rating"),
+                reS.getString("genre"),
+                reS.getString("language"),
+                reS.getString("description"),
+                reS.getInt("numRatings"),
+                reS.getString("publisher"),
+                reS.getString("isbn"),
+                reS.getString("publishedDate"),
+                reS.getString("award"),
+                reS.getString("coverImg")
+            );
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -90,33 +88,6 @@ public class DocumentDAO implements IRepository{
     public Object Save(Object entity) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'Save'");
-    }
-
-    public static void main(String[] args) {
-        DocumentDAO documentDAO = new DocumentDAO();
-
-        // Kiểm tra với một documentId cụ thể, ví dụ "D001"
-        String documentId = "D001"; // Thay đổi ID này phù hợp với dữ liệu trong cơ sở dữ liệu
-        Document document = (Document) documentDAO.GetById(documentId);
-        
-        if (document != null) {
-            System.out.println("Document found:");
-            System.out.println("Document ID: " + document.getDocumentId());
-            System.out.println("Title: " + document.getTitle());
-            System.out.println("Author: " + document.getAuthorName());
-            System.out.println("Rating: " + document.getRating());
-            System.out.println("Genre: " + document.getGenre());
-            System.out.println("Language: " + document.getLanguage());
-            System.out.println("Description: " + document.getDescription());
-            System.out.println("Voter Amount: " + document.getVoterAmount());
-            System.out.println("Publisher: " + document.getPublisher());
-            System.out.println("ISBN: " + document.getIsbn());
-            System.out.println("Published Date: " + document.getPublishedDate());
-            System.out.println("Award: " + document.getAward());
-            System.out.println("Cover Image: " + document.getCoverImg());
-        } else {
-            System.out.println("No document found with ID: " + documentId);
-        }
     }
 
 }

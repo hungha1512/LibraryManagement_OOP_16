@@ -14,9 +14,9 @@ public class MySQLConnection {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Kết nối thành công!");
+            //System.out.println("Kết nối thành công!");
         } catch (SQLException e) {
-            System.out.println("Kết nối thất bại!");
+            //System.out.println("Kết nối thất bại!");
             e.printStackTrace();
         }
         return connection;
