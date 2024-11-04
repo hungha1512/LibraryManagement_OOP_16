@@ -13,5 +13,4 @@ public interface IRepository<T>
     T Save(T entity);
     void Update(T entity);
     void Delete(int id);
-    
 }

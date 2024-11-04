@@ -7,7 +7,7 @@ public class Review {
     private String reviewId;
     private Document document;
     private User user;
-    private int rating;
+    private double rating;
     private String reviewText;
     private LocalDateTime reviewDate;
 
@@ -35,11 +35,11 @@ public class Review {
         this.user = user;
     }
 
-    public int getRating() {
+    public double getRating() {
         return this.rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
@@ -63,7 +63,7 @@ public class Review {
         
     }
 
-    public Review(String reviewId, Document document, User user, int rating,
+    public Review(String reviewId, Document document, User user, double rating,
     String reviewText, LocalDateTime reviewDate) {
         this.reviewId = reviewId;
         this.document = document;
