@@ -4,18 +4,30 @@ import java.time.LocalDateTime;
 
 public class Review {
     
+<<<<<<< HEAD
     private String reviewId;
+=======
+    private int reviewId;
+>>>>>>> cc31ce91e1f43171ca1bb986dee1f79adab998e0
     private Document document;
     private User user;
     private int rating;
     private String reviewText;
     private LocalDateTime reviewDate;
 
+<<<<<<< HEAD
     public String getReviewId() {
         return this.reviewId;
     }
 
     public void setReviewId(String reviewId) {
+=======
+    public int getReviewId() {
+        return this.reviewId;
+    }
+
+    public void setReviewId(int reviewId) {
+>>>>>>> cc31ce91e1f43171ca1bb986dee1f79adab998e0
         this.reviewId = reviewId;
     }
 
@@ -63,7 +75,11 @@ public class Review {
         
     }
 
+<<<<<<< HEAD
     public Review(String reviewId, Document document, User user, int rating,
+=======
+    public Review(int reviewId, Document document, User user, int rating,
+>>>>>>> cc31ce91e1f43171ca1bb986dee1f79adab998e0
     String reviewText, LocalDateTime reviewDate) {
         this.reviewId = reviewId;
         this.document = document;
@@ -75,11 +91,19 @@ public class Review {
 
     public String toString() {
         return "Review[reviewId=" + reviewId
+<<<<<<< HEAD
         + ", document=" + document
         + ", user=" + user
         + ", rating=" + rating
         + ", reviewText=" + reviewText
         + ", reviewDate=" + reviewDate
+=======
+        + ",documentId=" + document.getDocumentId()
+        + ",userId=" + user.getUserId()
+        + ",rating=" + rating
+        + ",reviewText=" + reviewText
+        + ",reviewDate=" + reviewDate
+>>>>>>> cc31ce91e1f43171ca1bb986dee1f79adab998e0
         + "]";
     }
 
