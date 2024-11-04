@@ -1,7 +1,5 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
-import java.time.LocalDateTime;
-
 public class Document {
 
     private String documentId;
@@ -11,10 +9,10 @@ public class Document {
     private String genre;
     private String language;
     private String description;
-    private int voterAmount;
+    private int numRatings;
     private String publisher;
     private String isbn;
-    private LocalDateTime publishedDate;
+    private String publishedDate;
     private String award;
     private String coverImg;
 
@@ -74,12 +72,12 @@ public class Document {
         this.description = description;
     }
 
-    public int getVoterAmount() {
-        return this.voterAmount;
+    public int getnumRatings() {
+        return this.numRatings;
     }
 
-    public void setVoterAmount(int voterAmount) {
-        this.voterAmount = voterAmount;
+    public void setnumRatings(int numRatings) {
+        this.numRatings = numRatings;
     }
 
     public String getPublisher() {
@@ -98,11 +96,11 @@ public class Document {
         this.isbn = isbn;
     }
 
-    public LocalDateTime getPublishedDate() {
+    public String getPublishedDate() {
         return this.publishedDate;
     }
 
-    public void setPublishedDate(LocalDateTime publishedDate) {
+    public void setPublishedDate(String publishedDate) {
         this.publishedDate = publishedDate;
     }
 
@@ -125,8 +123,8 @@ public class Document {
     public Document() {;}
 
     public Document(String documentId, String title, String authorName, double rating,
-    String genre, String language, String description, int voterAmount, String publisher,
-    String isbn, LocalDateTime publishedDate, String award, String coverImg) {
+    String genre, String language, String description, int numRatings, String publisher,
+    String isbn, String publishedDate, String award, String coverImg) {
         this.documentId = documentId;
         this.title = title;
         this.authorName = authorName;
@@ -134,7 +132,7 @@ public class Document {
         this.genre = genre;
         this.language = language;
         this.description = description;
-        this.voterAmount = voterAmount;
+        this.numRatings = numRatings;
         this.publisher = publisher;
         this.isbn = isbn;
         this.publishedDate = publishedDate;
@@ -151,7 +149,7 @@ public class Document {
             ", genre=" + genre +
             ", language=" + language +
             ", description=" + description +
-            ", voterAmount=" + voterAmount +
+            ", numRatings=" + numRatings +
             ", publisher=" + publisher +
             ", isbn=" + isbn +
             ", publishedDate=" + publishedDate +
