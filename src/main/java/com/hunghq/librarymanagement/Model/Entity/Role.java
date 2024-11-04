@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Role {
 
-    private int roleId;
+    private String roleId;
     private String title;
     private String slug;
     private String description;
@@ -13,11 +13,11 @@ public class Role {
     private String content;
     private boolean isDeleted;
 
-    public int getRoleId() {
+    public String getRoleId() {
         return this.roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
 
@@ -81,8 +81,9 @@ public class Role {
         this.isDeleted = false;
     }
 
-    public Role(int roleId, String title, String slug, String description,
-    LocalDateTime createdAt, LocalDateTime updatedAt, String content, boolean isDeleted) {
+    public Role(String roleId, String title, String slug, String description,
+    LocalDateTime createdAt, LocalDateTime updatedAt, String content,
+    boolean isDeleted) {
         this.roleId = roleId;
         this.title = title;
         this.slug = slug;
@@ -95,13 +96,13 @@ public class Role {
 
     public String toString() {
         return "Role[roleId=" + roleId
-        + ",title" + title
-        + ",slug" + slug
-        + ",description" + description
-        + ",createdAt" + createdAt
-        + ",updatedAt" + updatedAt
-        + ",content" + content
-        + ",isDeleted" + isDeleted
+        + ", title" + title
+        + ", slug" + slug
+        + ", description" + description
+        + ", createdAt" + createdAt
+        + ", updatedAt" + updatedAt
+        + ", content" + content
+        + ", isDeleted" + isDeleted
         + "]";
     }
 

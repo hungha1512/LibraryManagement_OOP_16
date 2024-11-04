@@ -3,7 +3,7 @@ package com.hunghq.librarymanagement.Model.Entity;
 import java.time.LocalDateTime;
 public class User {
 
-    private int userId;
+    private String userId;
     private String fullName;
     private String userName;
     private String passwordHash;
@@ -12,11 +12,11 @@ public class User {
     private LocalDateTime joinDate;
     private LocalDateTime dateOfBirth;
 
-    public int getUserId() {
+    public String getUserId() {
         return this.userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -76,17 +76,15 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public User() {
+    public User() {;}
 
-    }
-
-    public User(int userId, String fullName, String userName, String passwordHash
+    public User(String userId, String fullName, String userName, String passwordHash
     , String email, String phone, LocalDateTime joinDate, LocalDateTime dateOfBirth) {
         this.userId = userId;
         this.fullName = fullName;
         this.userName = userName;
         this.passwordHash = passwordHash;
-        this.email = email;
+        this.email = email; 
         this.phone = phone;
         this.joinDate = joinDate;
         this.dateOfBirth = dateOfBirth;
@@ -94,14 +92,14 @@ public class User {
 
     public String toString() {
         return "User[userId=" + userId
-        + ",fullName=" + fullName
-        + ",userName=" + userName
-        + ",passwordHash=" + passwordHash
-        + ",email=" + email
-        + ",phone=" + phone
-        + ",joinDate=" + joinDate
-        + ",dateOfBirth=" + dateOfBirth
-        + "]";
+        + ", fullName=" + fullName
+        + ", userName=" + userName
+        + ", passwordHash=" + passwordHash
+        + ", email=" + email
+        + ", phone=" + phone
+        + ", joinDate=" + joinDate
+        + ", dateOfBirth=" + dateOfBirth
+        + "]"; 
     }
 
 }

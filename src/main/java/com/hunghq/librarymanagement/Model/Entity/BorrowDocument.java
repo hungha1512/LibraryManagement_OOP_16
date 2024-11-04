@@ -1,10 +1,14 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import com.hunghq.librarymanagement.Enum.State;
+
 
 public class BorrowDocument {
 
-    private int borrowId;
+    private String borrowId;
     private Document document;
     private User user;
     private LocalDateTime borrowDate;
@@ -12,17 +16,11 @@ public class BorrowDocument {
     private LocalDateTime returnDate;
     private State state;
 
-    private enum State {
-        BORROWED,
-        RETURNED,
-        OVERDUE
-    };
-
-    public int getBorrowId() {
+    public String getBorrowId() {
         return this.borrowId;
     }
 
-    public void setBorrowId(int borrowId) {
+    public void setBorrowId(String borrowId) {
         this.borrowId = borrowId;
     }
 
@@ -30,16 +28,16 @@ public class BorrowDocument {
         return this.document;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setDocument(Optional<Document> document) {
+        this.document = document.orElse(null);
     }
 
     public User getUser() {
         return this.user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Optional<User> user) {
+        this.user = user.orElse(null);
     }
 
     public LocalDateTime getBorrowDate() {
@@ -65,16 +63,12 @@ public class BorrowDocument {
     public void setReturnDate(LocalDateTime returnDate) {
         this.returnDate = returnDate;
     }
-    
+
     public State getState() {
-        return state;
+        return this.state;
     }
 
     public void setState(State state) {
-        this.state = state;
-    }
-
-    public BorrowDocument(State state) {
         this.state = state;
     }
 
@@ -82,7 +76,7 @@ public class BorrowDocument {
         
     }
 
-    public BorrowDocument(int borrowId, Document document, User user,
+    public BorrowDocument(String borrowId, Document document, User user,
     LocalDateTime borrowDate, LocalDateTime dueDate, LocalDateTime returnDate, State state) {
         this.borrowId = borrowId;
         this.document = document;
@@ -91,16 +85,16 @@ public class BorrowDocument {
         this.dueDate = dueDate;
         this.returnDate = returnDate;
         this.state = state;
-    }
+    } 
 
     public String toString() {
         return "BorrowDocument[borrowId=" + borrowId
-        + ",documentId=" + document.getDocumentId()
-        + ",userId=" + user.getUserId()
-        + ",borrowDate=" + borrowDate
-        + ",dueDate=" + dueDate
-        + ",returnDate=" + returnDate
-        + ",state=" + state
+        + ", document=" + document
+        + ", user=" + user
+        + ", borrowDate=" + borrowDate
+        + ", dueDate=" + dueDate
+        + ", returnDate=" + returnDate
+        + ", state=" + state
         + "]";
     }
 }

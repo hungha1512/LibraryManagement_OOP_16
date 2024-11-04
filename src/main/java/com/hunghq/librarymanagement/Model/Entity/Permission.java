@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Permission {
     
-    private int permissionId;
+    private String permissionId;
     private String title;
     private String slug;
     private String description;
@@ -13,11 +13,11 @@ public class Permission {
     private String content;
     private boolean isDeleted;
 
-    public int getPermissionId() {
+    public String getPermissionId() {
         return this.permissionId;
     }
 
-    public void setPermissionId(int permissionId) {
+    public void setPermissionId(String permissionId) {
         this.permissionId = permissionId;
     }
 
@@ -81,7 +81,7 @@ public class Permission {
 
     }
 
-    public Permission(int permissionId, String title, String slug, String description,
+    public Permission(String permissionId, String title, String slug, String description,
     LocalDateTime createdAt, LocalDateTime updatedAt, String content,
     boolean isDeleted) {
         this.permissionId = permissionId;
@@ -96,13 +96,13 @@ public class Permission {
 
     public String toString() {
         return "Permission[permissionId=" + permissionId
-        + ",title" + title
-        + ",slug" + slug
-        + ",description" + description
-        + ",createdAt" + createdAt
-        + ",updatedAt" + updatedAt
-        + ",content" + content
-        + ",isDeleted" + isDeleted
+        + ", title" + title
+        + ", slug" + slug
+        + ", description" + description
+        + ", createdAt" + createdAt
+        + ", updatedAt" + updatedAt
+        + ", content" + content
+        + ", isDeleted" + isDeleted
         + "]";
     }
 }

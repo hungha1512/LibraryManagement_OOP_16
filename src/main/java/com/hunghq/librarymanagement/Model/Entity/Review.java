@@ -4,18 +4,18 @@ import java.time.LocalDateTime;
 
 public class Review {
     
-    private int reviewId;
+    private String reviewId;
     private Document document;
     private User user;
     private int rating;
     private String reviewText;
     private LocalDateTime reviewDate;
 
-    public int getReviewId() {
+    public String getReviewId() {
         return this.reviewId;
     }
 
-    public void setReviewId(int reviewId) {
+    public void setReviewId(String reviewId) {
         this.reviewId = reviewId;
     }
 
@@ -63,7 +63,7 @@ public class Review {
         
     }
 
-    public Review(int reviewId, Document document, User user, int rating,
+    public Review(String reviewId, Document document, User user, int rating,
     String reviewText, LocalDateTime reviewDate) {
         this.reviewId = reviewId;
         this.document = document;
@@ -75,11 +75,11 @@ public class Review {
 
     public String toString() {
         return "Review[reviewId=" + reviewId
-        + ",documentId=" + document.getDocumentId()
-        + ",userId=" + user.getUserId()
-        + ",rating=" + rating
-        + ",reviewText=" + reviewText
-        + ",reviewDate=" + reviewDate
+        + ", document=" + document
+        + ", user=" + user
+        + ", rating=" + rating
+        + ", reviewText=" + reviewText
+        + ", reviewDate=" + reviewDate
         + "]";
     }
 

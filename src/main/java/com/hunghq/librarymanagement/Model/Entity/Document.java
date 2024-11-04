@@ -1,20 +1,28 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
+import java.time.LocalDateTime;
+
 public class Document {
 
-    private int documentId;
+    private String documentId;
     private String title;
-    private Author author;
+    private String authorName;
+    private double rating;
+    private String genre;
+    private String language;
+    private String description;
+    private int voterAmount;
     private String publisher;
     private String isbn;
-    private int yearPublished;
-    private int quantity;
+    private LocalDateTime publishedDate;
+    private String award;
+    private String coverImg;
 
-    public int getDocumentId() {
+    public String getDocumentId() {
         return this.documentId;
     }
 
-    public void setDocumentId(int documentId) {
+    public void setDocumentId(String documentId) {
         this.documentId = documentId;
     }
 
@@ -26,12 +34,52 @@ public class Document {
         this.title = title;
     }
 
-    public Author getAuthor() {
-        return this.author;
+    public String getAuthorName() {
+        return this.authorName;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public double getRating() {
+        return this.rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getGenre() {
+        return this.genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getLanguage() {
+        return this.language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getVoterAmount() {
+        return this.voterAmount;
+    }
+
+    public void setVoterAmount(int voterAmount) {
+        this.voterAmount = voterAmount;
     }
 
     public String getPublisher() {
@@ -50,47 +98,66 @@ public class Document {
         this.isbn = isbn;
     }
 
-    public int getYearPublished() {
-        return this.yearPublished;
+    public LocalDateTime getPublishedDate() {
+        return this.publishedDate;
     }
 
-    public void setYearPublished(int yearPublished) {
-        this.yearPublished = yearPublished;
+    public void setPublishedDate(LocalDateTime publishedDate) {
+        this.publishedDate = publishedDate;
     }
 
-    public int getQuantity() {
-        return this.quantity;
+    public String getAward() {
+        return this.award;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-    
-
-    public Document() {
-
+    public void setAward(String award) {
+        this.award = award;
     }
 
-    public Document(int documentId, String title, Author author,
-                String publisher, String isbn, int yearPublished, int quantity) {
+    public String getCoverImg() {
+        return this.coverImg;
+    }
+
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
+    }
+
+    public Document() {;}
+
+    public Document(String documentId, String title, String authorName, double rating,
+    String genre, String language, String description, int voterAmount, String publisher,
+    String isbn, LocalDateTime publishedDate, String award, String coverImg) {
         this.documentId = documentId;
         this.title = title;
-        this.author = author;
+        this.authorName = authorName;
+        this.rating = rating;
+        this.genre = genre;
+        this.language = language;
+        this.description = description;
+        this.voterAmount = voterAmount;
         this.publisher = publisher;
         this.isbn = isbn;
-        this.yearPublished = yearPublished;
-        this.quantity = quantity;
+        this.publishedDate = publishedDate;
+        this.award = award;
+        this.coverImg = coverImg;
     }
 
     public String toString() {
-        return "Document[documentId=" + documentId
-        + ",title=" + title
-        + ",authorId=" + author.getAuthorId()
-        + ",publisher=" + publisher
-        + ",isbn=" + isbn
-        + ",yearPublished=" + yearPublished
-        + ",quantity=" + quantity 
-        + "]";
+        return "Document[" +
+            "documentId=" + documentId +
+            ", title=" + title +
+            ", authorName=" + authorName +
+            ", rating=" + rating +
+            ", genre=" + genre +
+            ", language=" + language +
+            ", description=" + description +
+            ", voterAmount=" + voterAmount +
+            ", publisher=" + publisher +
+            ", isbn=" + isbn +
+            ", publishedDate=" + publishedDate +
+            ", award=" + award +
+            ", coverImg=" + coverImg +
+            "]";
     }
 
 }
