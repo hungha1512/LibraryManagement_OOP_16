@@ -1,23 +1,39 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
+import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
+
 import java.time.LocalDateTime;
 
 public class Permission {
-    
-    private String permissionId;
+    private int permissionId;
     private String title;
     private String slug;
     private String description;
+    private EIsDeleted isDeleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String content;
-    private boolean isDeleted;
 
-    public String getPermissionId() {
+    public Permission() {
+        ;
+    }
+
+    public Permission(int permissionId, String title, String slug, String description, EIsDeleted isDeleted,
+                      LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.permissionId = permissionId;
+        this.title = title;
+        this.slug = slug;
+        this.description = description;
+        this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+
+    public int getPermissionId() {
         return this.permissionId;
     }
 
-    public void setPermissionId(String permissionId) {
+    public void setPermissionId(int permissionId) {
         this.permissionId = permissionId;
     }
 
@@ -61,48 +77,22 @@ public class Permission {
         this.updatedAt = updatedAt;
     }
 
-    public String getContent() {
-        return this.content;
+    public EIsDeleted getIsDeleted() {
+        return isDeleted;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public boolean isIsDeleted() {
-        return this.isDeleted;
-    }
-
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public Permission() {
-
-    }
-
-    public Permission(String permissionId, String title, String slug, String description,
-    LocalDateTime createdAt, LocalDateTime updatedAt, String content,
-    boolean isDeleted) {
-        this.permissionId = permissionId;
-        this.title = title;
-        this.slug = slug;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.content = content;
+    public void setIsDeleted(EIsDeleted isDeleted) {
         this.isDeleted = isDeleted;
     }
 
     public String toString() {
         return "Permission[permissionId=" + permissionId
-        + ", title" + title
-        + ", slug" + slug
-        + ", description" + description
-        + ", createdAt" + createdAt
-        + ", updatedAt" + updatedAt
-        + ", content" + content
-        + ", isDeleted" + isDeleted
-        + "]";
+                + ", title" + title
+                + ", slug" + slug
+                + ", description" + description
+                + ", isDeleted" + isDeleted
+                + ", createdAt" + createdAt
+                + ", updatedAt" + updatedAt
+                + "]";
     }
 }
