@@ -22,13 +22,13 @@ public class BorrowDocumentDAO implements IRepository{
     private static final Connection con = MySQLConnection.getConnection();
 
     @Override
-    public BorrowDocument Make(ResultSet reS) {
+    public BorrowDocument make(ResultSet reS) {
         try {
             DocumentDAO documentDAO = new DocumentDAO();
-            Document document = (Document) documentDAO.GetById(reS.getString("documentId"));
+            Document document = (Document) documentDAO.getById(reS.getString("documentId"));
     
             UserDAO userDAO = new UserDAO();
-            User user = (User) userDAO.GetById(reS.getString("userId"));
+            User user = (User) userDAO.getById(reS.getString("userId"));
     
             return new BorrowDocument(
                 reS.getString("borrowId"),
@@ -46,7 +46,7 @@ public class BorrowDocumentDAO implements IRepository{
     }
     
     @Override
-    public void Add(Object entity) {
+    public void add(Object entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
         
         String sql = "INSERT INTO borrowDocuments (borrowId, documentId, userId, borrowDate, dueDate, returnDate, state) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -68,7 +68,7 @@ public class BorrowDocumentDAO implements IRepository{
     }
 
     @Override
-    public BorrowDocument GetById(String borrowId) {
+    public BorrowDocument getById(String borrowId) {
         String sql = "SELECT * FROM borrowDocuments WHERE borrowId = ?";
         BorrowDocument borrowDocument = null;
         try (PreparedStatement prS = con.prepareStatement(sql)){
@@ -76,7 +76,7 @@ public class BorrowDocumentDAO implements IRepository{
             ResultSet reS = prS.executeQuery();
 
             if (reS.next()) {
-                borrowDocument = Make(reS);
+                borrowDocument = make(reS);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,13 +85,13 @@ public class BorrowDocumentDAO implements IRepository{
     }
 
     @Override
-    public List<BorrowDocument> GetAll() {
+    public List<BorrowDocument> getAll() {
         List<BorrowDocument> borrowDocuments = new ArrayList<>();
         String sql = "SELECT * FROM borrowDocuments"; 
         try (Statement stM = con.createStatement();
             ResultSet reS = stM.executeQuery(sql)) {
             while (reS.next()) {
-                BorrowDocument borrowDocument = Make(reS);
+                BorrowDocument borrowDocument = make(reS);
 
                 if (borrowDocument != null) {
                     borrowDocuments.add(borrowDocument);
@@ -104,7 +104,7 @@ public class BorrowDocumentDAO implements IRepository{
     }
 
     @Override
-    public List<BorrowDocument> FindByName(String name) {
+    public List<BorrowDocument> findByName(String name) {
             List<BorrowDocument> borrowDocuments = new ArrayList<>();
             String sql = "SELECT bd.*, d.*, u.* FROM borrowDocuments bd " +
                          "JOIN documents d ON bd.documentId = d.documentId " +
@@ -116,8 +116,7 @@ public class BorrowDocumentDAO implements IRepository{
         
                 try (ResultSet reS = prT.executeQuery()) {
                     while (reS.next()) {
-                        
-                        BorrowDocument borrowDocument = Make(reS);
+                        BorrowDocument borrowDocument = make(reS);
                         if (borrowDocument != null) {
                             borrowDocuments.add(borrowDocument);
                         }
@@ -130,7 +129,7 @@ public class BorrowDocumentDAO implements IRepository{
         }
     
     @Override
-    public void Update(Object entity) {
+    public void update(Object entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
         String sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, borrowDate = ?, dueDate = ?, returnDate = ?, state = ? WHERE borrowId = ?";
         
@@ -152,7 +151,7 @@ public class BorrowDocumentDAO implements IRepository{
     }
     
     @Override
-    public void Delete(int id) {
+    public void delete(int id) {
         String sql = "DELETE FROM borrowDocuments WHERE borrowId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setInt(1, id);
@@ -163,12 +162,12 @@ public class BorrowDocumentDAO implements IRepository{
     }
     
     @Override
-    public Object Save(Object entity) {
+    public Object save(Object entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity; 
-        if (GetById(borrowDocument.getBorrowId()) != null) {
-            Update(borrowDocument);
+        if (getById(borrowDocument.getBorrowId()) != null) {
+            update(borrowDocument);
         } else {
-            Add(borrowDocument);
+            add(borrowDocument);
         }
         return borrowDocument;
     }

@@ -1,19 +1,43 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
-import java.time.LocalDateTime;
-public class User {
+import com.hunghq.librarymanagement.Model.Enum.EGender;
 
+import java.time.LocalDateTime;
+
+public class User {
     private String userId;
     private String fullName;
-    private String userName;
     private String passwordHash;
+    private EGender gender;
     private String email;
     private String phone;
     private LocalDateTime joinDate;
     private LocalDateTime dateOfBirth;
+    private String imagePath;
+    private Role role;
+    private String otp;
+
+    public User() {
+        ;
+    }
+
+    public User(String userId, String fullName, String passwordHash, EGender gender, String email, String phone,
+                LocalDateTime joinDate, LocalDateTime dateOfBirth, String imagePath, Role role, String otp) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.passwordHash = passwordHash;
+        this.gender = gender;
+        this.email = email;
+        this.phone = phone;
+        this.joinDate = joinDate;
+        this.dateOfBirth = dateOfBirth;
+        this.imagePath = imagePath;
+        this.role = role;
+        this.otp = otp;
+    }
 
     public String getUserId() {
-        return this.userId;
+        return userId;
     }
 
     public void setUserId(String userId) {
@@ -21,31 +45,31 @@ public class User {
     }
 
     public String getFullName() {
-        return this.fullName;
+        return fullName;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public String getPasswordHash() {
-        return this.passwordHash;
+        return passwordHash;
     }
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
 
+    public EGender getGender() {
+        return gender;
+    }
+
+    public void setGender(EGender gender) {
+        this.gender = gender;
+    }
+
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public void setEmail(String email) {
@@ -53,7 +77,7 @@ public class User {
     }
 
     public String getPhone() {
-        return this.phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
@@ -61,7 +85,7 @@ public class User {
     }
 
     public LocalDateTime getJoinDate() {
-        return this.joinDate;
+        return joinDate;
     }
 
     public void setJoinDate(LocalDateTime joinDate) {
@@ -69,37 +93,46 @@ public class User {
     }
 
     public LocalDateTime getDateOfBirth() {
-        return this.dateOfBirth;
+        return dateOfBirth;
     }
 
     public void setDateOfBirth(LocalDateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public User() {;}
-
-    public User(String userId, String fullName, String userName, String passwordHash
-    , String email, String phone, LocalDateTime joinDate, LocalDateTime dateOfBirth) {
-        this.userId = userId;
-        this.fullName = fullName;
-        this.userName = userName;
-        this.passwordHash = passwordHash;
-        this.email = email; 
-        this.phone = phone;
-        this.joinDate = joinDate;
-        this.dateOfBirth = dateOfBirth;
+    public String getImagePath() {
+        return imagePath;
     }
 
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    @Override
     public String toString() {
-        return "User[userId=" + userId
-        + ", fullName=" + fullName
-        + ", userName=" + userName
-        + ", passwordHash=" + passwordHash
-        + ", email=" + email
-        + ", phone=" + phone
-        + ", joinDate=" + joinDate
-        + ", dateOfBirth=" + dateOfBirth
-        + "]"; 
+        return "User{" +
+                "fullName='" + fullName + '\'' +
+                ", gender=" + gender +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", role=" + role +
+                '}';
     }
-
 }

@@ -1,23 +1,42 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
+import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Role {
-
-    private String roleId;
+    private int roleId;
     private String title;
     private String slug;
     private String description;
+    private EIsDeleted isDeleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String content;
-    private boolean isDeleted;
+    private List<Permission> permissions;
 
-    public String getRoleId() {
+    public Role() {
+        ;
+    }
+
+    public Role(int roleId, String title, String slug, String description, EIsDeleted isDeleted,
+                LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.roleId = roleId;
+        this.title = title;
+        this.slug = slug;
+        this.description = description;
+        this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.permissions = new ArrayList<>();
+    }
+
+    public int getRoleId() {
         return this.roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 
@@ -45,6 +64,14 @@ public class Role {
         this.description = description;
     }
 
+    public EIsDeleted getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(EIsDeleted isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
@@ -61,49 +88,16 @@ public class Role {
         this.updatedAt = updatedAt;
     }
 
-    public String getContent() {
-        return this.content;
+    public List<Permission> getPermissions() {
+        return permissions;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public boolean isIsDeleted() {
-        return this.isDeleted;
-    }
-
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public Role() {
-        this.isDeleted = false;
-    }
-
-    public Role(String roleId, String title, String slug, String description,
-    LocalDateTime createdAt, LocalDateTime updatedAt, String content,
-    boolean isDeleted) {
-        this.roleId = roleId;
-        this.title = title;
-        this.slug = slug;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.content = content;
-        this.isDeleted = isDeleted;
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     public String toString() {
-        return "Role[roleId=" + roleId
-        + ", title" + title
-        + ", slug" + slug
-        + ", description" + description
-        + ", createdAt" + createdAt
-        + ", updatedAt" + updatedAt
-        + ", content" + content
-        + ", isDeleted" + isDeleted
-        + "]";
+        return "Role[" + title + "]";
     }
 
 

@@ -17,7 +17,7 @@ public class DocumentDAO implements IRepository{
     private static final Connection con = MySQLConnection.getConnection();
     
     @Override
-    public Document Make(ResultSet reS) {
+    public Document make(ResultSet reS) {
         Document document = null;
         try {
             document = new Document(
@@ -42,7 +42,7 @@ public class DocumentDAO implements IRepository{
     }
 
     @Override
-    public void Add(Object entity) {
+    public void add(Object entity) {
         Document document = (Document) entity;
         String sql = "INSERT INTO documents (documentId, title, author, rating, genre, language, description, numRatings, publisher, isbn, publishedDate, award, coverImg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -68,14 +68,14 @@ public class DocumentDAO implements IRepository{
     }
 
     @Override
-    public Object GetById(String id) {
+    public Object getById(String id) {
         String sql = "SELECT * FROM documents WHERE documentId = ?";
         Document document = null; 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, id);
             ResultSet reS = prS.executeQuery();
             if (reS.next()) {
-                document = Make(reS);
+                document = make(reS);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -83,13 +83,13 @@ public class DocumentDAO implements IRepository{
         return document; 
     }
 
-    public List<Document> GetAll() {
+    public List<Document> getAll() {
         List<Document> documents = new ArrayList<>();
         String sql = "SELECT * FROM documents";
         try (PreparedStatement prS = con.prepareStatement(sql);
             ResultSet reS = prS.executeQuery()) {
             while (reS.next()) {
-                documents.add(Make(reS));
+                documents.add(make(reS));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,7 +98,7 @@ public class DocumentDAO implements IRepository{
     }
 
     @Override
-    public List<Document> FindByName(String name) {
+    public List<Document> findByName(String name) {
         List<Document> documents = new ArrayList<>();
         String sql = "SELECT * FROM documents WHERE title LIKE ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -106,7 +106,7 @@ public class DocumentDAO implements IRepository{
             ResultSet reS = prS.executeQuery();
 
             while (reS.next()) {
-                documents.add(Make(reS));
+                documents.add(make(reS));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,7 +115,7 @@ public class DocumentDAO implements IRepository{
     }
 
     @Override
-    public void Update(Object entity) {
+    public void update(Object entity) {
         Document document = (Document) entity;
         String sql = "UPDATE documents SET title = ?, author = ?, rating = ?, genre = ?, language = ?, description = ?, numRatings = ?, publisher = ?, isbn = ?, publishedDate = ?, award = ?, coverImg = ? WHERE documentId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -141,7 +141,7 @@ public class DocumentDAO implements IRepository{
     }
 
     @Override
-    public void Delete(int id) {
+    public void delete(int id) {
         String sql = "DELETE FROM documents WHERE documentId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setInt(1, id);
@@ -153,12 +153,12 @@ public class DocumentDAO implements IRepository{
     }
 
     @Override
-    public Object Save(Object entity) {
+    public Object save(Object entity) {
         Document document = (Document) entity;
-        if (GetById(document.getDocumentId()) != null) {
-            Update(document);
+        if (getById(document.getDocumentId()) != null) {
+            update(document);
         } else {
-            Add(document);
+            add(document);
         }
         return document;
     }
