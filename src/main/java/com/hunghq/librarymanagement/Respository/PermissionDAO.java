@@ -8,49 +8,49 @@ import com.hunghq.librarymanagement.IGeneric.IRepository;
 public class PermissionDAO implements IRepository{
 
     @Override
-    public void Add(Object entity) {
+    public void add(Object entity) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'Add'");
+        throw new UnsupportedOperationException("Unimplemented method 'add'");
     }
 
     @Override
-    public Object GetById(String id) {
+    public Object getById(String id) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'GetById'");
+        throw new UnsupportedOperationException("Unimplemented method 'getById'");
     }
 
     @Override
-    public List GetAll() {
+    public List getAll() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'GetAll'");
+        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
     }
 
     @Override
-    public List FindByName(String name) {
+    public List findByName(String name) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'FindByName'");
+        throw new UnsupportedOperationException("Unimplemented method 'findByName'");
     }
 
     @Override
-    public void Update(Object entity) {
+    public void update(Object entity) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'Update'");
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void Delete(int id) {
+    public void delete(int id) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'Delete'");
+        throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }
 
     @Override
-    public Object Save(Object entity) {
+    public Object save(Object entity) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'Save'");
     }
 
     @Override
-    public Object Make(ResultSet reS) {
+    public Object make(ResultSet reS) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'Make'");
     }
