@@ -5,12 +5,12 @@ import java.util.List;
 
 public interface IRepository<T>
 {
-    T Make(ResultSet reS);
-    void Add(T entity);
-    T GetById(String id);
-    List<T> GetAll();
-    List<T> FindByName(String name);
-    T Save(T entity);
-    void Update(T entity);
-    void Delete(int id);
+    T make(ResultSet reS);
+    void add(T entity);
+    T getById(String id);
+    List<T> getAll();
+    List<T> findByName(String name);
+    T save(T entity);
+    void update(T entity);
+    void delete(int id);
 }

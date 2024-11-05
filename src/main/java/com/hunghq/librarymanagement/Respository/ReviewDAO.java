@@ -19,7 +19,7 @@ public class ReviewDAO implements IRepository{
 
     private static final Connection con = MySQLConnection.getConnection();
     @Override
-    public Review Make(ResultSet reS) {
+    public Review make(ResultSet reS) {
         Review review = null;
         
         try {
@@ -45,7 +45,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public void Add(Object entity) {
+    public void add(Object entity) {
         Review review = (Review) entity;
         String sql = "INSERT INTO reviews (reviewId, documentId, userId, "
                    + "rating, reviewText, reviewDate) " 
@@ -66,7 +66,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public Object GetById(String id) {
+    public Object getById(String id) {
         String sql = "SELECT * FROM reviews WHERE reviewId = ?";
         Review review = null;
         
@@ -75,7 +75,7 @@ public class ReviewDAO implements IRepository{
             ResultSet reS = prS.executeQuery(); 
 
             if (reS.next()) {
-                review = Make(reS);
+                review = make(reS);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,7 +85,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public List<Review> GetAll() {
+    public List<Review> getAll() {
         String sql = "SELECT * FROM reviews";
         List<Review> reviews = new ArrayList<>();
         
@@ -93,7 +93,7 @@ public class ReviewDAO implements IRepository{
             ResultSet reS = prS.executeQuery();
 
             while (reS.next()) {
-                reviews.add(Make(reS));
+                reviews.add(make(reS));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public List<Review> FindByName(String name) {
+    public List<Review> findByName(String name) {
         String sql = "SELECT * FROM reviews r " 
                    + "JOIN documents d ON r.documentId = d.documentId " 
                    + "WHERE d.title LIKE ?";
@@ -114,7 +114,7 @@ public class ReviewDAO implements IRepository{
             ResultSet reS = prS.executeQuery();
 
             while (reS.next()) {
-                reviews.add(Make(reS));
+                reviews.add(make(reS));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,7 +124,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public void Update(Object entity) {
+    public void update(Object entity) {
         Review review = (Review) entity;
         String sql = "UPDATE reviews SET documentId = ?, userId = ?, rating = ?, "
                    + "reviewText = ?, reviewDate = ? WHERE reviewId = ?";
@@ -144,7 +144,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public void Delete(int id) {
+    public void delete(int id) {
         String sql = "DELETE FROM reviews WHERE reviewId = ?";
         
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -157,13 +157,13 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public Object Save(Object entity) {
+    public Object save(Object entity) {
         Review review = (Review) entity;
         
-        if (GetById(review.getReviewId()) != null) {
-            Update(review);
+        if (getById(review.getReviewId()) != null) {
+            update(review);
         } else {
-            Add(review);
+            add(review);
         }
         
         return review;
