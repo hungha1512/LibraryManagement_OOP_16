@@ -16,6 +16,10 @@ public class Role {
     private LocalDateTime updatedAt;
     private List<Permission> permissions;
 
+    public Role() {
+        ;
+    }
+
     public Role(int roleId, String title, String slug, String description, EIsDeleted isDeleted,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.roleId = roleId;
