@@ -1,13 +1,13 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
-import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
+
 public class Role {
-    private int roleId;
+    private String roleId;
     private String title;
     private String slug;
     private String description;
@@ -20,7 +20,7 @@ public class Role {
         ;
     }
 
-    public Role(int roleId, String title, String slug, String description, EIsDeleted isDeleted,
+    public Role(String roleId, String title, String slug, String description, EIsDeleted isDeleted,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.roleId = roleId;
         this.title = title;
@@ -32,11 +32,11 @@ public class Role {
         this.permissions = new ArrayList<>();
     }
 
-    public int getRoleId() {
+    public String getRoleId() {
         return this.roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
 

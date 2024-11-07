@@ -1,11 +1,11 @@
 package com.hunghq.librarymanagement.Respository;
 
-import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +31,16 @@ public class BorrowDocumentDAO implements IRepository{
             User user = (User) userDAO.getById(reS.getString("userId"));
     
             return new BorrowDocument(
-                reS.getString("borrowId"),
-                document,
-                user,
-                reS.getTimestamp("borrowDate").toLocalDateTime(),
-                reS.getTimestamp("dueDate").toLocalDateTime(),
-                reS.getTimestamp("returnDate").toLocalDateTime(),
-                State.fromValue(reS.getString("state"))
+                    reS.getString("borrowId"),
+                    document,
+                    user,
+                    reS.getTimestamp("borrowDate") != null 
+                    ? reS.getTimestamp("borrowDate").toLocalDateTime() : null,
+                    reS.getTimestamp("dueDate") != null 
+                    ? reS.getTimestamp("dueDate").toLocalDateTime() : null,
+                    reS.getTimestamp("returnDate") != null 
+                    ? reS.getTimestamp("returnDate").toLocalDateTime() : null,
+                    State.fromValue(reS.getString("state"))
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,7 +80,10 @@ public class BorrowDocumentDAO implements IRepository{
 
             if (reS.next()) {
                 borrowDocument = make(reS);
+            } else {
+                System.out.println("No BorrowDocument found with borrowId: " + borrowId);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,10 +98,7 @@ public class BorrowDocumentDAO implements IRepository{
             ResultSet reS = stM.executeQuery(sql)) {
             while (reS.next()) {
                 BorrowDocument borrowDocument = make(reS);
-
-                if (borrowDocument != null) {
-                    borrowDocuments.add(borrowDocument);
-                }
+                borrowDocuments.add(borrowDocument);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,9 +120,10 @@ public class BorrowDocumentDAO implements IRepository{
                 try (ResultSet reS = prT.executeQuery()) {
                     while (reS.next()) {
                         BorrowDocument borrowDocument = make(reS);
-                        if (borrowDocument != null) {
-                            borrowDocuments.add(borrowDocument);
-                        }
+                        borrowDocuments.add(borrowDocument);
+                    }
+                    if (borrowDocuments.isEmpty()) {
+                        System.out.println("No BorrowDocument found with name: " + name);
                     }
                 }
             } catch (SQLException e) {
@@ -150,11 +154,11 @@ public class BorrowDocumentDAO implements IRepository{
         }
     }
     
-    @Override
-    public void delete(int id) {
+    
+    public void delete(String id) {
         String sql = "DELETE FROM borrowDocuments WHERE borrowId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setInt(1, id);
+            prS.setString(1, id);
             prS.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -171,5 +175,4 @@ public class BorrowDocumentDAO implements IRepository{
         }
         return borrowDocument;
     }
-
 }

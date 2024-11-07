@@ -74,9 +74,13 @@ public class DocumentDAO implements IRepository{
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, id);
             ResultSet reS = prS.executeQuery();
+
             if (reS.next()) {
                 document = make(reS);
+            } else {
+                System.out.println("No document found with id: " + id);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -88,9 +92,11 @@ public class DocumentDAO implements IRepository{
         String sql = "SELECT * FROM documents";
         try (PreparedStatement prS = con.prepareStatement(sql);
             ResultSet reS = prS.executeQuery()) {
+
             while (reS.next()) {
                 documents.add(make(reS));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -108,6 +114,10 @@ public class DocumentDAO implements IRepository{
             while (reS.next()) {
                 documents.add(make(reS));
             }
+            if (documents.isEmpty()) {
+                System.out.println("No document found with name: " + name);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -141,10 +151,10 @@ public class DocumentDAO implements IRepository{
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(String id) {
         String sql = "DELETE FROM documents WHERE documentId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setInt(1, id);
+            prS.setString(1, id);
 
             prS.executeUpdate();
         } catch (SQLException e) {

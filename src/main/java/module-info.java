@@ -10,6 +10,6 @@ module com.hunghq.librarymanagement {
     requires eu.hansolo.tilesfx;
     requires java.sql;
 
-    opens com.hunghq.librarymanagement to javafx.fxml;
+    opens com.hunghq.librarymanagement.Controller to javafx.fxml;
     exports com.hunghq.librarymanagement;
 }

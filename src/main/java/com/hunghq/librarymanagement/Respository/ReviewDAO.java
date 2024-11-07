@@ -23,11 +23,11 @@ public class ReviewDAO implements IRepository{
         Review review = null;
         
         try {
-            Document document = new Document();
-            document.setDocumentId(reS.getString("documentId"));
+            DocumentDAO documentDAO = new DocumentDAO();
+            Document document = (Document) documentDAO.getById(reS.getString("documentId"));
 
-            User user = new User();
-            user.setUserId(reS.getString("userId"));
+            UserDAO userDAO = new UserDAO();
+            User user = (User) userDAO.getById(reS.getString("userId"));
 
             review = new Review(
                 reS.getString("reviewId"),
@@ -52,6 +52,7 @@ public class ReviewDAO implements IRepository{
                    + "VALUES (?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement prS = con.prepareStatement(sql)) {
+
             prS.setString(1, review.getReviewId());
             prS.setString(2, review.getDocument().getDocumentId());
             prS.setString(3, review.getUser().getUserId());
@@ -76,7 +77,10 @@ public class ReviewDAO implements IRepository{
 
             if (reS.next()) {
                 review = make(reS);
+            } else {
+                System.out.println("No review found with id: " + id);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -95,6 +99,7 @@ public class ReviewDAO implements IRepository{
             while (reS.next()) {
                 reviews.add(make(reS));
             }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -115,6 +120,9 @@ public class ReviewDAO implements IRepository{
 
             while (reS.next()) {
                 reviews.add(make(reS));
+            }
+            if (reviews.isEmpty()) {
+                System.out.println("No review found with document title: " + name);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -144,11 +152,11 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(String id) {
         String sql = "DELETE FROM reviews WHERE reviewId = ?";
         
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setInt(1, id);
+            prS.setString(1, id);
 
             prS.executeUpdate();
         } catch (SQLException e) {

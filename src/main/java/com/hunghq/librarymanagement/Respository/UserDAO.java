@@ -1,14 +1,18 @@
 package com.hunghq.librarymanagement.Respository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
 import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.Role;
 import com.hunghq.librarymanagement.Model.Entity.User;
 import com.hunghq.librarymanagement.Model.Enum.EGender;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @SuppressWarnings("rawtypes")
@@ -19,9 +23,10 @@ public class UserDAO implements IRepository {
     @Override
     public User make(ResultSet reS) {
         try {
-            int roleId = reS.getInt("role");
-            //TODO: write function to get Role from role ID
-            Role role = new Role();
+        
+            RoleDAO roleDAO = new RoleDAO();
+            Role role = (Role) roleDAO.getById(reS.getString("roleId"));
+
             return new User(
                     reS.getString("userId"),
                     reS.getString("fullName"),
@@ -34,7 +39,6 @@ public class UserDAO implements IRepository {
                     reS.getString("imagePath"),
                     role,
                     reS.getString("otp")
-
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,6 +53,7 @@ public class UserDAO implements IRepository {
                 + "email, phone, joinDate, dateOfBirth, imagePath, role, otp) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
+
             prS.setString(1, user.getUserId());
             prS.setString(2, user.getFullName());
             prS.setString(3, user.getPasswordHash());
@@ -57,9 +62,11 @@ public class UserDAO implements IRepository {
             prS.setTimestamp(6, Timestamp.valueOf(user.getJoinDate()));
             prS.setTimestamp(7, Timestamp.valueOf(user.getDateOfBirth()));
             prS.setString(8, user.getImagePath());
-            prS.setInt(9, user.getRole().getRoleId());
+            prS.setString(9, user.getRole().getRoleId());
             prS.setString(10, user.getOtp());
+
             prS.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -75,7 +82,10 @@ public class UserDAO implements IRepository {
 
             if (reS.next()) {
                 user = make(reS);
+            } else {
+                System.out.println("No user found with id: " + id);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,6 +102,7 @@ public class UserDAO implements IRepository {
             while (reS.next()) {
                 users.add(make(reS));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,6 +120,10 @@ public class UserDAO implements IRepository {
             while (reS.next()) {
                 users.add(make(reS));
             }
+            if (users.isEmpty()) {
+                System.out.println("No user found with name: " + name);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -137,10 +152,10 @@ public class UserDAO implements IRepository {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(String id) {
         String sql = "DELETE FROM users WHERE userId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setInt(1, id);
+            prS.setString(1, id);
 
             prS.executeUpdate();
         } catch (SQLException e) {

@@ -1,8 +1,8 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
-import com.hunghq.librarymanagement.Model.Enum.EGender;
-
 import java.time.LocalDateTime;
+
+import com.hunghq.librarymanagement.Model.Enum.EGender;
 
 public class User {
     private String userId;
@@ -126,13 +126,13 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "fullName='" + fullName + '\'' +
+        return "User[" +
+                "fullName=" + fullName + '\'' +
                 ", gender=" + gender +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
+                ", email=" + email + '\'' +
+                ", phone=" + phone + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", role=" + role +
-                '}';
+                ']';
     }
 }
