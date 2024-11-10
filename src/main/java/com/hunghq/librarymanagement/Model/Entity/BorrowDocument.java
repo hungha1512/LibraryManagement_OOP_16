@@ -3,7 +3,7 @@ package com.hunghq.librarymanagement.Model.Entity;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.hunghq.librarymanagement.Enum.State;
+import com.hunghq.librarymanagement.Model.Enum.State;
 
 
 public class BorrowDocument {
@@ -87,6 +87,7 @@ public class BorrowDocument {
         this.state = state;
     } 
 
+    @Override
     public String toString() {
         return "BorrowDocument[borrowId=" + borrowId
         + ", document=" + document

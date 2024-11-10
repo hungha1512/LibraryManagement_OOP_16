@@ -173,4 +173,28 @@ public class DocumentDAO implements IRepository{
         return document;
     }
 
+    public static void main(String[] args) {
+        DocumentDAO documentDAO = new DocumentDAO();
+        String testId = "UET00000001";
+        Document documentById = (Document) documentDAO.getById(testId);
+        if (documentById != null) {
+            System.out.println("Document found with ID " + testId + ":");
+            System.out.println("Title: " + documentById.getTitle());
+            System.out.println("Author: " + documentById.getAuthorName());
+            System.out.println("Rating: " + documentById.getRating());
+        } else {
+            System.out.println("No document found with ID: " + testId);
+        }
+        String testName = "The Hunger Game";
+        List<Document> documentsByName = documentDAO.findByName(testName);
+
+        if (!documentsByName.isEmpty()) {
+            System.out.println("\nDocuments found with name containing \"" + testName + "\":");
+            for (Document doc : documentsByName) {
+                System.out.println("ID: " + doc.getDocumentId() + ", Title: " + doc.getTitle() + ", Author: " + doc.getAuthorName());
+            }
+        } else {
+            System.out.println("No document found with name containing: " + testName);
+        }
+    }
 }
