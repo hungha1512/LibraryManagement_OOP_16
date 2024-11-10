@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
-import com.hunghq.librarymanagement.Enum.State;
 import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Model.Entity.User;
+import com.hunghq.librarymanagement.Model.Enum.State;
 
 @SuppressWarnings("rawtypes")
 public class BorrowDocumentDAO implements IRepository{
@@ -155,6 +155,7 @@ public class BorrowDocumentDAO implements IRepository{
     }
     
     
+    @Override
     public void delete(String id) {
         String sql = "DELETE FROM borrowDocuments WHERE borrowId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {

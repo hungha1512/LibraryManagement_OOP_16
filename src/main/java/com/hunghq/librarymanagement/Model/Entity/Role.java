@@ -16,9 +16,7 @@ public class Role {
     private LocalDateTime updatedAt;
     private List<Permission> permissions;
 
-    public Role() {
-        ;
-    }
+    public Role() {;}
 
     public Role(String roleId, String title, String slug, String description, EIsDeleted isDeleted,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -96,6 +94,7 @@ public class Role {
         this.permissions = permissions;
     }
 
+    @Override
     public String toString() {
         return "Role[" + title + "]";
     }

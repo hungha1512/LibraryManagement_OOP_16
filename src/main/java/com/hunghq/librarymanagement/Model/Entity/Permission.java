@@ -13,9 +13,7 @@ public class Permission {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Permission() {
-        ;
-    }
+    public Permission() {;}
 
     public Permission(String permissionId, String title, String slug, String description, EIsDeleted isDeleted,
                       LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -85,6 +83,7 @@ public class Permission {
         this.isDeleted = isDeleted;
     }
 
+    @Override
     public String toString() {
         return "Permission[permissionId=" + permissionId
                 + ", title" + title
