@@ -7,7 +7,7 @@ import java.util.List;
 import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
 
 public class Role {
-    private String roleId;
+    private int roleId;
     private String title;
     private String slug;
     private String description;
@@ -18,7 +18,7 @@ public class Role {
 
     public Role() {;}
 
-    public Role(String roleId, String title, String slug, String description, EIsDeleted isDeleted,
+    public Role(int roleId, String title, String slug, String description, EIsDeleted isDeleted,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.roleId = roleId;
         this.title = title;
@@ -30,11 +30,11 @@ public class Role {
         this.permissions = new ArrayList<>();
     }
 
-    public String getRoleId() {
+    public int getRoleId() {
         return this.roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 
@@ -93,6 +93,8 @@ public class Role {
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }
+
+
 
     @Override
     public String toString() {

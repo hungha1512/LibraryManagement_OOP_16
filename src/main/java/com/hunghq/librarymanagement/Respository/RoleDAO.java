@@ -24,11 +24,11 @@ public class RoleDAO implements IRepository{
 
         try {
             role = new Role(
-                reS.getString("roleId"),
+                reS.getInt("roleId"),
                 reS.getString("title"),
                 reS.getString("slug"),
                 reS.getString("description"),
-                EIsDeleted.valueOf(reS.getString("isDeleted")),
+                EIsDeleted.fromInt(reS.getInt("isDeleted")),
                 reS.getTimestamp("createdAt").toLocalDateTime(),
                 reS.getTimestamp("updatedAt") != null ? reS.getTimestamp("updatedAt").toLocalDateTime() : null
             );
@@ -46,7 +46,7 @@ public class RoleDAO implements IRepository{
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, role.getRoleId());
+            prS.setInt(1, role.getRoleId());
             prS.setString(2, role.getTitle());
             prS.setString(3, role.getSlug());
             prS.setString(4, role.getDescription());
@@ -61,13 +61,18 @@ public class RoleDAO implements IRepository{
     }
 
     @Override
-    public Role getById(String id) {
+    public Role getByStringId(String id) {
+        return null;
+    }
+
+    @Override
+    public Role getByIntId(int id) {
         String sql = "SELECT * FROM roles WHERE roleId = ?";
         Role role = null;
-        
+
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, id);
-            ResultSet reS = prS.executeQuery(); 
+            prS.setInt(1, id);
+            ResultSet reS = prS.executeQuery();
 
             if (reS.next()) {
                 role = make(reS);
@@ -78,7 +83,7 @@ public class RoleDAO implements IRepository{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return role;
     }
 
@@ -136,7 +141,7 @@ public class RoleDAO implements IRepository{
             prS.setString(4, role.getIsDeleted().toString());
             prS.setTimestamp(5, Timestamp.valueOf(role.getCreatedAt()));
             prS.setTimestamp(6, Timestamp.valueOf(role.getUpdatedAt()));
-            prS.setString(7, role.getRoleId());
+            prS.setInt(7, role.getRoleId());
             
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -161,7 +166,7 @@ public class RoleDAO implements IRepository{
     public Object save(Object entity) {
         Role role = (Role) entity;
         
-        if (getById(role.getRoleId()) != null) {
+        if (getByIntId(role.getRoleId()) != null) {
             update(role);
         } else {
             add(role);
