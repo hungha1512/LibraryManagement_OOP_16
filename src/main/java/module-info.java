@@ -10,6 +10,8 @@ module com.hunghq.librarymanagement {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires java.sql;
+    requires jbcrypt;
+    requires java.mail;
 
     opens com.hunghq.librarymanagement.Controller to javafx.fxml;
     exports com.hunghq.librarymanagement;
