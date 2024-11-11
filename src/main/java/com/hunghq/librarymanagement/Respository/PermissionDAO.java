@@ -62,7 +62,7 @@ public class PermissionDAO implements IRepository{
     }
 
     @Override
-    public Permission getById(String id) {
+    public Permission getByStringId(String id) {
         String sql = "SELECT * FROM permissions WHERE permissionId = ?";
         Permission permission = null;
 
@@ -81,6 +81,11 @@ public class PermissionDAO implements IRepository{
         }
 
         return permission;
+    }
+
+    @Override
+    public Permission getByIntId(int id) {
+        return null;
     }
 
     @Override
@@ -162,7 +167,7 @@ public class PermissionDAO implements IRepository{
     public Permission save(Object entity) {
         Permission permission = (Permission) entity;
 
-        if (getById(permission.getPermissionId()) != null) {
+        if (getByStringId(permission.getPermissionId()) != null) {
             update(permission);
         } else {
             add(permission);

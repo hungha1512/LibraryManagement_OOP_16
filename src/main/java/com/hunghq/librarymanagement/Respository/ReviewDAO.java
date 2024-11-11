@@ -24,10 +24,10 @@ public class ReviewDAO implements IRepository{
         
         try {
             DocumentDAO documentDAO = new DocumentDAO();
-            Document document = (Document) documentDAO.getById(reS.getString("documentId"));
+            Document document = (Document) documentDAO.getByStringId(reS.getString("documentId"));
 
             UserDAO userDAO = new UserDAO();
-            User user = (User) userDAO.getById(reS.getString("userId"));
+            User user = (User) userDAO.getByStringId(reS.getString("userId"));
 
             review = new Review(
                 reS.getString("reviewId"),
@@ -67,7 +67,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public Object getById(String id) {
+    public Object getByStringId(String id) {
         String sql = "SELECT * FROM reviews WHERE reviewId = ?";
         Review review = null;
         
@@ -86,6 +86,11 @@ public class ReviewDAO implements IRepository{
         }
         
         return review;
+    }
+
+    @Override
+    public Review getByIntId(int id) {
+        return null;
     }
 
     @Override
@@ -168,7 +173,7 @@ public class ReviewDAO implements IRepository{
     public Object save(Object entity) {
         Review review = (Review) entity;
         
-        if (getById(review.getReviewId()) != null) {
+        if (getByStringId(review.getReviewId()) != null) {
             update(review);
         } else {
             add(review);
