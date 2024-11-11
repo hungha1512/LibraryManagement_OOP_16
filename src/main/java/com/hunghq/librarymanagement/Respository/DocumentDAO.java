@@ -1,5 +1,9 @@
 package com.hunghq.librarymanagement.Respository;
 
+import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
+import com.hunghq.librarymanagement.IGeneric.IRepository;
+import com.hunghq.librarymanagement.Model.Entity.Document;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,33 +11,42 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
-import com.hunghq.librarymanagement.IGeneric.IRepository;
-import com.hunghq.librarymanagement.Model.Entity.Document;
-
+/**
+ * Data Access Object (DAO) for handling CRUD operations and queries
+ * related to the Document entity in the library management system.
+ */
 @SuppressWarnings("rawtypes")
-public class DocumentDAO implements IRepository{
+public class DocumentDAO implements IRepository {
 
+    /**
+     * Connection to the MySQL database.
+     */
     private static final Connection con = MySQLConnection.getConnection();
-    
+
+    /**
+     * Constructs a Document object from the provided ResultSet.
+     *
+     * @param reS the ResultSet containing document data
+     * @return a Document object created from the ResultSet, or null if an error occurs
+     */
     @Override
     public Document make(ResultSet reS) {
         Document document = null;
         try {
             document = new Document(
-                reS.getString("documentId"), 
-                reS.getString("title"),
-                reS.getString("author"),
-                reS.getDouble("rating"),
-                reS.getString("genre"),
-                reS.getString("language"),
-                reS.getString("description"),
-                reS.getInt("numRatings"),
-                reS.getString("publisher"),
-                reS.getString("isbn"),
-                reS.getString("publishedDate"),
-                reS.getString("award"),
-                reS.getString("coverImg")
+                    reS.getString("documentId"),
+                    reS.getString("title"),
+                    reS.getString("author"),
+                    reS.getDouble("rating"),
+                    reS.getString("genre"),
+                    reS.getString("language"),
+                    reS.getString("description"),
+                    reS.getInt("numRatings"),
+                    reS.getString("publisher"),
+                    reS.getString("isbn"),
+                    reS.getString("publishedDate"),
+                    reS.getString("award"),
+                    reS.getString("coverImg")
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -41,6 +54,11 @@ public class DocumentDAO implements IRepository{
         return document;
     }
 
+    /**
+     * Adds a new document record to the database.
+     *
+     * @param entity the Document object to be added
+     */
     @Override
     public void add(Object entity) {
         Document document = (Document) entity;
@@ -67,10 +85,16 @@ public class DocumentDAO implements IRepository{
         }
     }
 
+    /**
+     * Retrieves a Document by its unique document ID.
+     *
+     * @param id the unique document ID
+     * @return the Document with the specified documentId, or null if not found
+     */
     @Override
-    public Object getById(String id) {
+    public Object getByStringId(String id) {
         String sql = "SELECT * FROM documents WHERE documentId = ?";
-        Document document = null; 
+        Document document = null;
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, id);
             ResultSet reS = prS.executeQuery();
@@ -84,14 +108,30 @@ public class DocumentDAO implements IRepository{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return document; 
+        return document;
     }
 
+    /**
+     * Retrieves a Document by its integer ID (not implemented).
+     *
+     * @param id the integer ID
+     * @return null, as this method is not implemented
+     */
+    @Override
+    public Document getByIntId(int id) {
+        return null;
+    }
+
+    /**
+     * Retrieves all Document records from the database.
+     *
+     * @return a list of all Document objects in the database
+     */
     public List<Document> getAll() {
         List<Document> documents = new ArrayList<>();
         String sql = "SELECT * FROM documents";
         try (PreparedStatement prS = con.prepareStatement(sql);
-            ResultSet reS = prS.executeQuery()) {
+             ResultSet reS = prS.executeQuery()) {
 
             while (reS.next()) {
                 documents.add(make(reS));
@@ -103,6 +143,12 @@ public class DocumentDAO implements IRepository{
         return documents;
     }
 
+    /**
+     * Searches for documents by title.
+     *
+     * @param name the title or part of the title to search for
+     * @return a list of Document objects that match the search term
+     */
     @Override
     public List<Document> findByName(String name) {
         List<Document> documents = new ArrayList<>();
@@ -124,6 +170,11 @@ public class DocumentDAO implements IRepository{
         return documents;
     }
 
+    /**
+     * Updates an existing document record in the database.
+     *
+     * @param entity the Document object with updated information
+     */
     @Override
     public void update(Object entity) {
         Document document = (Document) entity;
@@ -142,7 +193,7 @@ public class DocumentDAO implements IRepository{
             prS.setString(10, document.getPublishedDate());
             prS.setString(11, document.getAward());
             prS.setString(12, document.getCoverImg());
-            prS.setString(13, document.getDocumentId()); 
+            prS.setString(13, document.getDocumentId());
 
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -150,6 +201,11 @@ public class DocumentDAO implements IRepository{
         }
     }
 
+    /**
+     * Deletes a document record from the database by its document ID.
+     *
+     * @param id the unique document ID of the document to delete
+     */
     @Override
     public void delete(String id) {
         String sql = "DELETE FROM documents WHERE documentId = ?";
@@ -162,10 +218,17 @@ public class DocumentDAO implements IRepository{
         }
     }
 
+    /**
+     * Saves a document record in the database. If the document already exists,
+     * it updates the record; otherwise, it adds a new record.
+     *
+     * @param entity the Document object to save
+     * @return the saved Document object
+     */
     @Override
     public Object save(Object entity) {
         Document document = (Document) entity;
-        if (getById(document.getDocumentId()) != null) {
+        if (getByStringId(document.getDocumentId()) != null) {
             update(document);
         } else {
             add(document);
@@ -173,10 +236,16 @@ public class DocumentDAO implements IRepository{
         return document;
     }
 
+    /**
+     * Main method for testing the DocumentDAO functionality, including
+     * fetching documents by ID and by name.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         DocumentDAO documentDAO = new DocumentDAO();
         String testId = "UET00000001";
-        Document documentById = (Document) documentDAO.getById(testId);
+        Document documentById = (Document) documentDAO.getByStringId(testId);
         if (documentById != null) {
             System.out.println("Document found with ID " + testId + ":");
             System.out.println("Title: " + documentById.getTitle());

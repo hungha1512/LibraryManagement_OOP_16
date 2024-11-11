@@ -3,7 +3,7 @@ package com.hunghq.librarymanagement.Model.Entity;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.hunghq.librarymanagement.Model.Enum.State;
+import com.hunghq.librarymanagement.Model.Enum.EState;
 
 
 public class BorrowDocument {
@@ -14,7 +14,7 @@ public class BorrowDocument {
     private LocalDateTime borrowDate;
     private LocalDateTime dueDate;
     private LocalDateTime returnDate;
-    private State state;
+    private EState eState;
 
     public String getBorrowId() {
         return this.borrowId;
@@ -64,12 +64,12 @@ public class BorrowDocument {
         this.returnDate = returnDate;
     }
 
-    public State getState() {
-        return this.state;
+    public EState getState() {
+        return this.eState;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setState(EState eState) {
+        this.eState = eState;
     }
 
     public BorrowDocument() {
@@ -77,14 +77,14 @@ public class BorrowDocument {
     }
 
     public BorrowDocument(String borrowId, Document document, User user,
-    LocalDateTime borrowDate, LocalDateTime dueDate, LocalDateTime returnDate, State state) {
+    LocalDateTime borrowDate, LocalDateTime dueDate, LocalDateTime returnDate, EState eState) {
         this.borrowId = borrowId;
         this.document = document;
         this.user = user;
         this.borrowDate = borrowDate;
         this.dueDate = dueDate;
         this.returnDate = returnDate;
-        this.state = state;
+        this.eState = eState;
     } 
 
     @Override
@@ -95,7 +95,7 @@ public class BorrowDocument {
         + ", borrowDate=" + borrowDate
         + ", dueDate=" + dueDate
         + ", returnDate=" + returnDate
-        + ", state=" + state
+        + ", state=" + eState
         + "]";
     }
 }
