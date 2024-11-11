@@ -1,8 +1,9 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
-import java.time.LocalDateTime;
-
 import com.hunghq.librarymanagement.Model.Enum.EGender;
+import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
+
+import java.time.LocalDateTime;
 
 public class User {
     private String userId;
@@ -13,16 +14,16 @@ public class User {
     private String phone;
     private LocalDateTime joinDate;
     private LocalDateTime dateOfBirth;
-    private String imagePath;
     private Role role;
     private String otp;
+    private EIsDeleted eIsDeleted;
 
     public User() {
         ;
     }
 
     public User(String userId, String fullName, String passwordHash, EGender gender, String email, String phone,
-                LocalDateTime joinDate, LocalDateTime dateOfBirth, String imagePath, Role role, String otp) {
+                LocalDateTime joinDate, LocalDateTime dateOfBirth, Role role, String otp, EIsDeleted eIsDeleted) {
         this.userId = userId;
         this.fullName = fullName;
         this.passwordHash = passwordHash;
@@ -31,9 +32,9 @@ public class User {
         this.phone = phone;
         this.joinDate = joinDate;
         this.dateOfBirth = dateOfBirth;
-        this.imagePath = imagePath;
         this.role = role;
         this.otp = otp;
+        this.eIsDeleted = eIsDeleted;
     }
 
     public String getUserId() {
@@ -100,14 +101,6 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -122,6 +115,14 @@ public class User {
 
     public void setOtp(String otp) {
         this.otp = otp;
+    }
+
+    public EIsDeleted getEIsDeleted() {
+        return eIsDeleted;
+    }
+
+    public void setEIsDeleted(EIsDeleted eIsDeleted) {
+        this.eIsDeleted = eIsDeleted;
     }
 
     @Override
