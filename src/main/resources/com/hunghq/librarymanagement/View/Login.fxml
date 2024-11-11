@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.View.Login">
-   <children>
-      <TextField layoutX="105.0" layoutY="145.0" />
-   </children>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.LoginController">
+    <VBox prefHeight="200.0" prefWidth="301.0" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="120.0">
+        <children>
+            <Label text="Email or phone number"/>
+            <TextField fx:id="txt_username" promptText="Enter your email or phone number"/>
+            <Label layoutX="10.0" layoutY="10.0" text="Password"/>
+            <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                <PasswordField fx:id="pwd_password" promptText="Enter your password" HBox.hgrow="ALWAYS">
+                </PasswordField>
+                <TextField fx:id="txt_password_visible" managed="false" promptText="Enter your password" visible="false"
+                           HBox.hgrow="ALWAYS">
+                </TextField>
+                <Button fx:id="btn_toggle_password" onAction="#togglePasswordVisibility" text="Show">
+                </Button>
+            </HBox>
+            <CheckBox fx:id="cb_remember" mnemonicParsing="false" text="Remember me"/>
+            <Label fx:id="hl_forgot_password" text="Forgot password?" textFill="#717ed2"
+                   onMouseClicked="#handleForgotPassword">
+            </Label>
+            <Button fx:id="btn_sign_in" mnemonicParsing="false" prefHeight="40.0" prefWidth="300.0" text="Sign in">
+            </Button>
+            <Label fx:id="lbl_authenticate" cacheShape="false" prefWidth="301.0" visible="false"/>
+        </children>
+    </VBox>
 </AnchorPane>

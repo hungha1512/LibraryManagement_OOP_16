@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.EnterOtpController">
+    <Label text="Enter OTP" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0" />
+    <TextField fx:id="txt_otp" promptText="Enter OTP code" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
+    <Button layoutX="50.0" layoutY="134.0" onAction="#handleVerifyOtp" text="Confirm" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="134.0">
+    </Button>
+    <Label fx:id="lbl_status" layoutX="50.0" layoutY="78.0" prefHeight="48.0" prefWidth="300.0" textFill="RED" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="78.0" />
+</AnchorPane>

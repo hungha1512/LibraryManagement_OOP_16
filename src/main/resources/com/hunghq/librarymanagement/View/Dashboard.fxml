@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.hunghq.librarymanagement.Controller.DashboardController"
+            prefHeight="400.0" prefWidth="600.0">
+    <Label fx:id="welcomeText" text="Click the button to display a message"/>
+</AnchorPane>
