@@ -7,7 +7,8 @@ public interface IRepository<T>
 {
     T make(ResultSet reS);
     void add(T entity);
-    T getById(String id);
+    T getByStringId(String id);
+    T getByIntId(int id);
     List<T> getAll();
     List<T> findByName(String name);
     T save(T entity);
