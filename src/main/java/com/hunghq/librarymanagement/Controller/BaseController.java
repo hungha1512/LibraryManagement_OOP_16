@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  * functionality for role-based access control using the {@link RolePermissionRequired} annotation.
  * This class checks if the current user's role has access to specific functionalities.
  */
-public class BaseController implements Initializable {
+public abstract class BaseController implements Initializable {
 
     /**
      * Initializes the controller, checking if the {@link RolePermissionRequired} annotation
