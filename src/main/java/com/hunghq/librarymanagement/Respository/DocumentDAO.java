@@ -39,6 +39,7 @@ public class DocumentDAO implements IRepository {
                     reS.getString("author"),
                     reS.getDouble("rating"),
                     reS.getString("genre"),
+                    reS.getInt("quantity"),
                     reS.getString("language"),
                     reS.getString("description"),
                     reS.getInt("numRatings"),

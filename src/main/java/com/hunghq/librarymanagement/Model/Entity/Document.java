@@ -7,6 +7,7 @@ public class Document {
     private String authorName;
     private double rating;
     private String genre;
+    private int quantity;
     private String language;
     private String description;
     private int numRatings;
@@ -15,6 +16,29 @@ public class Document {
     private String publishedDate;
     private String award;
     private String coverImg;
+
+    public Document() {
+        ;
+    }
+
+    public Document(String documentId, String title, String authorName, double rating,
+                    String genre, int quantity, String language, String description, int numRatings, String publisher,
+                    String isbn, String publishedDate, String award, String coverImg) {
+        this.documentId = documentId;
+        this.title = title;
+        this.authorName = authorName;
+        this.rating = rating;
+        this.genre = genre;
+        this.quantity = quantity;
+        this.language = language;
+        this.description = description;
+        this.numRatings = numRatings;
+        this.publisher = publisher;
+        this.isbn = isbn;
+        this.publishedDate = publishedDate;
+        this.award = award;
+        this.coverImg = coverImg;
+    }
 
     public String getDocumentId() {
         return this.documentId;
@@ -54,6 +78,14 @@ public class Document {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getLanguage() {
@@ -120,42 +152,24 @@ public class Document {
         this.coverImg = coverImg;
     }
 
-    public Document() {;}
-
-    public Document(String documentId, String title, String authorName, double rating,
-    String genre, String language, String description, int numRatings, String publisher,
-    String isbn, String publishedDate, String award, String coverImg) {
-        this.documentId = documentId;
-        this.title = title;
-        this.authorName = authorName;
-        this.rating = rating;
-        this.genre = genre;
-        this.language = language;
-        this.description = description;
-        this.numRatings = numRatings;
-        this.publisher = publisher;
-        this.isbn = isbn;
-        this.publishedDate = publishedDate;
-        this.award = award;
-        this.coverImg = coverImg;
-    }
 
     public String toString() {
         return "Document[" +
-            "documentId=" + documentId +
-            ", title=" + title +
-            ", authorName=" + authorName +
-            ", rating=" + rating +
-            ", genre=" + genre +
-            ", language=" + language +
-            ", description=" + description +
-            ", numRatings=" + numRatings +
-            ", publisher=" + publisher +
-            ", isbn=" + isbn +
-            ", publishedDate=" + publishedDate +
-            ", award=" + award +
-            ", coverImg=" + coverImg +
-            "]";
+                "documentId=" + documentId +
+                ", title=" + title +
+                ", authorName=" + authorName +
+                ", rating=" + rating +
+                ", genre=" + genre +
+                ", quantity=" + quantity +
+                ", language=" + language +
+                ", description=" + description +
+                ", numRatings=" + numRatings +
+                ", publisher=" + publisher +
+                ", isbn=" + isbn +
+                ", publishedDate=" + publishedDate +
+                ", award=" + award +
+                ", coverImg=" + coverImg +
+                "]";
     }
 
 }
