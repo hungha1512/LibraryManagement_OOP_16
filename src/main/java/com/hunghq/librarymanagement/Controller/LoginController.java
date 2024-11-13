@@ -127,7 +127,6 @@ public class LoginController implements Initializable {
 
         btn_sign_in.setOnAction(new EventHandler<ActionEvent>() {
 
-            /*EVENT LOGIN BUTTON*/
             @Override
             public void handle(ActionEvent event) {
                 String username = txt_username.getText();
