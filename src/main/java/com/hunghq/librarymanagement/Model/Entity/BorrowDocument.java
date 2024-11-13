@@ -1,9 +1,9 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
+import com.hunghq.librarymanagement.Model.Enum.EState;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
-
-import com.hunghq.librarymanagement.Model.Enum.EState;
 
 
 public class BorrowDocument {
@@ -14,7 +14,23 @@ public class BorrowDocument {
     private LocalDateTime borrowDate;
     private LocalDateTime dueDate;
     private LocalDateTime returnDate;
+    private double fee;
     private EState eState;
+
+    public BorrowDocument() {
+
+    }
+
+    public BorrowDocument(String borrowId, Document document, User user,
+                          LocalDateTime borrowDate, LocalDateTime dueDate, LocalDateTime returnDate, EState eState) {
+        this.borrowId = borrowId;
+        this.document = document;
+        this.user = user;
+        this.borrowDate = borrowDate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
+        this.eState = eState;
+    }
 
     public String getBorrowId() {
         return this.borrowId;
@@ -64,6 +80,14 @@ public class BorrowDocument {
         this.returnDate = returnDate;
     }
 
+    public double getFee() {
+        return fee;
+    }
+
+    public void setFee(double fee) {
+        this.fee = fee;
+    }
+
     public EState getState() {
         return this.eState;
     }
@@ -72,30 +96,16 @@ public class BorrowDocument {
         this.eState = eState;
     }
 
-    public BorrowDocument() {
-        
-    }
-
-    public BorrowDocument(String borrowId, Document document, User user,
-    LocalDateTime borrowDate, LocalDateTime dueDate, LocalDateTime returnDate, EState eState) {
-        this.borrowId = borrowId;
-        this.document = document;
-        this.user = user;
-        this.borrowDate = borrowDate;
-        this.dueDate = dueDate;
-        this.returnDate = returnDate;
-        this.eState = eState;
-    } 
-
     @Override
     public String toString() {
         return "BorrowDocument[borrowId=" + borrowId
-        + ", document=" + document
-        + ", user=" + user
-        + ", borrowDate=" + borrowDate
-        + ", dueDate=" + dueDate
-        + ", returnDate=" + returnDate
-        + ", state=" + eState
-        + "]";
+                + ", document=" + document
+                + ", user=" + user
+                + ", borrowDate=" + borrowDate
+                + ", dueDate=" + dueDate
+                + ", returnDate=" + returnDate
+                + ", fee=" + fee
+                + ", state=" + eState
+                + "]";
     }
 }
