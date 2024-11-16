@@ -6,6 +6,7 @@ import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
 import java.time.LocalDateTime;
 
 public class User {
+
     private String userId;
     private String fullName;
     private String passwordHash;
