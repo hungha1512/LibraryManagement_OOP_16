@@ -170,7 +170,7 @@ public class LoginController implements Initializable {
      */
     private void loadMainMenu() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass()
-                .getResource("/com/hunghq/librarymanagement/View/Dashboard.fxml"));
+                .getResource("/com/hunghq/librarymanagement/View/Homepage.fxml"));
         try {
             Scene scene = new Scene(fxmlLoader.load());
             Stage stage = new Stage();

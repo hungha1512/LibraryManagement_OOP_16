@@ -1,70 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.View.Homepage">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.HomepageController">
     <!-- Sidebar Menu -->
     <VBox layoutX="0" layoutY="0" prefHeight="600.0" prefWidth="160.0" style="-fx-background-color: #000022; -fx-padding: 15;">
         <Button fx:id="btn_all_books" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="All Books">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font></Button>
-        <Button fx:id="btn_recent" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Recent">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font></Button>
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Button>
         <Button fx:id="btn_my_books" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="My Books">
-         <font>
-            <Font size="14.0" />
-         </font></Button>
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
         <Button fx:id="btn_favorites" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Favorites">
-         <font>
-            <Font size="14.0" />
-         </font></Button>
-      <Button fx:id="btn_favorites1" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Service">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="btn_user" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="User">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="btn_service" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Service">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="btn_user" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="User">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
     </VBox>
 
     <!-- Header -->
     <HBox layoutX="160.0" layoutY="0" prefHeight="50" prefWidth="840.0" style="-fx-background-color: #000022; -fx-padding: 10;">
         <Pane HBox.hgrow="ALWAYS">
-         <children>
-            <TextField prefHeight="30.0" prefWidth="471.0" style="-fx-border-radius: 5px; -fx-background-radius: 5px;" text="Search your favourite book">
+            <children>
+                <TextField prefHeight="30.0" prefWidth="351.0" style="-fx-border-radius: 5px; -fx-background-radius: 5px;" text="Search your favourite book">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </TextField>
+                <Button layoutX="492.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: #0078d7; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Search" textFill="#f8f8f8">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <ComboBox fx:id="cb_search_option" layoutX="351.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+              <Label fx:id="txt_name_user" layoutX="583.0" layoutY="4.0" prefHeight="20.0" prefWidth="171.0" text="User" textFill="WHITE">
+                  <font>
+                      <Font name="System Bold" size="14.0" />
+                  </font>
+              </Label>
+            <Button fx:id="btn_log_out" layoutX="754.0" layoutY="-1.0" mnemonicParsing="false" style="-fx-background-color: red; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Log out" textFill="WHITE">
                <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <Button layoutX="482.0" layoutY="-2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="62.0" style="-fx-background-color: #0078d7; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Search" textFill="#f8f8f8">
-               <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font size="13.0" />
                </font>
             </Button>
-            <Label layoutX="572.0" layoutY="6.0" text="Welcome back, " textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="txt_name_user" layoutX="676.0" layoutY="6.0" prefHeight="20.0" prefWidth="141.0" text="User" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-         </children></Pane>
+            </children>
+        </Pane>
     </HBox>
-   <AnchorPane fx:id="main_screen" layoutX="160.0" layoutY="50.0" prefHeight="550.0" prefWidth="840.0" />
+   <StackPane fx:id="main_screen" layoutX="160.0" layoutY="50.0" prefHeight="550.0" prefWidth="840.0" />
 </AnchorPane>
