@@ -63,7 +63,7 @@
               </Label>
             <Button fx:id="btn_log_out" layoutX="754.0" layoutY="-1.0" mnemonicParsing="false" style="-fx-background-color: red; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Log out" textFill="WHITE">
                <font>
-                  <Font size="14.0" />
+                  <Font size="13.0" />
                </font>
             </Button>
             </children>
