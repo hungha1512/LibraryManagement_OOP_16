@@ -2,6 +2,7 @@ package com.hunghq.librarymanagement.Controller;
 
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
+import com.hunghq.librarymanagement.Service.CallAPIService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -26,22 +27,38 @@ public class MainAllBooksController extends BaseController {
     @FXML
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DocumentDAO documentDAO = new DocumentDAO();
+        CallAPIService callAPIService = new CallAPIService();
         allBooks = documentDAO.getAllWithOffset(offset);
 
         int column = 0;
         int row = 0;
 
         for (Document document : allBooks) {
-            String coverImg = document.getCoverImg();
             Image image = null;
-            // TODO: Fixing the image file with real URL, now is error with IllegalException
+            String coverImg = callAPIService.getImageUrlFromTitle(document.getTitle());
+
             if (coverImg != null) {
-                image = new Image(coverImg);
-            } else {
+                try {
+                    image = new Image(coverImg, true);
+                } catch (Exception e) {
+                    System.err.println("Error loading image from API: " + e.getMessage());
+                }
+            }
+
+            if (image == null && document.getCoverImg() != null) {
+                try {
+                    image = new Image(document.getCoverImg(), true);
+                } catch (Exception e) {
+                    System.err.println("Error loading image from database: " + e.getMessage());
+                }
+            }
+
+            if (image == null) {
                 String defaultImage = "src/main/resources/com/hunghq/librarymanagement/Media/PT.jpg";
                 File file = new File(defaultImage);
                 image = new Image(file.toURI().toString());
             }
+
             ImageView imageView = new ImageView(image);
 
             imageView.setFitHeight(120);
@@ -69,7 +86,6 @@ public class MainAllBooksController extends BaseController {
                 column = 0;
                 row++;
             }
-
             // TODO: Do pagination, with each page has 15 books
         }
     }
