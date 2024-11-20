@@ -6,6 +6,8 @@ import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Model.Entity.User;
 import com.hunghq.librarymanagement.Model.Enum.EState;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.List;
  * for BorrowDocument objects within a library management system.
  */
 @SuppressWarnings("rawtypes")
-public class BorrowDocumentDAO implements IRepository {
+public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
     private static final Connection con = MySQLConnection.getConnection();
 
@@ -59,7 +61,7 @@ public class BorrowDocumentDAO implements IRepository {
      * @param entity the BorrowDocument object to be added
      */
     @Override
-    public void add(Object entity) {
+    public void add(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
 
         String sql = "INSERT INTO borrowDocuments (borrowId, documentId, userId, borrowDate, dueDate, returnDate, state) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -123,8 +125,8 @@ public class BorrowDocumentDAO implements IRepository {
      * @return a list of all BorrowDocument objects in the database
      */
     @Override
-    public List<BorrowDocument> getAll() {
-        List<BorrowDocument> borrowDocuments = new ArrayList<>();
+    public ObservableList<BorrowDocument> getAll() {
+        ObservableList<BorrowDocument> borrowDocuments = FXCollections.observableArrayList();
         String sql = "SELECT * FROM borrowDocuments";
         try (Statement stM = con.createStatement();
              ResultSet reS = stM.executeQuery(sql)) {
@@ -145,8 +147,8 @@ public class BorrowDocumentDAO implements IRepository {
      * @return a list of BorrowDocument objects with documents that match the title
      */
     @Override
-    public List<BorrowDocument> findByName(String name) {
-        List<BorrowDocument> borrowDocuments = new ArrayList<>();
+    public ObservableList<BorrowDocument> findByName(String name) {
+        ObservableList<BorrowDocument> borrowDocuments = FXCollections.observableArrayList();
         String sql = "SELECT bd.*, d.*, u.* FROM borrowDocuments bd " +
                 "JOIN documents d ON bd.documentId = d.documentId " +
                 "JOIN users u ON bd.userId = u.userId " +
@@ -176,7 +178,7 @@ public class BorrowDocumentDAO implements IRepository {
      * @param entity the BorrowDocument object with updated information
      */
     @Override
-    public void update(Object entity) {
+    public void update(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
         String sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, borrowDate = ?, dueDate = ?, returnDate = ?, state = ? WHERE borrowId = ?";
 
@@ -221,7 +223,7 @@ public class BorrowDocumentDAO implements IRepository {
      * @return the saved BorrowDocument object
      */
     @Override
-    public Object save(Object entity) {
+    public BorrowDocument save(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
         if (getByStringId(borrowDocument.getBorrowId()) != null) {
             update(borrowDocument);

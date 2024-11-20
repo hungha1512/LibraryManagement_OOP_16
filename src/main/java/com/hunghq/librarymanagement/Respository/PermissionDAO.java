@@ -12,9 +12,11 @@ import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
 import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.Permission;
 import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 @SuppressWarnings("rawtypes")
-public class PermissionDAO implements IRepository{
+public class PermissionDAO implements IRepository<Permission>{
 
     private static final Connection con = MySQLConnection.getConnection();
 
@@ -40,8 +42,8 @@ public class PermissionDAO implements IRepository{
     }
 
     @Override
-    public void add(Object entity) {
-        Permission permission = (Permission) entity;
+    public void add(Permission entity) {
+        Permission permission = entity;
         String sql = "INSERT INTO permissions (permissionId, title, slug, description, isDeleted, createdAt, updatedAt) "
                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -89,9 +91,9 @@ public class PermissionDAO implements IRepository{
     }
 
     @Override
-    public List<Permission> getAll() {
+    public ObservableList<Permission> getAll() {
         String sql = "SELECT * FROM permissions";
-        List<Permission> permissions = new ArrayList<>();
+        ObservableList<Permission> permissions = FXCollections.observableArrayList();
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             ResultSet reS = prS.executeQuery();
@@ -108,9 +110,9 @@ public class PermissionDAO implements IRepository{
     }
 
     @Override
-    public List<Permission> findByName(String name) {
+    public ObservableList<Permission> findByName(String name) {
         String sql = "SELECT * FROM permissions WHERE title LIKE ?";
-        List<Permission> permissions = new ArrayList<>();
+        ObservableList<Permission> permissions = FXCollections.observableArrayList();
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, "%" + name + "%");
@@ -131,7 +133,7 @@ public class PermissionDAO implements IRepository{
     }
 
     @Override
-    public void update(Object entity) {
+    public void update(Permission entity) {
         Permission permission = (Permission) entity;
         String sql = "UPDATE permissions SET title = ?, slug = ?, description = ?, isDeleted = ?, updatedAt = ? "
                    + "WHERE permissionId = ?";
@@ -164,7 +166,7 @@ public class PermissionDAO implements IRepository{
     }
 
     @Override
-    public Permission save(Object entity) {
+    public Permission save(Permission entity) {
         Permission permission = (Permission) entity;
 
         if (getByStringId(permission.getPermissionId()) != null) {

@@ -1,7 +1,8 @@
 package com.hunghq.librarymanagement.IGeneric;
 
+import javafx.collections.ObservableList;
+
 import java.sql.ResultSet;
-import java.util.List;
 
 public interface IRepository<T>
 {
@@ -9,8 +10,8 @@ public interface IRepository<T>
     void add(T entity);
     T getByStringId(String id);
     T getByIntId(int id);
-    List<T> getAll();
-    List<T> findByName(String name);
+    ObservableList<T> getAll();
+    ObservableList<T> findByName(String name);
     T save(T entity);
     void update(T entity);
     void delete(String id);
