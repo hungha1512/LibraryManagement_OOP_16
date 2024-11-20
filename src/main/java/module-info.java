@@ -12,6 +12,7 @@ module com.hunghq.librarymanagement {
     requires java.sql;
     requires jbcrypt;
     requires java.mail;
+    requires java.desktop;
 
     opens com.hunghq.librarymanagement.Controller to javafx.fxml;
     exports com.hunghq.librarymanagement;
