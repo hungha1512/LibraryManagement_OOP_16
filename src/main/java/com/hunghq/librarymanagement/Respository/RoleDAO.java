@@ -4,6 +4,8 @@ import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
 import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.Role;
 import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.List;
  * This class handles CRUD operations and custom queries on the users table.
  */
 @SuppressWarnings("rawtypes")
-public class RoleDAO implements IRepository {
+public class RoleDAO implements IRepository<Role> {
 
     private static final Connection con = MySQLConnection.getConnection();
 
@@ -50,8 +52,8 @@ public class RoleDAO implements IRepository {
      * @param entity the User object to add
      */
     @Override
-    public void add(Object entity) {
-        Role role = (Role) entity;
+    public void add(Role entity) {
+        Role role = entity;
         String sql = "INSERT INTO roles (roleId, title, slug, description, isDeleted, createdAt, updatedAt) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -109,9 +111,9 @@ public class RoleDAO implements IRepository {
      * @return a list of all Role objects in the database
      */
     @Override
-    public List<Role> getAll() {
+    public ObservableList<Role> getAll() {
         String sql = "SELECT * FROM roles";
-        List<Role> roles = new ArrayList<>();
+        ObservableList<Role> roles = FXCollections.observableArrayList();
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             ResultSet reS = prS.executeQuery();
@@ -134,9 +136,9 @@ public class RoleDAO implements IRepository {
      * @return a list of roles whose titles match the search term
      */
     @Override
-    public List<Role> findByName(String name) {
+    public ObservableList<Role> findByName(String name) {
         String sql = "SELECT * FROM roles WHERE title LIKE ?";
-        List<Role> roles = new ArrayList<>();
+        ObservableList<Role> roles = FXCollections.observableArrayList();
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, "%" + name + "%");
@@ -161,8 +163,8 @@ public class RoleDAO implements IRepository {
      * @param entity the Role object with updated information
      */
     @Override
-    public void update(Object entity) {
-        Role role = (Role) entity;
+    public void update(Role entity) {
+        Role role = entity;
         String sql = "UPDATE roles SET title = ?, slug = ?, description = ?, isDeleted = ?, " +
                 "createdAt = ?, updatedAt = ? WHERE roleId = ?";
 
@@ -206,8 +208,8 @@ public class RoleDAO implements IRepository {
      * @return the saved Role object
      */
     @Override
-    public Object save(Object entity) {
-        Role role = (Role) entity;
+    public Role save(Role entity) {
+        Role role = entity;
 
         if (getByIntId(role.getRoleId()) != null) {
             update(role);

@@ -3,7 +3,10 @@ package com.hunghq.librarymanagement.Respository;
 import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
 import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.Document;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
+import javax.print.Doc;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +19,7 @@ import java.util.List;
  * related to the Document entity in the library management system.
  */
 @SuppressWarnings("rawtypes")
-public class DocumentDAO implements IRepository {
+public class DocumentDAO implements IRepository<Document> {
 
     /**
      * Connection to the MySQL database.
@@ -61,7 +64,7 @@ public class DocumentDAO implements IRepository {
      * @param entity the Document object to be added
      */
     @Override
-    public void add(Object entity) {
+    public void add(Document entity) {
         Document document = (Document) entity;
         String sql = "INSERT INTO documents (documentId, title, author, rating, genre, language, description, numRatings, publisher, isbn, publishedDate, award, coverImg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -93,7 +96,7 @@ public class DocumentDAO implements IRepository {
      * @return the Document with the specified documentId, or null if not found
      */
     @Override
-    public Object getByStringId(String id) {
+    public Document getByStringId(String id) {
         String sql = "SELECT * FROM documents WHERE documentId = ?";
         Document document = null;
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -128,8 +131,8 @@ public class DocumentDAO implements IRepository {
      *
      * @return a list of all Document objects in the database
      */
-    public List<Document> getAll() {
-        List<Document> documents = new ArrayList<>();
+    public ObservableList<Document> getAll() {
+        ObservableList<Document> documents = FXCollections.observableArrayList();
         String sql = "SELECT * FROM documents";
         try (PreparedStatement prS = con.prepareStatement(sql);
              ResultSet reS = prS.executeQuery()) {
@@ -151,8 +154,8 @@ public class DocumentDAO implements IRepository {
      * @return a list of Document objects that match the search term
      */
     @Override
-    public List<Document> findByName(String name) {
-        List<Document> documents = new ArrayList<>();
+    public ObservableList<Document> findByName(String name) {
+        ObservableList<Document> documents = FXCollections.observableArrayList();
         String sql = "SELECT * FROM documents WHERE title LIKE ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, "%" + name + "%");
@@ -177,7 +180,7 @@ public class DocumentDAO implements IRepository {
      * @param entity the Document object with updated information
      */
     @Override
-    public void update(Object entity) {
+    public void update(Document entity) {
         Document document = (Document) entity;
         String sql = "UPDATE documents SET title = ?, author = ?, rating = ?, genre = ?, language = ?, description = ?, numRatings = ?, publisher = ?, isbn = ?, publishedDate = ?, award = ?, coverImg = ? WHERE documentId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -227,7 +230,7 @@ public class DocumentDAO implements IRepository {
      * @return the saved Document object
      */
     @Override
-    public Object save(Object entity) {
+    public Document save(Document entity) {
         Document document = (Document) entity;
         if (getByStringId(document.getDocumentId()) != null) {
             update(document);
@@ -266,5 +269,26 @@ public class DocumentDAO implements IRepository {
         } else {
             System.out.println("No document found with name containing: " + testName);
         }
+    }
+
+    /**
+     * Retrieves all Document records from the database.
+     *
+     * @return a list of all Document objects in the database
+     */
+    public ObservableList<Document> getAllWithOffset(int offset) {
+        ObservableList<Document> documents = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM documents LIMIT 15 OFFSET " + offset;
+        try (PreparedStatement prS = con.prepareStatement(sql);
+             ResultSet reS = prS.executeQuery()) {
+
+            while (reS.next()) {
+                documents.add(make(reS));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return documents;
     }
 }
