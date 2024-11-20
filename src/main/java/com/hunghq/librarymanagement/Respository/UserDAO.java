@@ -18,7 +18,7 @@ import java.util.List;
  * UserDAO class for performing CRUD operations and custom queries on the users table.
  */
 @SuppressWarnings("rawtypes")
-public class UserDAO implements IRepository {
+public class UserDAO implements IRepository<User> {
 
     private static final Connection con = MySQLConnection.getConnection();
     private ObservableList<User> users = FXCollections.observableArrayList();
@@ -67,8 +67,8 @@ public class UserDAO implements IRepository {
      * @param entity the User object to add
      */
     @Override
-    public void add(Object entity) {
-        User user = (User) entity;
+    public void add(User entity) {
+        User user = entity;
         String sql = "INSERT INTO users (userId, fullName, passwordHash, gender,"
                 + "email, phone, joinDate, dateOfBirth, role, otp, isDeleted) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -135,9 +135,9 @@ public class UserDAO implements IRepository {
      * @return a list of all User objects in the database
      */
     @Override
-    public List<User> getAll() {
+    public ObservableList<User> getAll() {
         String sql = "SELECT * FROM users";
-        List<User> users = new ArrayList<>();
+        ObservableList<User> users = FXCollections.observableArrayList();
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             ResultSet reS = prS.executeQuery();
 
@@ -158,9 +158,9 @@ public class UserDAO implements IRepository {
      * @return a list of users whose names match the search term
      */
     @Override
-    public List<User> findByName(String name) {
+    public ObservableList<User> findByName(String name) {
         String sql = "SELECT * FROM users WHERE fullName LIKE ?";
-        List<User> users = new ArrayList<>();
+        ObservableList<User> users = FXCollections.observableArrayList();
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, "%" + name + "%");
             ResultSet reS = prS.executeQuery();
@@ -184,8 +184,8 @@ public class UserDAO implements IRepository {
      * @param entity the User object with updated information
      */
     @Override
-    public void update(Object entity) {
-        User user = (User) entity;
+    public void update(User entity) {
+        User user = entity;
         String sql = "UPDATE users SET fullName = ?, passwordHash = ?, email = ?, "
                 + "phone = ?, joinDate = ?, dateOfBirth = ? WHERE userId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -228,7 +228,7 @@ public class UserDAO implements IRepository {
      * @return the saved User object
      */
     @Override
-    public User save(Object entity) {
+    public User save(User entity) {
         User user = (User) entity;
 
         if (getByStringId(user.getUserId()) != null) {

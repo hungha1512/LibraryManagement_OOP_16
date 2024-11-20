@@ -13,9 +13,11 @@ import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Model.Entity.Review;
 import com.hunghq.librarymanagement.Model.Entity.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 @SuppressWarnings("rawtypes")
-public class ReviewDAO implements IRepository{
+public class ReviewDAO implements IRepository<Review>{
 
     private static final Connection con = MySQLConnection.getConnection();
     @Override
@@ -45,7 +47,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public void add(Object entity) {
+    public void add(Review entity) {
         Review review = (Review) entity;
         String sql = "INSERT INTO reviews (reviewId, documentId, userId, "
                    + "rating, reviewText, reviewDate) " 
@@ -67,7 +69,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public Object getByStringId(String id) {
+    public Review getByStringId(String id) {
         String sql = "SELECT * FROM reviews WHERE reviewId = ?";
         Review review = null;
         
@@ -94,9 +96,9 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public List<Review> getAll() {
+    public ObservableList<Review> getAll() {
         String sql = "SELECT * FROM reviews";
-        List<Review> reviews = new ArrayList<>();
+        ObservableList<Review> reviews = FXCollections.observableArrayList();
         
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             ResultSet reS = prS.executeQuery();
@@ -113,11 +115,11 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public List<Review> findByName(String name) {
+    public ObservableList<Review> findByName(String name) {
         String sql = "SELECT * FROM reviews r " 
                    + "JOIN documents d ON r.documentId = d.documentId " 
                    + "WHERE d.title LIKE ?";
-        List<Review> reviews = new ArrayList<>();
+        ObservableList<Review> reviews = FXCollections.observableArrayList();
         
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, "%" + name + "%");
@@ -137,7 +139,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public void update(Object entity) {
+    public void update(Review entity) {
         Review review = (Review) entity;
         String sql = "UPDATE reviews SET documentId = ?, userId = ?, rating = ?, "
                    + "reviewText = ?, reviewDate = ? WHERE reviewId = ?";
@@ -170,7 +172,7 @@ public class ReviewDAO implements IRepository{
     }
 
     @Override
-    public Object save(Object entity) {
+    public Review save(Review entity) {
         Review review = (Review) entity;
         
         if (getByStringId(review.getReviewId()) != null) {

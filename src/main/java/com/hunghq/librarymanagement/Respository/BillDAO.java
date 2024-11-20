@@ -5,6 +5,8 @@ import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.Bill;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Model.Entity.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.List;
  * BillDAO provides CRUD operations for Bill objects within the library management system.
  */
 @SuppressWarnings("rawtypes")
-public class BillDAO implements IRepository {
+public class BillDAO implements IRepository<Bill> {
 
     private static final Connection con = MySQLConnection.getConnection();
 
@@ -55,7 +57,7 @@ public class BillDAO implements IRepository {
      * @param entity the Bill object to be added
      */
     @Override
-    public void add(Object entity) {
+    public void add(Bill entity) {
         Bill bill = (Bill) entity;
 
         String sql = "INSERT INTO bills (documentId, userId, timeBorrow, " +
@@ -124,8 +126,8 @@ public class BillDAO implements IRepository {
      * @return a list of all Bill objects
      */
     @Override
-    public List<Bill> getAll() {
-        List<Bill> bills = new ArrayList<>();
+    public ObservableList<Bill> getAll() {
+        ObservableList<Bill> bills = FXCollections.observableArrayList();
         String sql = "SELECT * FROM bills";
         try (Statement stM = con.createStatement();
              ResultSet reS = stM.executeQuery(sql)) {
@@ -146,8 +148,8 @@ public class BillDAO implements IRepository {
      * @return bill
      */
     @Override
-    public List<Bill> findByName(String userId) {
-        List<Bill> bills = new ArrayList<>();
+    public ObservableList<Bill> findByName(String userId) {
+        ObservableList<Bill> bills = FXCollections.observableArrayList();
         String sql = "SELECT * FROM bills WHERE userId = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -176,7 +178,7 @@ public class BillDAO implements IRepository {
      * @param entity the Bill object with updated information
      */
     @Override
-    public void update(Object entity) {
+    public void update(Bill entity) {
         Bill bill = (Bill) entity;
         String sql = "UPDATE bills SET documentId = ?, userId = ?, timeBorrow = ?, timeReturn = ?, latelyFee = ?, costPerDayLate = ? WHERE billId = ?";
 
@@ -218,8 +220,8 @@ public class BillDAO implements IRepository {
      * @return the saved Bill object
      */
     @Override
-    public Object save(Object entity) {
-        Bill bill = (Bill) entity;
+    public Bill save(Bill entity) {
+        Bill bill = entity;
         if (getByIntId(bill.getBillId()) != null) {
             update(bill);
         } else {
