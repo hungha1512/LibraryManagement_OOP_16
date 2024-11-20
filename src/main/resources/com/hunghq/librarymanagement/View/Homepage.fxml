@@ -24,16 +24,16 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="btn_favorites" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Favorites">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
         <Button fx:id="btn_service" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Service">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
+      <Button fx:id="btn_user1" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="AskAI">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
         <Button fx:id="btn_user" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="User">
             <font>
                 <Font size="14.0" />
