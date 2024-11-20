@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.HomepageController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.HomepageController">
     <!-- Sidebar Menu -->
     <VBox layoutX="0" layoutY="0" prefHeight="600.0" prefWidth="160.0" style="-fx-background-color: #000022; -fx-padding: 15;">
         <Button fx:id="btn_all_books" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="All Books">
@@ -45,12 +45,12 @@
     <HBox layoutX="160.0" layoutY="0" prefHeight="50" prefWidth="840.0" style="-fx-background-color: #000022; -fx-padding: 10;">
         <Pane HBox.hgrow="ALWAYS">
             <children>
-                <TextField prefHeight="30.0" prefWidth="351.0" style="-fx-border-radius: 5px; -fx-background-radius: 5px;" text="Search your favourite book">
+                <TextField fx:id="tf_search_bar" prefHeight="30.0" prefWidth="351.0" style="-fx-border-radius: 5px; -fx-background-radius: 5px;" text="Search your favourite book">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </TextField>
-                <Button layoutX="492.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: #0078d7; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Search" textFill="#f8f8f8">
+                <Button fx:id="btn_search" layoutX="492.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: #0078d7; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Search" textFill="#f8f8f8">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
