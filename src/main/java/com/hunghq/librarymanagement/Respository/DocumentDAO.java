@@ -11,7 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -291,6 +290,66 @@ public class DocumentDAO implements IRepository<Document> {
 
             while (reS.next()) {
                 documents.add(make(reS));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return documents;
+    }
+
+    public ObservableList<Document> searchByISBN(String isbn) {
+        ObservableList<Document> documents = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM documents WHERE isbn LIKE ?";
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
+            prS.setString(1, "%" + isbn + "%");
+            ResultSet reS = prS.executeQuery();
+
+            while (reS.next()) {
+                documents.add(make(reS));
+            }
+            if (documents.isEmpty()) {
+                System.out.println("No document found with isbn: " + isbn);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return documents;
+    }
+
+    public ObservableList<Document> searchByGenre(String genre) {
+        ObservableList<Document> documents = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM documents WHERE genre LIKE ?";
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
+            prS.setString(1, "%" + genre + "%");
+            ResultSet reS = prS.executeQuery();
+
+            while (reS.next()) {
+                documents.add(make(reS));
+            }
+            if (documents.isEmpty()) {
+                System.out.println("No document found with name: " + genre);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return documents;
+    }
+
+    public ObservableList<Document> searchByAuthor(String author) {
+        ObservableList<Document> documents = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM documents WHERE author LIKE ?";
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
+            prS.setString(1, "%" + author + "%");
+            ResultSet reS = prS.executeQuery();
+
+            while (reS.next()) {
+                documents.add(make(reS));
+            }
+            if (documents.isEmpty()) {
+                System.out.println("No document found with name: " + author);
             }
 
         } catch (SQLException e) {
