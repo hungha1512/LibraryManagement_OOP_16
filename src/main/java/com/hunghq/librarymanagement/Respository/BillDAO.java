@@ -180,7 +180,8 @@ public class BillDAO implements IRepository<Bill> {
     @Override
     public void update(Bill entity) {
         Bill bill = (Bill) entity;
-        String sql = "UPDATE bills SET documentId = ?, userId = ?, timeBorrow = ?, timeReturn = ?, latelyFee = ?, costPerDayLate = ? WHERE billId = ?";
+        String sql = "UPDATE bills SET documentId = ?, userId = ?, timeBorrow = ?, " +
+                "timeReturn = ?, latelyFee = ?, costPerDayLate = ? WHERE billId = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, bill.getDocument().getDocumentId());
