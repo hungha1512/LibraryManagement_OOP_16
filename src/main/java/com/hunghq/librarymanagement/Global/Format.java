@@ -19,5 +19,4 @@ public class Format {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         return date.format(formatter);
     }
-
 }

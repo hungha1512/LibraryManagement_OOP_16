@@ -12,6 +12,20 @@ public class Bill {
     private double latelyFee;
     private double costPerDayLate;
 
+    public Bill() {
+
+    }
+    public Bill(int billId, Document document, User user, Timestamp timeBorrow, Timestamp timeReturn,
+                double latelyFee, double costPerDayLate) {
+        this.billId = billId;
+        this.document = document;
+        this.user = user;
+        this.timeBorrow = timeBorrow;
+        this.timeReturn = timeReturn;
+        this.latelyFee = latelyFee;
+        this.costPerDayLate = costPerDayLate;
+    }
+
     public int getBillId() {
         return billId;
     }
@@ -65,20 +79,6 @@ public class Bill {
     }
 
     public void setCostPerDayLate(double costPerDayLate) {
-        this.costPerDayLate = costPerDayLate;
-    }
-
-    public Bill() {
-
-    }
-    public Bill(int billId, Document document, User user, Timestamp timeBorrow, Timestamp timeReturn,
-                double latelyFee, double costPerDayLate) {
-        this.billId = billId;
-        this.document = document;
-        this.user = user;
-        this.timeBorrow = timeBorrow;
-        this.timeReturn = timeReturn;
-        this.latelyFee = latelyFee;
         this.costPerDayLate = costPerDayLate;
     }
 

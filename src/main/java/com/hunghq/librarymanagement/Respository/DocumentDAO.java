@@ -66,7 +66,10 @@ public class DocumentDAO implements IRepository<Document> {
     @Override
     public void add(Document entity) {
         Document document = (Document) entity;
-        String sql = "INSERT INTO documents (documentId, title, author, rating, genre, language, description, numRatings, publisher, isbn, publishedDate, award, coverImg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO documents (documentId, title, author, rating, genre, " +
+                "quantity, language, description, numRatings, " +
+                "publisher, isbn, publishedDate, award, coverImg) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
             prS.setString(1, document.getDocumentId());
@@ -74,14 +77,15 @@ public class DocumentDAO implements IRepository<Document> {
             prS.setString(3, document.getAuthorName());
             prS.setDouble(4, document.getRating());
             prS.setString(5, document.getGenre());
-            prS.setString(6, document.getLanguage());
-            prS.setString(7, document.getDescription());
-            prS.setInt(8, document.getNumRatings());
-            prS.setString(9, document.getPublisher());
-            prS.setString(10, document.getIsbn());
-            prS.setString(11, document.getPublishedDate());
-            prS.setString(12, document.getAward());
-            prS.setString(13, document.getCoverImg());
+            prS.setInt(6, document.getQuantity());
+            prS.setString(7, document.getLanguage());
+            prS.setString(8, document.getDescription());
+            prS.setInt(9, document.getNumRatings());
+            prS.setString(10, document.getPublisher());
+            prS.setString(11, document.getIsbn());
+            prS.setString(12, document.getPublishedDate());
+            prS.setString(13, document.getAward());
+            prS.setString(14, document.getCoverImg());
 
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -182,7 +186,10 @@ public class DocumentDAO implements IRepository<Document> {
     @Override
     public void update(Document entity) {
         Document document = (Document) entity;
-        String sql = "UPDATE documents SET title = ?, author = ?, rating = ?, genre = ?, language = ?, description = ?, numRatings = ?, publisher = ?, isbn = ?, publishedDate = ?, award = ?, coverImg = ? WHERE documentId = ?";
+        String sql = "UPDATE documents SET title = ?, author = ?, rating = ?, " +
+                "genre = ?, quantity = ?, language = ?, description = ?, " +
+                "numRatings = ?, publisher = ?, isbn = ?, publishedDate = ?, " +
+                "award = ?, coverImg = ? WHERE documentId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
             prS.setString(1, document.getTitle());
