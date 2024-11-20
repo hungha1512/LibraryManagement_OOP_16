@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.hunghq.librarymanagement.Controller.AskAIController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <!-- TextField để nhập câu hỏi -->
+    <TextField fx:id="questionInput" layoutX="20.0" layoutY="20.0" prefWidth="400.0" promptText="Enter your question here..." />
+
+    <!-- Button để gửi câu hỏi -->
+    <Button text="Send" layoutX="440.0" layoutY="20.0" prefWidth="100.0" onAction="#handleSend" />
+
+    <!-- TextArea để hiển thị phản hồi -->
+    <TextArea fx:id="responseArea" layoutX="20.0" layoutY="70.0" prefWidth="560.0" prefHeight="300.0" wrapText="true" editable="false" promptText="AI response will appear here..." />
+
+</AnchorPane>
