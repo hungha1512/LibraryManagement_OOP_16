@@ -1,6 +1,8 @@
 package com.hunghq.librarymanagement.Controller;
 
 import com.hunghq.librarymanagement.Global.AppProperties;
+import com.hunghq.librarymanagement.Model.Entity.Document;
+import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
@@ -50,6 +53,17 @@ public class HomepageController implements Initializable {
 
     @FXML
     public Button btn_log_out;
+
+    @FXML
+    public TextField tf_search_bar;
+
+    @FXML
+    public Button btn_search;
+
+    @FXML
+    public Button btn_ask_ai;
+
+    private DocumentDAO documentDAO = new DocumentDAO();
 
     public void setContent(Parent newContentPane) {
         main_screen.getChildren().clear();
@@ -93,5 +107,58 @@ public class HomepageController implements Initializable {
                 getContentPane("/com/hunghq/librarymanagement/View/AllBooks/MainAllBooks.fxml");
             }
         });
+
+        btn_ask_ai.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                getContentPane("/com/hunghq/librarymanagement/View/AskAI/AskAI.fxml");
+            }
+        });
+
+        btn_search.setOnAction(actionEvent -> handleSearch());
+    }
+
+    private void handleSearch() {
+        String query = tf_search_bar.getText().trim();
+        String searchOption = cb_search_option.getValue();
+
+        if (query.isEmpty()) {
+            System.out.println("Search query is empty!");
+            return;
+        }
+
+        ObservableList<Document> searchResults = FXCollections.observableArrayList();
+
+        switch (searchOption) {
+            case "Book name":
+                searchResults = documentDAO.findByName(query);
+                break;
+            case "ISBN":
+                searchResults = documentDAO.searchByISBN(query);
+                break;
+            case "Genre":
+                searchResults = documentDAO.searchByGenre(query);
+                break;
+            case "Author":
+                searchResults = documentDAO.searchByAuthor(query);
+                break;
+            default:
+                System.out.println("Invalid search option!");
+        }
+
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/AllBooks/MainAllBooks.fxml"));
+            Parent newContentPane = loader.load();
+
+            MainAllBooksController controller = loader.getController();
+
+            controller.updateBooks(searchResults);
+
+            setContent(newContentPane);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
