@@ -6,14 +6,18 @@ import com.hunghq.librarymanagement.Service.CallAPIService;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -124,6 +128,10 @@ public class MainAllBooksController extends BaseController {
             vBox.getStyleClass().add("service-box");
             imageView.getStyleClass().add("image-box");
 
+            vBox.setOnMouseClicked(event -> {
+                showBookDetail(document);
+            });
+
             vBox.setOnMouseEntered(event -> {
                 vBox.setOpacity(0.8);
                 vBox.setStyle("-fx-cursor: hand;");
@@ -226,6 +234,10 @@ public class MainAllBooksController extends BaseController {
             vBox.getStyleClass().add("service-box");
             imageView.getStyleClass().add("image-box");
 
+            vBox.setOnMouseClicked(event -> {
+                showBookDetail(document);
+            });
+
             vBox.setOnMouseEntered(event -> {
                 vBox.setOpacity(0.8);
                 vBox.setStyle("-fx-cursor: hand;");
@@ -243,6 +255,25 @@ public class MainAllBooksController extends BaseController {
         }
 
         lbl_page_info.setText("Page " + currentPage + " of " + totalPages);
+    }
+    private void showBookDetail(Document document) {
+        try {
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/AllBooks/BookDetail.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load());
+
+            BookDetailController bookDetailController = fxmlLoader.getController();
+
+            bookDetailController.initialize(document);
+
+            Stage stage = new Stage();
+            stage.setTitle("Book Detail");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
