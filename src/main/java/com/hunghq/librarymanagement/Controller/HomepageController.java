@@ -3,6 +3,8 @@ package com.hunghq.librarymanagement.Controller;
 import com.hunghq.librarymanagement.Global.AppProperties;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
+import com.hunghq.librarymanagement.Service.AuthenticationService;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,11 +13,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -116,6 +120,26 @@ public class HomepageController implements Initializable {
         });
 
         btn_search.setOnAction(actionEvent -> handleSearch());
+
+        btn_log_out.setOnAction(actionEvent -> {
+            AuthenticationService.logout();
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("/com/hunghq/librarymanagement/View/Login.fxml")
+            );
+            Platform.runLater(() -> {
+                Stage stage = (Stage) btn_log_out.getScene().getWindow();
+                stage.close();
+            });
+            try {
+                Scene scene = new Scene(loader.load());
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.setTitle("UET Library Management System");
+                stage.show();
+            }catch (IOException e){
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private void handleSearch() {
