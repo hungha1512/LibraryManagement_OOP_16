@@ -6,6 +6,7 @@ import com.hunghq.librarymanagement.Model.Entity.User;
 import com.hunghq.librarymanagement.Service.AuthenticationService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -129,40 +132,64 @@ public class LoginController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                String username = txt_username.getText();
-                String password = pwd_password.getText();
-
-                try {
-                    User userLogin = new User();
-                    if (Validation.isEmailValid(username)) {
-                        userLogin.setEmail(username);
-                        userLogin.setPasswordHash(password);
-                    }
-                    if (Validation.isPhoneNumberValid(username)) {
-                        userLogin.setPhone(username);
-                        userLogin.setPasswordHash(password);
-                    }
-
-                    lbl_authenticate.setText("");
-                    if (username.isEmpty()) throw new Exception("Username cannot be empty");
-                    if (password.isEmpty()) throw new Exception("Password cannot be empty");
-
-                    if (AuthenticationService.login(userLogin)) {
-                        AppProperties.setProperty("user.isRemember", cb_remember.isSelected() ? "true" : "false");
-
-                        Node node = (Node) event.getSource();
-                        Stage stage = (Stage) node.getScene().getWindow();
-                        stage.close();
-                        loadMainMenu();
-                    } else throw new Exception("Invalid username or password");
-                } catch (Exception e) {
-                    lbl_authenticate.visibleProperty().set(true);
-                    lbl_authenticate.setStyle("-fx-text-fill: #f63838");
-                    lbl_authenticate.setText(e.getMessage());//Notification
-                }
+                handleLogin(event);
             }
-            /*END EVENT LOGIN BUTTON*/
         });
+
+        txt_username.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin(event);
+            }
+        });
+
+        pwd_password.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin(null);
+            }
+        });
+
+        txt_password_visible.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin(null);
+            }
+        });
+    }
+
+    private void handleLogin(Event event) {
+        String username = txt_username.getText();
+        String password = pwd_password.getText();
+
+        try {
+            User userLogin = new User();
+            if (Validation.isEmailValid(username)) {
+                userLogin.setEmail(username);
+                userLogin.setPasswordHash(password);
+            }
+            if (Validation.isPhoneNumberValid(username)) {
+                userLogin.setPhone(username);
+                userLogin.setPasswordHash(password);
+            }
+
+            lbl_authenticate.setText("");
+            if (username.isEmpty()) throw new Exception("Username cannot be empty");
+            if (password.isEmpty()) throw new Exception("Password cannot be empty");
+
+            if (AuthenticationService.login(userLogin)) {
+                AppProperties.setProperty("user.isRemember", cb_remember.isSelected() ? "true" : "false");
+
+                if (event != null) {
+                    Node node = (Node) event.getSource();
+                    Stage stage = (Stage) node.getScene().getWindow();
+                    stage.close();
+                }
+
+                loadMainMenu();
+            } else throw new Exception("Invalid username or password");
+        } catch (Exception e) {
+            lbl_authenticate.visibleProperty().set(true);
+            lbl_authenticate.setStyle("-fx-text-fill: #f63838");
+            lbl_authenticate.setText(e.getMessage());//Notification
+        }
     }
 
     /**

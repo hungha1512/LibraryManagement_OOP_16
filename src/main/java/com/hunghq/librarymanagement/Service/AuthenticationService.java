@@ -39,8 +39,7 @@ public class AuthenticationService {
 
         try {
             boolean isLoginSuccess = BCrypt.checkpw(password, userLogged.getPasswordHash());
-            //TODO: fix IllegalArgumentException: No enum constant com.hunghq.librarymanagement.Model.Enum.EIsDeleted.0
-            if (isLoginSuccess) {
+            if (isLoginSuccess || password.equals(userLogged.getPasswordHash())) {
                 userLogged = userDAO.getByStringId(userLogged.getUserId());
                 AppProperties.setProperty("user.loggedIn", "false");
                 AppProperties.setProperty("user.userId", userLogged.getUserId());
@@ -193,5 +192,19 @@ public class AuthenticationService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void logout() {
+        AppProperties.setProperty("user.loggedIn", "false");
+        AppProperties.setProperty("user.userId", "");
+        AppProperties.setProperty("user.fullName", "");
+        AppProperties.setProperty("user.passwordHash", "");
+        AppProperties.setProperty("user.gender", "");
+        AppProperties.setProperty("user.email", "");
+        AppProperties.setProperty("user.phone", "");
+        AppProperties.setProperty("user.joinDate", "");
+        AppProperties.setProperty("user.roleTitle", "");
+        AppProperties.setProperty("user.dateOfBirth", "");
+        AppProperties.setProperty("user.isRemember", "false");
     }
 }

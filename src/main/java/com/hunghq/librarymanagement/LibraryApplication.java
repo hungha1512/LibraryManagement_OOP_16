@@ -15,7 +15,7 @@ public class LibraryApplication extends Application {
                 .getResource("/com/hunghq/librarymanagement/View/Login.fxml")
         );
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+        stage.setTitle("UET Library Management System!");
         stage.setScene(scene);
         stage.show();
     }
