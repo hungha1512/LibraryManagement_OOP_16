@@ -13,6 +13,7 @@ module com.hunghq.librarymanagement {
     requires jbcrypt;
     requires java.mail;
     requires java.net.http;
+    requires com.google.gson;
     requires org.json;
     requires java.desktop;
 
