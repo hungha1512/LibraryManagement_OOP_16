@@ -60,6 +60,9 @@ public class HomepageController implements Initializable {
     @FXML
     public Button btn_search;
 
+    @FXML
+    public Button btn_ask_ai;
+
     private DocumentDAO documentDAO = new DocumentDAO();
 
     public void setContent(Parent newContentPane) {
@@ -102,6 +105,13 @@ public class HomepageController implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 getContentPane("/com/hunghq/librarymanagement/View/AllBooks/MainAllBooks.fxml");
+            }
+        });
+
+        btn_ask_ai.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                getContentPane("/com/hunghq/librarymanagement/View/AskAI/AskAI.fxml");
             }
         });
 

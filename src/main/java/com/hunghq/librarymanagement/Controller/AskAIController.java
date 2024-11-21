@@ -9,6 +9,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 
 public class AskAIController {
 
@@ -19,7 +20,7 @@ public class AskAIController {
     private TextArea responseArea;
 
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
-    private static final String API_KEY = "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"; // Thay bằng API Key của bạn
+    private static final String API_KEY = "API_KEY";
 
     @FXML
     public void handleSend() {
@@ -43,14 +44,13 @@ public class AskAIController {
 
         // JSON body gửi đến API
         String requestBody = """
-                {
-                    "model": "gpt-4",
-                    "messages": [{"role": "user", "content": "%s"}],
-                    "max_tokens": 200
-                }
-                """.formatted(prompt);
+            {
+                "model": "gpt-3.5-turbo",
+                "messages": [{"role": "user", "content": "%s"}],
+                "max_tokens": 500
+            }\
+            """.formatted(prompt);
 
-        // Tạo request đến API
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(java.net.URI.create(API_URL))
                 .header("Content-Type", "application/json")
@@ -58,11 +58,24 @@ public class AskAIController {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
-        // Nhận response từ API
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Parse JSON response để lấy câu trả lời
+        // In phản hồi JSON từ API để kiểm tra
+        System.out.println("Response from API: " + response.body());
+
         JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
+
+        // Kiểm tra trường hợp lỗi
+        if (jsonResponse.has("error")) {
+            JsonObject error = jsonResponse.getAsJsonObject("error");
+            return "Error: " + error.get("message").getAsString();
+        }
+
+        // Kiểm tra và xử lý trường hợp không có "choices"
+        if (!jsonResponse.has("choices") || jsonResponse.getAsJsonArray("choices").size() == 0) {
+            return "Error: API response does not contain valid choices.";
+        }
+
         return jsonResponse
                 .getAsJsonArray("choices")
                 .get(0)
