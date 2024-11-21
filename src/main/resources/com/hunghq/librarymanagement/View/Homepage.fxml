@@ -41,11 +41,10 @@
         </Button>
     </VBox>
 
-    <!-- Header -->
     <HBox layoutX="160.0" layoutY="0" prefHeight="50" prefWidth="840.0" style="-fx-background-color: #000022; -fx-padding: 10;">
         <Pane HBox.hgrow="ALWAYS">
             <children>
-                <TextField fx:id="tf_search_bar" prefHeight="30.0" prefWidth="351.0" style="-fx-border-radius: 5px; -fx-background-radius: 5px;" text="Search your favourite book">
+                <TextField fx:id="tf_search_bar" prefHeight="30.0" prefWidth="351.0" promptText="Search your favourite book" style="-fx-border-radius: 5px; -fx-background-radius: 5px;">
                     <font>
                         <Font size="14.0" />
                     </font>
