@@ -8,7 +8,7 @@ public class MySQLConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/lmsofficial";
     private static final String USER = "root";
-    private static final String PASSWORD = "(Ngocdung)19122005";
+    private static final String PASSWORD = "Trinh2003@@";
 
     @SuppressWarnings("CallToPrintStackTrace")
     public static Connection getConnection() {
