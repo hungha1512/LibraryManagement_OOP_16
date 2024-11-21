@@ -2,6 +2,7 @@ package com.hunghq.librarymanagement.Controller;
 
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Service.CallAPIService;
+import com.hunghq.librarymanagement.Service.LoadImageService;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -31,9 +32,14 @@ public class BookDetailController {
     @FXML
     private ImageView coverImageView;
 
-    private CallAPIService apiService = new CallAPIService();
+    private CallAPIService callAPIService;
+    private LoadImageService loadImageService;
 
     public void initialize(Document document) {
+
+        callAPIService = new CallAPIService();
+        loadImageService = new LoadImageService(callAPIService);
+
         if (document != null) {
 
             titleField.setText(document.getTitle());
@@ -46,34 +52,8 @@ public class BookDetailController {
             awardField.setText(document.getAward());
             idField.setText(document.getDocumentId());
 
-            loadImageAsync(document);
+            loadImageService.loadImage(document, coverImageView);
         }
     }
-
-    private void loadImageAsync(Document document) {
-        Task<Image> loadImageTask = new Task<>() {
-            @Override
-            protected Image call() {
-                String imageUrl = apiService.getImageUrlFromTitle(document.getTitle());
-                if (imageUrl != null) {
-                    try {
-                        return new Image(imageUrl, true);
-                    } catch (Exception e) {
-                        System.err.println("Error loading image: " + e.getMessage());
-                    }
-                }
-                return new Image("/src/main/resources/com/hunghq/librarymanagement/Media/LogoUet.jpg");
-            }
-        };
-
-        loadImageTask.setOnSucceeded(event -> coverImageView.setImage(loadImageTask.getValue()));
-
-        loadImageTask.setOnFailed(event -> {
-            System.err.println("Failed to load image for: " + document.getTitle());
-            coverImageView.setImage(new Image("/src/main/resources/com/hunghq/librarymanagement/Media/LogoUet.jpg"));
-        });
-        new Thread(loadImageTask).start();
-    }
-
 
 }

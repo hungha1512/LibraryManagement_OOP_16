@@ -19,7 +19,7 @@ public class CallAPIService {
      * @return image URL string
      */
     public String getImageUrlFromTitle(String title) {
-        title = title.replace(" ", "+"); // Format title for the API
+        title = title.replace(" ", "+");
         String url = GOOGLE_BOOKS_API + title;
         return fetchImageUrl(url);
     }
@@ -60,4 +60,19 @@ public class CallAPIService {
 
         return null;
     }
+
+
+    public static void main(String[] args) {
+        CallAPIService callAPIService = new CallAPIService();
+
+        String title = "The Guernsey Literary and Potato Peel Pie Society";
+        String imageUrl = callAPIService.getImageUrlFromTitle(title);
+
+        if (imageUrl != null) {
+            System.out.println("Image URL: " + imageUrl);
+        } else {
+            System.out.println("No image found for the book: " + title);
+        }
+    }
+
 }

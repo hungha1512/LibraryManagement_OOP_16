@@ -3,15 +3,14 @@ package com.hunghq.librarymanagement.Controller;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Service.CallAPIService;
+import com.hunghq.librarymanagement.Service.LoadImageService;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -39,8 +38,15 @@ public class MainAllBooksController extends BaseController {
     private int totalPages;
     private DocumentDAO documentDAO = new DocumentDAO();
 
+    private CallAPIService callAPIService;
+    private LoadImageService loadImageService;
+
     @FXML
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        callAPIService = new CallAPIService();
+        loadImageService = new LoadImageService(callAPIService);
+
         loadBooks();
 
         btn_previous.setOnAction(event -> {
@@ -61,9 +67,7 @@ public class MainAllBooksController extends BaseController {
     }
 
     private void loadBooks() {
-        CallAPIService callAPIService = new CallAPIService();
         allBooks = documentDAO.getAllWithOffset(offset);
-
         gp_all_books.getChildren().clear();
 
         int column = 0;
@@ -88,41 +92,7 @@ public class MainAllBooksController extends BaseController {
             nameLabel.setStyle("-fx-alignment: center;");
             vBox.getChildren().add(nameLabel);
 
-            Task<Image> loadImageTask = new Task<>() {
-                private final int maxRetry = 20;
-                private int retry = 0;
-
-                @Override
-                protected Image call() {
-                    String coverImg = callAPIService.getImageUrlFromTitle(document.getTitle());
-                    while (retry < maxRetry) {
-                        try {
-                            if (coverImg != null) {
-                                return new Image(coverImg, true);
-                            } else if (document.getCoverImg() != null) {
-                                return new Image(document.getCoverImg(), true);
-                            }
-                        } catch (Exception e) {
-                            retry++;
-                            System.err.println("Error loading image: " + e.getMessage());
-                        }
-                    }
-                    return new Image("/src/main/resources/com/hunghq/librarymanagement/Media/LogoUet.jpg");
-                }
-            };
-
-            loadImageTask.setOnSucceeded(event -> {
-                Image image = loadImageTask.getValue();
-                if (image != null) {
-                    imageView.setImage(image);
-                }
-            });
-
-            loadImageTask.setOnFailed(event -> {
-                System.err.println("Failed to load image for: " + document.getTitle());
-            });
-
-            new Thread(loadImageTask).start();
+            loadImageService.loadImage(document, imageView);
 
             gp_all_books.add(vBox, column, row);
             vBox.getStyleClass().add("service-box");
@@ -171,8 +141,6 @@ public class MainAllBooksController extends BaseController {
         int column = 0;
         int row = 0;
 
-        CallAPIService callAPIService = new CallAPIService();
-
         for (int i = startIndex; i < endIndex; i++) {
             Document document = books.get(i);
 
@@ -194,41 +162,7 @@ public class MainAllBooksController extends BaseController {
             nameLabel.setStyle("-fx-alignment: center;");
             vBox.getChildren().add(nameLabel);
 
-            Task<Image> loadImageTask = new Task<>() {
-                private final int maxRetry = 20;
-                private int retry = 0;
-
-                @Override
-                protected Image call() {
-                    String coverImg = callAPIService.getImageUrlFromTitle(document.getTitle());
-                    while (retry < maxRetry) {
-                        try {
-                            if (coverImg != null) {
-                                return new Image(coverImg, true);
-                            } else if (document.getCoverImg() != null) {
-                                return new Image(document.getCoverImg(), true);
-                            }
-                        } catch (Exception e) {
-                            retry++;
-                            System.err.println("Error loading image: " + e.getMessage());
-                        }
-                    }
-                    return new Image("/src/main/resources/com/hunghq/librarymanagement/Media/LogoUet.jpg");
-                }
-            };
-
-            loadImageTask.setOnSucceeded(event -> {
-                Image image = loadImageTask.getValue();
-                if (image != null) {
-                    imageView.setImage(image);
-                }
-            });
-
-            loadImageTask.setOnFailed(event -> {
-                System.err.println("Failed to load image for: " + document.getTitle());
-            });
-
-            new Thread(loadImageTask).start();
+            loadImageService.loadImage(document, imageView);
 
             gp_all_books.add(vBox, column, row);
             vBox.getStyleClass().add("service-box");
@@ -256,9 +190,9 @@ public class MainAllBooksController extends BaseController {
 
         lbl_page_info.setText("Page " + currentPage + " of " + totalPages);
     }
+
     private void showBookDetail(Document document) {
         try {
-
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/AllBooks/BookDetail.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load());
