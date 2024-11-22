@@ -122,7 +122,7 @@ public class LoginController implements Initializable {
                     Stage stage = (Stage) btn_sign_in.getScene().getWindow();
                     stage.close();
                 });
-                loadMainMenu();
+                loadHomepage();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -183,7 +183,7 @@ public class LoginController implements Initializable {
                     stage.close();
                 }
 
-                loadMainMenu();
+                loadHomepage();
             } else throw new Exception("Invalid username or password");
         } catch (Exception e) {
             lbl_authenticate.visibleProperty().set(true);
@@ -195,15 +195,20 @@ public class LoginController implements Initializable {
     /**
      * Loads the main menu view upon successful login.
      */
-    private void loadMainMenu() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass()
-                .getResource("/com/hunghq/librarymanagement/View/Homepage.fxml"));
+    private void loadHomepage() {
         try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass()
+                    .getResource("/com/hunghq/librarymanagement/View/Homepage.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             Stage stage = new Stage();
             stage.setTitle("Main Menu");
-            stage.setScene(scene); // Set MainMenu scene to new stage
-            stage.show(); // Display the stage
+            stage.setScene(scene);
+            stage.show();
+
+            Stage loginStage = (Stage) btn_sign_in.getScene().getWindow();
+            if (loginStage.isShowing()) {
+                loginStage.close();
+            }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load Main Menu: " + e.getMessage());
         }
