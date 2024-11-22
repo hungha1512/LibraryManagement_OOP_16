@@ -32,7 +32,6 @@ public class MainAllBooksController extends BaseController {
 
     private ObservableList<Document> allBooks;
 
-    private int offset = 0;
     private int currentPage = 1;
     private final int limit = 15;
     private int totalPages;
@@ -43,7 +42,6 @@ public class MainAllBooksController extends BaseController {
 
     @FXML
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         callAPIService = new CallAPIService();
         loadImageService = new LoadImageService(callAPIService);
 
@@ -52,84 +50,33 @@ public class MainAllBooksController extends BaseController {
         btn_previous.setOnAction(event -> {
             if (currentPage > 1) {
                 currentPage--;
-                offset -= limit;
-                loadBooks();
+                displayPage(allBooks);
+                updatePaginationButtons();
             }
         });
 
         btn_next.setOnAction(event -> {
             if (!allBooks.isEmpty()) {
                 currentPage++;
-                offset += limit;
-                loadBooks();
+                displayPage(allBooks);
+                updatePaginationButtons();
             }
         });
     }
 
     private void loadBooks() {
-        allBooks = documentDAO.getAllWithOffset(offset);
-        gp_all_books.getChildren().clear();
-
-        int column = 0;
-        int row = 0;
-
-        for (Document document : allBooks) {
-            VBox vBox = new VBox(10);
-            vBox.setAlignment(Pos.CENTER);
-            vBox.setPrefHeight(150);
-            vBox.setMaxHeight(150);
-
-            ImageView imageView = new ImageView();
-            imageView.setFitHeight(120);
-            imageView.setFitWidth(120);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
-            vBox.getChildren().add(imageView);
-
-            Label nameLabel = new Label(document.getTitle());
-            nameLabel.setWrapText(true);
-            nameLabel.setMaxWidth(120);
-            nameLabel.setStyle("-fx-alignment: center;");
-            vBox.getChildren().add(nameLabel);
-
-            loadImageService.loadImage(document, imageView);
-
-            gp_all_books.add(vBox, column, row);
-            vBox.getStyleClass().add("service-box");
-            imageView.getStyleClass().add("image-box");
-
-            vBox.setOnMouseClicked(event -> {
-                showBookDetail(document);
-            });
-
-            vBox.setOnMouseEntered(event -> {
-                vBox.setOpacity(0.8);
-                vBox.setStyle("-fx-cursor: hand;");
-            });
-
-            vBox.setOnMouseExited(event -> {
-                vBox.setOpacity(1.0);
-            });
-
-            column++;
-            if (column == 5) {
-                column = 0;
-                row++;
-            }
-        }
-
-        lbl_page_info.setText("Page " + currentPage);
-        btn_previous.setDisable(currentPage == 1);
-        btn_next.setDisable(allBooks.size() < limit);
+        allBooks = documentDAO.getAll();
+        totalPages = (int) Math.ceil((double) allBooks.size() / limit);
+        displayPage(allBooks);
+        updatePaginationButtons();
     }
 
     public void updateBooks(ObservableList<Document> searchResults) {
+        allBooks = searchResults;
         totalPages = (int) Math.ceil((double) searchResults.size() / limit);
-
-        displayPage(searchResults);
-
-        btn_previous.setDisable(currentPage == 1);
-        btn_next.setDisable(currentPage == totalPages);
+        currentPage = 1;
+        displayPage(allBooks);
+        updatePaginationButtons();
     }
 
     private void displayPage(ObservableList<Document> books) {
@@ -208,6 +155,11 @@ public class MainAllBooksController extends BaseController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void updatePaginationButtons() {
+        btn_previous.setDisable(currentPage == 1);
+        btn_next.setDisable(currentPage == totalPages || allBooks.isEmpty());
     }
 }
 
