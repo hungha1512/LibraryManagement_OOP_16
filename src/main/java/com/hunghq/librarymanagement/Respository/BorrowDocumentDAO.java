@@ -237,6 +237,11 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         return borrowDocument;
     }
 
+    /**
+     *
+     * @param userId
+     * @return
+     */
     public ObservableList<BorrowDocument> getBorrowDocumentByUserId(int userId) {
         ObservableList<BorrowDocument> borrowDocuments = FXCollections.observableArrayList();
         String sql = "SELECT * FROM borrowDocuments WHERE userId = ?";
