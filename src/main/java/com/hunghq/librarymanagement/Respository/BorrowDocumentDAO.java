@@ -236,4 +236,21 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
         return borrowDocument;
     }
+
+    public ObservableList<BorrowDocument> getBorrowDocumentByUserId(int userId) {
+        ObservableList<BorrowDocument> borrowDocuments = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM borrowDocuments WHERE userId = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    BorrowDocument borrowDocument = make(rs);
+                    borrowDocuments.add(borrowDocument);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return borrowDocuments;
+    }
 }

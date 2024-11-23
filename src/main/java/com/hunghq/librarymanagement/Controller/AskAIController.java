@@ -10,7 +10,7 @@ import java.net.http.HttpResponse;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class AskAIController {
+public class AskAIController extends BaseController {
 
     @FXML
     private TextField questionInput;

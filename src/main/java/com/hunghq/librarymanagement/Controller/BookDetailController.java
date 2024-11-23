@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter;
 
 import static java.lang.Integer.parseInt;
 
-public class BookDetailController {
+public class BookDetailController extends BaseController {
 
     // Book details section
     @FXML
