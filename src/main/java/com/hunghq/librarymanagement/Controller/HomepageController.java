@@ -117,6 +117,13 @@ public class HomepageController implements Initializable {
             }
         });
 
+        btn_user.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                getContentPane("/com/hunghq/librarymanagement/View/User/MainUser.fxml");
+            }
+        }) ;
+
         btn_search.setOnAction(actionEvent -> handleSearch());
 
         btn_log_out.setOnAction(actionEvent -> {
