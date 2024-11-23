@@ -32,7 +32,7 @@ public class ReviewDAO implements IRepository<Review>{
             User user = (User) userDAO.getByStringId(reS.getString("userId"));
 
             review = new Review(
-                reS.getString("reviewId"),
+                reS.getInt("reviewId"),
                 document,
                 user,
                 reS.getDouble("rating"),
@@ -55,9 +55,9 @@ public class ReviewDAO implements IRepository<Review>{
         
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
-            prS.setString(1, review.getReviewId());
+            prS.setInt(1, review.getReviewId());
             prS.setString(2, review.getDocument().getDocumentId());
-            prS.setString(3, review.getUser().getUserId());
+            prS.setInt(3, review.getUser().getUserId());
             prS.setDouble(4, review.getRating());
             prS.setString(5, review.getReviewText());
             prS.setTimestamp(6, Timestamp.valueOf(review.getReviewDate()));
@@ -70,12 +70,17 @@ public class ReviewDAO implements IRepository<Review>{
 
     @Override
     public Review getByStringId(String id) {
+        return null;
+    }
+
+    @Override
+    public Review getByIntId(int id) {
         String sql = "SELECT * FROM reviews WHERE reviewId = ?";
         Review review = null;
-        
+
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, id);
-            ResultSet reS = prS.executeQuery(); 
+            prS.setInt(1, id);
+            ResultSet reS = prS.executeQuery();
 
             if (reS.next()) {
                 review = make(reS);
@@ -86,13 +91,8 @@ public class ReviewDAO implements IRepository<Review>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        return review;
-    }
 
-    @Override
-    public Review getByIntId(int id) {
-        return null;
+        return review;
     }
 
     @Override
@@ -146,11 +146,11 @@ public class ReviewDAO implements IRepository<Review>{
         
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, review.getDocument().getDocumentId());
-            prS.setString(2, review.getUser().getUserId());
+            prS.setInt(2, review.getUser().getUserId());
             prS.setDouble(3, review.getRating());
             prS.setString(4, review.getReviewText());
             prS.setTimestamp(5, Timestamp.valueOf(review.getReviewDate()));
-            prS.setString(6, review.getReviewId());
+            prS.setInt(6, review.getReviewId());
             
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -163,7 +163,7 @@ public class ReviewDAO implements IRepository<Review>{
         String sql = "DELETE FROM reviews WHERE reviewId = ?";
         
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, id);
+            prS.setInt(1, Integer.parseInt(id));
 
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -175,7 +175,7 @@ public class ReviewDAO implements IRepository<Review>{
     public Review save(Review entity) {
         Review review = (Review) entity;
         
-        if (getByStringId(review.getReviewId()) != null) {
+        if (getByIntId(review.getReviewId()) != null) {
             update(review);
         } else {
             add(review);

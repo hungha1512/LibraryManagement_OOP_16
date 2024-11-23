@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class LoadImageService {
+
     private final String defaultImagePath = "com/hunghq/librarymanagement/Media/LogoUet.jpg";
     private final int maxRetry = 20;
     private final CallAPIService callAPIService;

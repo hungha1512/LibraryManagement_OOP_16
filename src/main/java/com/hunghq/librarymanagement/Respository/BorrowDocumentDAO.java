@@ -38,7 +38,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
             User user = (User) userDAO.getByStringId(reS.getString("userId"));
 
             return new BorrowDocument(
-                    reS.getString("borrowId"),
+                    reS.getInt("borrowId"),
                     document,
                     user,
                     reS.getTimestamp("borrowDate") != null
@@ -68,12 +68,14 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
-            prS.setString(1, borrowDocument.getBorrowId());
+            prS.setInt(1, borrowDocument.getBorrowId());
             prS.setString(2, borrowDocument.getDocument().getDocumentId());
-            prS.setString(3, borrowDocument.getUser().getUserId());
+            prS.setInt(3, borrowDocument.getUser().getUserId());
             prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getBorrowDate()));
             prS.setTimestamp(5, Timestamp.valueOf(borrowDocument.getDueDate()));
-            prS.setTimestamp(6, Timestamp.valueOf(borrowDocument.getReturnDate()));
+            prS.setTimestamp(6, borrowDocument.getReturnDate() != null
+                    ? Timestamp.valueOf(borrowDocument.getReturnDate())
+                    : null);
             prS.setString(7, borrowDocument.getState().getState());
 
             prS.executeUpdate();
@@ -90,22 +92,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
      */
     @Override
     public BorrowDocument getByStringId(String borrowId) {
-        String sql = "SELECT * FROM borrowDocuments WHERE borrowId = ?";
-        BorrowDocument borrowDocument = null;
-        try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, borrowId);
-            ResultSet reS = prS.executeQuery();
-
-            if (reS.next()) {
-                borrowDocument = make(reS);
-            } else {
-                System.out.println("No BorrowDocument found with borrowId: " + borrowId);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return borrowDocument;
+        return null;
     }
 
     /**
@@ -116,7 +103,22 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
      */
     @Override
     public BorrowDocument getByIntId(int id) {
-        return null;
+        String sql = "SELECT * FROM borrowDocuments WHERE borrowId = ?";
+        BorrowDocument borrowDocument = null;
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
+            prS.setInt(1, id);
+            ResultSet reS = prS.executeQuery();
+
+            if (reS.next()) {
+                borrowDocument = make(reS);
+            } else {
+                System.out.println("No BorrowDocument found with borrowId: " + id);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return borrowDocument;
     }
 
     /**
@@ -185,12 +187,14 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
             prS.setString(1, borrowDocument.getDocument().getDocumentId());
-            prS.setString(2, borrowDocument.getUser().getUserId());
+            prS.setInt(2, borrowDocument.getUser().getUserId());
             prS.setTimestamp(3, Timestamp.valueOf(borrowDocument.getBorrowDate()));
             prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getDueDate()));
-            prS.setTimestamp(5, Timestamp.valueOf(borrowDocument.getReturnDate()));
+            prS.setTimestamp(6, borrowDocument.getReturnDate() != null
+                    ? Timestamp.valueOf(borrowDocument.getReturnDate())
+                    : null);
             prS.setString(6, borrowDocument.getState().getState());
-            prS.setString(7, borrowDocument.getBorrowId());
+            prS.setInt(7, borrowDocument.getBorrowId());
 
             prS.executeUpdate();
 
@@ -208,7 +212,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
     public void delete(String id) {
         String sql = "DELETE FROM borrowDocuments WHERE borrowId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, id);
+            prS.setInt(1, Integer.parseInt(id));
             prS.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -225,7 +229,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
     @Override
     public BorrowDocument save(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
-        if (getByStringId(borrowDocument.getBorrowId()) != null) {
+        if (getByIntId(borrowDocument.getBorrowId()) != null) {
             update(borrowDocument);
         } else {
             add(borrowDocument);

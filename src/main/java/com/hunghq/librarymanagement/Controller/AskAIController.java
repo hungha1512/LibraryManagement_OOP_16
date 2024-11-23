@@ -9,7 +9,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 
 public class AskAIController {
 

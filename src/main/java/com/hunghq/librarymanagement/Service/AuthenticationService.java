@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
+import static java.lang.String.valueOf;
+
 /**
  * Service class providing authentication-related functionalities
  * including login, password recovery, OTP generation, and password change.
@@ -40,9 +42,9 @@ public class AuthenticationService {
         try {
             boolean isLoginSuccess = BCrypt.checkpw(password, userLogged.getPasswordHash());
             if (isLoginSuccess || password.equals(userLogged.getPasswordHash())) {
-                userLogged = userDAO.getByStringId(userLogged.getUserId());
+                userLogged = userDAO.getByIntId(userLogged.getUserId());
                 AppProperties.setProperty("user.loggedIn", "false");
-                AppProperties.setProperty("user.userId", userLogged.getUserId());
+                AppProperties.setProperty("user.userId", valueOf(userLogged.getUserId()));
                 AppProperties.setProperty("user.fullName", userLogged.getFullName());
                 AppProperties.setProperty("user.passwordHash", userLogged.getPasswordHash());
                 AppProperties.setProperty("user.gender", userLogged.getGender().toString());
@@ -126,7 +128,7 @@ public class AuthenticationService {
     private static String generateOTP() {
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
-        return String.valueOf(otp);
+        return valueOf(otp);
     }
 
     /**

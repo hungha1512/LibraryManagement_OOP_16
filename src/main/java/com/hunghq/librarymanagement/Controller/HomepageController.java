@@ -26,8 +26,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HomepageController implements Initializable {
-
-
     @FXML
     public Button btn_all_books;
 
@@ -170,15 +168,12 @@ public class HomepageController implements Initializable {
                 System.out.println("Invalid search option!");
         }
 
-
         try {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/AllBooks/MainAllBooks.fxml"));
             Parent newContentPane = loader.load();
-
             MainAllBooksController controller = loader.getController();
-
             controller.updateBooks(searchResults);
-
             setContent(newContentPane);
 
         } catch (IOException e) {
