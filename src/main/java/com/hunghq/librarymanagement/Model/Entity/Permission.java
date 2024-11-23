@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
 
 public class Permission {
-    private String permissionId;
+    private int permissionId;
     private String title;
     private String slug;
     private String description;
@@ -15,7 +15,7 @@ public class Permission {
 
     public Permission() {;}
 
-    public Permission(String permissionId, String title, String slug, String description, EIsDeleted isDeleted,
+    public Permission(int permissionId, String title, String slug, String description, EIsDeleted isDeleted,
                       LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.permissionId = permissionId;
         this.title = title;
@@ -27,11 +27,11 @@ public class Permission {
     }
 
 
-    public String getPermissionId() {
+    public int getPermissionId() {
         return this.permissionId;
     }
 
-    public void setPermissionId(String permissionId) {
+    public void setPermissionId(int permissionId) {
         this.permissionId = permissionId;
     }
 

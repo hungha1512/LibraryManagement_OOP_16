@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class BorrowDocument {
 
-    private String borrowId;
+    private int borrowId;
     private Document document;
     private User user;
     private LocalDateTime borrowDate;
@@ -21,7 +21,7 @@ public class BorrowDocument {
 
     }
 
-    public BorrowDocument(String borrowId, Document document, User user,
+    public BorrowDocument(int borrowId, Document document, User user,
                           LocalDateTime borrowDate, LocalDateTime dueDate, LocalDateTime returnDate, EState eState) {
         this.borrowId = borrowId;
         this.document = document;
@@ -32,11 +32,11 @@ public class BorrowDocument {
         this.eState = eState;
     }
 
-    public String getBorrowId() {
+    public int getBorrowId() {
         return this.borrowId;
     }
 
-    public void setBorrowId(String borrowId) {
+    public void setBorrowId(int borrowId) {
         this.borrowId = borrowId;
     }
 

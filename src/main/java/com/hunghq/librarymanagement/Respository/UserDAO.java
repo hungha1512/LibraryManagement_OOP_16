@@ -43,7 +43,7 @@ public class UserDAO implements IRepository<User> {
             EIsDeleted isDeletedStatus = EIsDeleted.fromInt(isDeletedValue);
 
             return new User(
-                    reS.getString("userId"),
+                    reS.getInt("userId"),
                     reS.getString("fullName"),
                     reS.getString("passwordHash"),
                     EGender.fromValue(reS.getString("gender")),
@@ -74,7 +74,7 @@ public class UserDAO implements IRepository<User> {
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
-            prS.setString(1, user.getUserId());
+            prS.setInt(1, user.getUserId());
             prS.setString(2, user.getFullName());
             prS.setString(3, user.getPasswordHash());
             prS.setString(4, user.getGender().toString());
@@ -100,10 +100,21 @@ public class UserDAO implements IRepository<User> {
      */
     @Override
     public User getByStringId(String id) {
+        return null;
+    }
+
+    /**
+     * Retrieves a user by integer ID (currently not implemented).
+     *
+     * @param id the integer ID of the user
+     * @return null since this method is not implemented
+     */
+    @Override
+    public User getByIntId(int id) {
         String sql = "SELECT * FROM users WHERE userId = ?";
         User user = null;
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, id);
+            prS.setInt(1, id);
             ResultSet reS = prS.executeQuery();
 
             if (reS.next()) {
@@ -116,17 +127,6 @@ public class UserDAO implements IRepository<User> {
             e.printStackTrace();
         }
         return user;
-    }
-
-    /**
-     * Retrieves a user by integer ID (currently not implemented).
-     *
-     * @param id the integer ID of the user
-     * @return null since this method is not implemented
-     */
-    @Override
-    public User getByIntId(int id) {
-        return null;
     }
 
     /**
@@ -196,7 +196,7 @@ public class UserDAO implements IRepository<User> {
             prS.setString(4, user.getPhone());
             prS.setTimestamp(5, Timestamp.valueOf(user.getJoinDate()));
             prS.setTimestamp(6, Timestamp.valueOf(user.getDateOfBirth()));
-            prS.setString(7, user.getUserId());
+            prS.setInt(7, user.getUserId());
 
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -213,7 +213,7 @@ public class UserDAO implements IRepository<User> {
     public void delete(String id) {
         String sql = "DELETE FROM users WHERE userId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, id);
+            prS.setInt(1, Integer.parseInt(id));
 
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -231,7 +231,7 @@ public class UserDAO implements IRepository<User> {
     public User save(User entity) {
         User user = (User) entity;
 
-        if (getByStringId(user.getUserId()) != null) {
+        if (getByIntId(user.getUserId()) != null) {
             update(user);
         } else {
             add(user);
@@ -273,7 +273,7 @@ public class UserDAO implements IRepository<User> {
             if (reS.next()) {
                 //TODO: remove userName in database, create otp column
                 userFound = new User();
-                userFound.setUserId(reS.getString("userId"));
+                userFound.setUserId(reS.getInt("userId"));
                 userFound.setFullName(reS.getString("fullName"));
                 userFound.setEmail(reS.getString("email"));
                 userFound.setPhone(reS.getString("phone"));
@@ -313,7 +313,7 @@ public class UserDAO implements IRepository<User> {
      * @param id          the user ID
      * @param newPassword the new password to set
      */
-    public void updatePasswordById(String id, String newPassword) {
+    public void updatePasswordById(int id, String newPassword) {
         try {
             if (con == null) {
                 throw new SQLException("Failed to connect to database");
@@ -321,7 +321,7 @@ public class UserDAO implements IRepository<User> {
             String sql = "UPDATE users SET passwordHash = ? WHERE userId = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, newPassword);
-            pstmt.setString(2, id);
+            pstmt.setInt(2, id);
             pstmt.executeUpdate();
             DialogHelper.showNotificationDialog("Success", "Password updated successfully.");
         } catch (SQLException e) {

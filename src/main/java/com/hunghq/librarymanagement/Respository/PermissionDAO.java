@@ -26,7 +26,7 @@ public class PermissionDAO implements IRepository<Permission>{
 
         try {
             permission = new Permission(
-                reS.getString("permissionId"),
+                reS.getInt("permissionId"),
                 reS.getString("title"),
                 reS.getString("slug"),
                 reS.getString("description"),
@@ -49,7 +49,7 @@ public class PermissionDAO implements IRepository<Permission>{
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             
-            prS.setString(1, permission.getPermissionId());
+            prS.setInt(1, permission.getPermissionId());
             prS.setString(2, permission.getTitle());
             prS.setString(3, permission.getSlug());
             prS.setString(4, permission.getDescription());
@@ -65,11 +65,16 @@ public class PermissionDAO implements IRepository<Permission>{
 
     @Override
     public Permission getByStringId(String id) {
+        return null;
+    }
+
+    @Override
+    public Permission getByIntId(int id) {
         String sql = "SELECT * FROM permissions WHERE permissionId = ?";
         Permission permission = null;
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, id);
+            prS.setInt(1, id);
             ResultSet reS = prS.executeQuery();
 
             if (reS.next()) {
@@ -83,11 +88,6 @@ public class PermissionDAO implements IRepository<Permission>{
         }
 
         return permission;
-    }
-
-    @Override
-    public Permission getByIntId(int id) {
-        return null;
     }
 
     @Override
@@ -145,7 +145,7 @@ public class PermissionDAO implements IRepository<Permission>{
             prS.setString(3, permission.getDescription());
             prS.setString(4, permission.getIsDeleted().name());
             prS.setTimestamp(5, permission.getUpdatedAt() != null ? Timestamp.valueOf(permission.getUpdatedAt()) : null);
-            prS.setString(6, permission.getPermissionId());
+            prS.setInt(6, permission.getPermissionId());
 
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -158,7 +158,7 @@ public class PermissionDAO implements IRepository<Permission>{
         String sql = "DELETE FROM permissions WHERE permissionId = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, id);
+            prS.setInt(1, Integer.parseInt(id));
             prS.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -169,7 +169,7 @@ public class PermissionDAO implements IRepository<Permission>{
     public Permission save(Permission entity) {
         Permission permission = (Permission) entity;
 
-        if (getByStringId(permission.getPermissionId()) != null) {
+        if (getByIntId(permission.getPermissionId()) != null) {
             update(permission);
         } else {
             add(permission);

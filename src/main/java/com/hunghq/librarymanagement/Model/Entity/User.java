@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class User {
 
-    private String userId;
+    private int userId;
     private String fullName;
     private String passwordHash;
     private EGender gender;
@@ -23,7 +23,7 @@ public class User {
         ;
     }
 
-    public User(String userId, String fullName, String passwordHash, EGender gender, String email, String phone,
+    public User(int userId, String fullName, String passwordHash, EGender gender, String email, String phone,
                 LocalDateTime joinDate, LocalDateTime dateOfBirth, Role role, String otp, EIsDeleted eIsDeleted) {
         this.userId = userId;
         this.fullName = fullName;
@@ -38,11 +38,11 @@ public class User {
         this.eIsDeleted = eIsDeleted;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

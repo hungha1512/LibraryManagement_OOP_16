@@ -193,7 +193,7 @@ public class RoleDAO implements IRepository<Role> {
         String sql = "DELETE FROM roles WHERE roleId = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, id);
+            prS.setInt(1, Integer.parseInt(id));
 
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -215,6 +215,24 @@ public class RoleDAO implements IRepository<Role> {
             update(role);
         } else {
             add(role);
+        }
+
+        return role;
+    }
+
+    public Role getRoleByTitle(String title) {
+        String sql = "SELECT * FROM roles WHERE title LIKE ?";
+        Role role = null;
+
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
+            prS.setString(1, "%" + title + "%");
+            ResultSet reS = prS.executeQuery();
+
+            if (reS.next()) {
+                role = make(reS);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return role;

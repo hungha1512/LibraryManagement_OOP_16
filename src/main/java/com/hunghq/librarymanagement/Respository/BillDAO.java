@@ -64,7 +64,7 @@ public class BillDAO implements IRepository<Bill> {
                 "timeReturn, latelyFee, costPerDayLate) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, bill.getDocument().getDocumentId());
-            prS.setString(2, bill.getUser().getUserId());
+            prS.setInt(2, bill.getUser().getUserId());
             prS.setTimestamp(3, bill.getTimeBorrow());
             prS.setTimestamp(4, bill.getTimeReturn());
             prS.setDouble(5, bill.getLatelyFee());
@@ -84,17 +84,6 @@ public class BillDAO implements IRepository<Bill> {
      */
     @Override
     public Bill getByStringId(String billId) {
-        String sql = "SELECT * FROM bills WHERE billId = ?";
-        try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setInt(1, Integer.parseInt(billId));
-            ResultSet reS = prS.executeQuery();
-
-            if (reS.next()) {
-                return make(reS);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return null;
     }
 
@@ -185,7 +174,7 @@ public class BillDAO implements IRepository<Bill> {
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             prS.setString(1, bill.getDocument().getDocumentId());
-            prS.setString(2, bill.getUser().getUserId());
+            prS.setInt(2, bill.getUser().getUserId());
             prS.setTimestamp(3, bill.getTimeBorrow());
             prS.setTimestamp(4, bill.getTimeReturn());
             prS.setDouble(5, bill.getLatelyFee());
