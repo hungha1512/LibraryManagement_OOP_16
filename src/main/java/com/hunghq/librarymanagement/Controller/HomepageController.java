@@ -110,6 +110,13 @@ public class HomepageController implements Initializable {
             }
         });
 
+        btn_my_books.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                getContentPane("/com/hunghq/librarymanagement/View/MyBooks/MainMyBooks.fxml");
+            }
+        });
+
         btn_ask_ai.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -187,4 +194,5 @@ public class HomepageController implements Initializable {
             e.printStackTrace();
         }
     }
+
 }

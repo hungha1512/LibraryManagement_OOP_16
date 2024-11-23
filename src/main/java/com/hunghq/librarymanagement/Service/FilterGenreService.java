@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class FilterGenreService {
+
     private List<Document> documentList = new ArrayList<>();
     private Set<String> genres = new HashSet<>();
     private DocumentDAO documentDAO = new DocumentDAO();
@@ -25,6 +26,11 @@ public class FilterGenreService {
             }
         }
         return genres;
+    }
+
+    public String formatGenres(String genres) {
+        genres = genres.replace("[", "").replace("]", "").replace("'", "").trim();
+        return genres.replace(",", ", ");
     }
 
     public static void main(String[] args) {
