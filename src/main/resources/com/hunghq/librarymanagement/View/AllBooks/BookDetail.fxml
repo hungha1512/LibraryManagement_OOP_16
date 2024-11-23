@@ -4,13 +4,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane hbarPolicy="NEVER" prefHeight="600.0" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.BookDetailController">
+<ScrollPane hbarPolicy="NEVER" prefHeight="600.0" style="-fx-background-color: #EDEDED;" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.BookDetailController">
    <content>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1100.0" prefWidth="1000.0">
          <children>
@@ -23,10 +22,10 @@
                      </font></Label>
                   <Label fx:id="authorLabel" layoutX="159.0" layoutY="46.0" text="Author" />
                   <Label fx:id="genreLabel" layoutX="159.0" layoutY="87.0" text="Genre" />
-                  <Button fx:id="borrowButton" layoutX="159.0" layoutY="162.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="215.0" text="Borrow" />
-                  <Button fx:id="extendButton" layoutX="159.0" layoutY="162.0" mnemonicParsing="false" text="Extend" visible="false" />
-                  <Button fx:id="returnButton" layoutX="241.0" layoutY="162.0" mnemonicParsing="false" text="Return" visible="false" />
-                  <Button fx:id="printButton" layoutX="333.0" layoutY="162.0" mnemonicParsing="false" text="Print" visible="false" />
+                  <Button fx:id="borrowButton" layoutX="159.0" layoutY="162.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #04558A;" text="Borrow" textFill="WHITE" />
+                  <Button fx:id="extendButton" layoutX="159.0" layoutY="162.0" mnemonicParsing="false" style="-fx-background-color: #04558A;" text="Extend" textFill="WHITE" visible="false" />
+                  <Button fx:id="returnButton" layoutX="241.0" layoutY="162.0" mnemonicParsing="false" style="-fx-background-color: #04558A;" text="Return" textFill="WHITE" visible="false" />
+                  <Button fx:id="printButton" layoutX="333.0" layoutY="162.0" mnemonicParsing="false" style="-fx-background-color: #04558A;" text="Print" textFill="WHITE" visible="false" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="53.0" layoutY="308.0" prefHeight="243.0" prefWidth="891.0">
@@ -35,7 +34,7 @@
                      <font>
                         <Font size="16.0" />
                      </font></Label>
-                  <TextArea fx:id="descriptionTextArea" editable="false" layoutX="1.0" layoutY="26.0" prefHeight="216.0" prefWidth="897.0" wrapText="true" />
+                  <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="1.0" layoutY="29.0" prefHeight="209.0" prefWidth="889.0" wrapText="true" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="53.0" layoutY="581.0" prefHeight="156.0" prefWidth="891.0">
@@ -48,10 +47,10 @@
                   <Label layoutY="68.0" text="Publisher" />
                   <Label layoutY="101.0" text="Published Date" />
                   <Label layoutY="134.0" text="Language" />
-                  <TextField fx:id="authorTextField" editable="false" layoutX="106.0" layoutY="31.0" prefHeight="25.0" prefWidth="507.0" />
-                  <TextField fx:id="publisherTextField" editable="false" layoutX="106.0" layoutY="64.0" prefHeight="25.0" prefWidth="507.0" />
-                  <TextField fx:id="publishedDateTextField" editable="false" layoutX="106.0" layoutY="97.0" prefHeight="25.0" prefWidth="507.0" />
-                  <TextField fx:id="languageTextField" editable="false" layoutX="106.0" layoutY="130.0" prefHeight="25.0" prefWidth="507.0" />
+                  <Label fx:id="anotherAuthorLabel" layoutX="99.0" layoutY="35.0" prefHeight="17.0" prefWidth="777.0" />
+                  <Label fx:id="publisherLabel" layoutX="99.0" layoutY="68.0" prefHeight="17.0" prefWidth="777.0" />
+                  <Label fx:id="publishedDateLabel" layoutX="99.0" layoutY="101.0" prefHeight="17.0" prefWidth="777.0" />
+                  <Label fx:id="languageLabel" layoutX="99.0" layoutY="133.0" prefHeight="17.0" prefWidth="777.0" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="27.0" layoutY="756.0" prefHeight="317.0" prefWidth="943.0">
@@ -65,7 +64,7 @@
                         <Font size="16.0" />
                      </font></Label>
                   <TextArea fx:id="commentTextArea" layoutX="24.0" layoutY="88.0" prefHeight="228.0" prefWidth="896.0" wrapText="true" />
-                  <Button fx:id="sendButton" layoutX="877.0" layoutY="26.0" mnemonicParsing="false" text="Send" />
+                  <Button fx:id="sendButton" layoutX="877.0" layoutY="26.0" mnemonicParsing="false" style="-fx-background-color: #04558A;" text="Send" textFill="WHITE" />
                   <HBox fx:id="hBoxStarsInactive" layoutX="98.0" layoutY="11.0" prefHeight="25.0" prefWidth="187.0">
                      <children>
                         <Button fx:id="btnStar1" prefHeight="25.0" prefWidth="37.0" style="-fx-background-color: transparent;" text="☆">

@@ -5,18 +5,15 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.hunghq.librarymanagement.Controller.AskAIController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.AskAIController">
 
     <!-- TextField để nhập câu hỏi -->
-    <TextField fx:id="questionInput" layoutX="20.0" layoutY="20.0" prefWidth="400.0" promptText="Enter your question here..." />
+    <TextField fx:id="questionInput" layoutX="20.0" layoutY="20.0" prefHeight="25.0" prefWidth="688.0" promptText="Enter your question here..." />
 
     <!-- Button để gửi câu hỏi -->
-    <Button text="Send" layoutX="440.0" layoutY="20.0" prefWidth="100.0" onAction="#handleSend" />
+    <Button layoutX="721.0" layoutY="20.0" onAction="#handleSend" prefWidth="100.0" style="-fx-background-color: #04558A;" text="Send" textFill="WHITE" />
 
     <!-- TextArea để hiển thị phản hồi -->
-    <TextArea fx:id="responseArea" layoutX="20.0" layoutY="70.0" prefWidth="560.0" prefHeight="300.0" wrapText="true" editable="false" promptText="AI response will appear here..." />
+    <TextArea fx:id="responseArea" editable="false" layoutX="20.0" layoutY="70.0" prefHeight="460.0" prefWidth="801.0" promptText="AI response will appear here..." wrapText="true" />
 
 </AnchorPane>

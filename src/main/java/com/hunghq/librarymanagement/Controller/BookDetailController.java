@@ -9,12 +9,12 @@ import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
 import com.hunghq.librarymanagement.Respository.ReviewDAO;
 import com.hunghq.librarymanagement.Respository.RoleDAO;
 import com.hunghq.librarymanagement.Service.CallAPIService;
+import com.hunghq.librarymanagement.Service.FilterGenreService;
 import com.hunghq.librarymanagement.Service.LoadImageService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
@@ -48,20 +48,20 @@ public class BookDetailController {
 
     // Description section
     @FXML
-    private TextArea descriptionTextArea;
+    private Label descriptionLabel;
 
     // Information section
     @FXML
-    private TextField authorTextField;
+    private Label anotherAuthorLabel;
     @FXML
-    private TextField publisherTextField;
+    private Label publisherLabel;
     @FXML
-    private TextField publishedDateTextField;
+    private Label publishedDateLabel;
     @FXML
-    private TextField languageTextField;
+    private Label languageLabel;
 
     @FXML
-    private HBox hBoxStarsInactive, hBoxStarsActive;
+    private HBox hBoxStarsInactive;
 
     @FXML
     private Button btnStar1, btnStar2, btnStar3, btnStar4, btnStar5;
@@ -73,6 +73,7 @@ public class BookDetailController {
 
     private CallAPIService callAPIService;
     private LoadImageService loadImageService;
+    private FilterGenreService filterGenreService;
     private Document document;
     private User user;
     private int rating;
@@ -80,6 +81,7 @@ public class BookDetailController {
     // Initialize the controller
     @FXML
     public void initialize(Document document) {
+        filterGenreService = new FilterGenreService();
         callAPIService = new CallAPIService();
         loadImageService = new LoadImageService(callAPIService);
         this.document = document;
@@ -91,14 +93,17 @@ public class BookDetailController {
     }
 
     private void setContent() {
+
         titleLabel.setText(document.getTitle());
         authorLabel.setText(document.getAuthorName());
-        genreLabel.setText(document.getGenre());
-        descriptionTextArea.setText(document.getDescription());
-        authorTextField.setText(document.getAuthorName());
-        publisherTextField.setText(document.getPublisher());
-        publishedDateTextField.setText(document.getPublishedDate());
-        languageTextField.setText(document.getLanguage());
+        genreLabel.setText(filterGenreService.formatGenres(document.getGenre()));
+        descriptionLabel.setText(document.getDescription());
+
+        anotherAuthorLabel.setText(document.getAuthorName());
+        publisherLabel.setText(document.getPublisher());
+        publishedDateLabel.setText(document.getPublishedDate());
+        languageLabel.setText(document.getLanguage());
+
         loadImageService.loadImage(document, bookImageView);
     }
 
