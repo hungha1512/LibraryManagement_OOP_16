@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainAllBooksController">
+<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainMyBooksController">
     <children>
         <VBox alignment="CENTER_LEFT" prefHeight="604.0" prefWidth="840.0" spacing="10">
             <GridPane fx:id="gp_all_books" alignment="CENTER" gridLinesVisible="false" hgap="10" prefHeight="538.0" prefWidth="825.0" vgap="20"> <!-- Điều chỉnh vgap để đặt khoảng cách giữa các hàng -->
@@ -29,13 +29,13 @@
             </GridPane>
             <HBox alignment="CENTER" prefHeight="50.0" spacing="10">
             <children>
-               <Button mnemonicParsing="false" style="-fx-background-color: #1e90ff; -fx-font-weight: bold;" text="Previous" textFill="WHITE">
+               <Button fx:id="btn_previous" style="-fx-background-color: #1e90ff; -fx-font-weight: bold;" text="Previous" textFill="WHITE">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Button>
-               <Label text="Page 1 of 1" />
-               <Button mnemonicParsing="false" style="-fx-background-color: #1d90ff; -fx-font-weight: bold;" text="Next" textFill="WHITE">
+               <Label fx:id="lbl_page_info" text="Page 1 of 1" />
+               <Button fx:id="btn_next" style="-fx-background-color: #1d90ff; -fx-font-weight: bold;" text="Next" textFill="WHITE">
                   <font>
                      <Font size="14.0" />
                   </font>
