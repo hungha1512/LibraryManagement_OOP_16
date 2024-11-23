@@ -114,19 +114,20 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         txt_password_visible.textProperty().bindBidirectional(pwd_password.textProperty());
+        Platform.runLater(() -> {
+            Properties prop = new Properties();
+            try {
+                if (AuthenticationService.authenticateFromFile(prop)) {
 
-        Properties prop = new Properties();
-        try {
-            if (AuthenticationService.authenticateFromFile(prop)) {
-                Platform.runLater(() -> {
                     Stage stage = (Stage) btn_sign_in.getScene().getWindow();
                     stage.close();
-                });
-                loadHomepage();
+
+                    loadHomepage();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        });
 
         btn_sign_in.setOnAction(new EventHandler<ActionEvent>() {
 
