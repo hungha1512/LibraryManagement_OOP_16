@@ -18,6 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -45,6 +46,9 @@ public class BookDetailController extends BaseController {
 
     @FXML
     private Button printButton;
+
+    @FXML
+    private Label notiLabel;
 
     // Description section
     @FXML
@@ -74,22 +78,41 @@ public class BookDetailController extends BaseController {
     private CallAPIService callAPIService;
     private LoadImageService loadImageService;
     private FilterGenreService filterGenreService;
+    private BorrowDocumentDAO borrowDocumentDAO;
     private Document document;
     private User user;
     private int rating;
+    private boolean isBorrowed;
+    private boolean isOverdue;
 
     // Initialize the controller
     @FXML
     public void initialize(Document document) {
+
         filterGenreService = new FilterGenreService();
         callAPIService = new CallAPIService();
         loadImageService = new LoadImageService(callAPIService);
+        borrowDocumentDAO = new BorrowDocumentDAO();
+
         this.document = document;
         this.user = userBorrow();
 
         setContent();
         setActionButton();
         handleStarRating(0);
+
+        isBorrowed = borrowDocumentDAO.isDocumentBorrowed(document.getDocumentId(), user.getUserId());
+        isOverdue = borrowDocumentDAO.isDocumentOverdue(document.getDocumentId(), user.getUserId());
+
+        if (isBorrowed || isOverdue) {
+            visibleIfBorrow();
+            setNotiLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
+                    borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()));
+            notiLabel.setVisible(true);
+        } else {
+            visibleIfNotBorrow();
+            notiLabel.setVisible(false);
+        }
     }
 
     private void setContent() {
@@ -109,6 +132,8 @@ public class BookDetailController extends BaseController {
 
     private void setActionButton() {
         borrowButton.setOnAction(event -> handleBorrowButtonAction());
+        returnButton.setOnAction(event -> handleReturnButtonAction());
+        extendButton.setOnAction(event -> handleExtendButtonAction());
 
         btnStar1.setOnAction(event -> handleStarRating(1));
         btnStar2.setOnAction(event -> handleStarRating(2));
@@ -151,33 +176,55 @@ public class BookDetailController extends BaseController {
 
     @FXML
     private void handleBorrowButtonAction() {
-        visibleButtonAfterBorrow();
-        interactWithBorrowDocumentInDB();
+        if (borrowDocumentDAO.limitOverdueDocument(user.getUserId())) {
+            // Handle if overdue borrowDocuments is greater than 3
+
+        } else {
+            visibleIfBorrow();
+            interactWithBorrowDocumentInDB();
+        }
     }
 
+    private void handleExtendButtonAction() {
+
+    }
+
+    private void handleReturnButtonAction() {
+
+    }
+
+
     private void interactWithBorrowDocumentInDB () {
-        BorrowDocumentDAO borrowDocumentDAO = new BorrowDocumentDAO();
 
         BorrowDocument borrowDocument = new BorrowDocument(
                 0,
                 this.document,
                 this.user,
-                java.time.LocalDateTime.now(),
-                java.time.LocalDateTime.now().plusDays(14),
+                LocalDateTime.now(),
+                LocalDateTime.now().plusDays(7),
                 null,
                 EState.BORROWED
         );
 
-        // Add condition to borrow
         borrowDocumentDAO.add(borrowDocument);
+        setNotiLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
+                borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()));
     }
 
-
-    private void visibleButtonAfterBorrow() {
+    private void visibleIfBorrow() {
         borrowButton.setVisible(false);
         returnButton.setVisible(true);
         extendButton.setVisible(true);
         printButton.setVisible(true);
+
+        notiLabel.setVisible(true);
+    }
+
+    private void visibleIfNotBorrow() {
+        borrowButton.setVisible(true);
+        returnButton.setVisible(false);
+        extendButton.setVisible(false);
+        printButton.setVisible(false);
     }
 
     @FXML
@@ -191,7 +238,7 @@ public class BookDetailController extends BaseController {
                 user,
                 rating,
                 comment,
-                java.time.LocalDateTime.now()
+                LocalDateTime.now()
         );
         if (this.rating != 0 && !comment.isEmpty()) {
             reviewDAO.add(review);
@@ -216,5 +263,24 @@ public class BookDetailController extends BaseController {
             }
         }
     }
+
+    private void setNotiLabel(LocalDateTime borrowDate, LocalDateTime dueDate) {
+        String noti = "";
+
+        if (isBorrowed) {
+            noti = "You borrowed this document at " + borrowDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+
+            if (dueDate.isAfter(LocalDateTime.now())) {
+                long daysRemaining = Duration.between(LocalDateTime.now(), dueDate).toDays();
+                noti += "\nYou have " + daysRemaining + " day(s) remaining to return.";
+            }
+        } else if (isOverdue) {
+            long daysOverdue = Duration.between(dueDate, LocalDateTime.now()).toDays();
+            noti = "Overdue for " + daysOverdue + " day(s).";
+        }
+
+        notiLabel.setText(noti);
+    }
+
 
 }

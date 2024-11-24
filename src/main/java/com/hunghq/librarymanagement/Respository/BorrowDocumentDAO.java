@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,25 +65,37 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
     public void add(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
 
-        String sql = "INSERT INTO borrowDocuments (borrowId, documentId, userId, borrowDate, dueDate, returnDate, state) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO borrowDocuments (documentId, userId, borrowDate, dueDate, returnDate, state) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement prS = con.prepareStatement(sql)) {
+        try (PreparedStatement prS = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            prS.setInt(1, borrowDocument.getBorrowId());
-            prS.setString(2, borrowDocument.getDocument().getDocumentId());
-            prS.setInt(3, borrowDocument.getUser().getUserId());
-            prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getBorrowDate()));
-            prS.setTimestamp(5, Timestamp.valueOf(borrowDocument.getDueDate()));
-            prS.setTimestamp(6, borrowDocument.getReturnDate() != null
-                    ? Timestamp.valueOf(borrowDocument.getReturnDate())
+            // Thiết lập các giá trị cho câu lệnh SQL
+            prS.setString(1, borrowDocument.getDocument().getDocumentId()); // Document ID (String)
+            prS.setInt(2, borrowDocument.getUser().getUserId());            // User ID (Integer)
+            prS.setTimestamp(3, Timestamp.valueOf(borrowDocument.getBorrowDate())); // Borrow Date
+            prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getDueDate()));    // Due Date
+            prS.setTimestamp(5, borrowDocument.getReturnDate() != null
+                    ? Timestamp.valueOf(borrowDocument.getReturnDate())    // Return Date nếu có
                     : null);
-            prS.setString(7, borrowDocument.getState().getState());
+            prS.setString(6, borrowDocument.getState().getState());        // State
 
+            // Thực thi câu lệnh
             prS.executeUpdate();
+
+            // Lấy giá trị ID tự động tăng (borrowId)
+            try (ResultSet generatedKeys = prS.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    // Gán giá trị borrowId cho đối tượng BorrowDocument
+                    borrowDocument.setBorrowId(generatedKeys.getInt(1));
+                }
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error adding BorrowDocument", e);
         }
     }
+
 
     /**
      * Retrieves a BorrowDocument by its unique borrowId.
@@ -237,11 +250,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         return borrowDocument;
     }
 
-    /**
-     *
-     * @param userId
-     * @return
-     */
+
     public ObservableList<BorrowDocument> getBorrowDocumentByUserId(int userId) {
         ObservableList<BorrowDocument> borrowDocuments = FXCollections.observableArrayList();
         String sql = "SELECT * FROM borrowDocuments WHERE userId = ?";
@@ -257,5 +266,88 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
             e.printStackTrace();
         }
         return borrowDocuments;
+    }
+
+
+    public boolean isDocumentBorrowed(String documentId, int userId) {
+        String sql = "SELECT COUNT(*) FROM borrowDocuments WHERE documentId = ? AND userId = ? AND state = 'Borrowed'";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, documentId);
+            stmt.setInt(2, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean isDocumentOverdue(String documentId, int userId) {
+        String sql = "SELECT COUNT(*) FROM borrowDocuments WHERE documentId = ? AND userId = ? AND state = 'Overdue'";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, documentId);
+            stmt.setInt(2, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public LocalDateTime getBorrowDate(String documentId, int userId) {
+        String sql = "SELECT borrowDate FROM borrowDocuments WHERE documentId = ? AND userId = ? AND state = 'Borrowed'";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, documentId);
+            stmt.setInt(2, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getTimestamp("borrowDate").toLocalDateTime();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public LocalDateTime getDueDate(String documentId, int userId) {
+        String sql = "SELECT dueDate FROM borrowDocuments WHERE documentId = ? AND userId = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, documentId);
+            stmt.setInt(2, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getTimestamp("dueDate").toLocalDateTime();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean limitOverdueDocument(int userId) {
+        boolean result = false;
+        String sql = "SELECT COUNT(*) FROM borrowDocuments WHERE userId = ? AND state = 'Overdue'";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    result = count >= 3;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

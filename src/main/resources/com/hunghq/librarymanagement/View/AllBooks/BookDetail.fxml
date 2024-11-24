@@ -91,6 +91,7 @@
                   </HBox>
                </children>
             </AnchorPane>
+            <Label fx:id="notiLabel" layoutX="53.0" layoutY="270.0" prefHeight="17.0" prefWidth="455.0" style="-fx-font-weight: bold;" textFill="RED" />
          </children>
       </AnchorPane>
    </content>
