@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -253,7 +254,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
     public ObservableList<BorrowDocument> getBorrowDocumentByUserId(int userId) {
         ObservableList<BorrowDocument> borrowDocuments = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM borrowDocuments WHERE userId = ?";
+        String sql = "SELECT * FROM borrowDocuments WHERE userId = ? AND state != 'Returned'";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -333,6 +334,71 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         return null;
     }
 
+    public void updateBorrowDocumentStateToReturned(String documentId, int userId) {
+        String sql = "UPDATE borrowdocuments SET state = 'Returned', returnDate = NOW() " +
+                "WHERE documentId = ? AND userId = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, documentId);
+            pstmt.setInt(2, userId);
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("The borrow document state has been successfully updated to Returned.");
+            } else {
+                System.out.println("No matching record found or the record is not in the 'Borrowed' state.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error while updating borrow document state: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public boolean canBorrowAfterReturn(String documentId, int userId) {
+        String sql = "SELECT returnDate FROM borrowdocuments WHERE documentId = ? " +
+                "AND userId = ? AND state = 'Returned' ORDER BY returnDate DESC LIMIT 1";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, documentId);
+            pstmt.setInt(2, userId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Date returnDate = rs.getDate("returnDate");
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(returnDate);
+                    calendar.add(Calendar.MONTH, 3);
+                    Date threeMonthsLater = new Date(calendar.getTimeInMillis());
+
+                    return new Date(System.currentTimeMillis()).after(threeMonthsLater);
+                } else {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public boolean updateDueDate(String documentId, int userId) {
+        String sql = "UPDATE borrowdocuments SET dueDate = DATE_ADD(dueDate, INTERVAL 7 DAY) " +
+                "WHERE documentId = ? AND userId = ? AND state = 'Borrowed'";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, documentId);
+            pstmt.setInt(2, userId);
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public boolean limitOverdueDocument(int userId) {
         boolean result = false;
         String sql = "SELECT COUNT(*) FROM borrowDocuments WHERE userId = ? AND state = 'Overdue'";
@@ -350,4 +416,5 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
         return result;
     }
+
 }

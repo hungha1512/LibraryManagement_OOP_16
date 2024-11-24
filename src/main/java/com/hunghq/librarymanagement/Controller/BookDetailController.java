@@ -12,21 +12,18 @@ import com.hunghq.librarymanagement.Service.CallAPIService;
 import com.hunghq.librarymanagement.Service.FilterGenreService;
 import com.hunghq.librarymanagement.Service.LoadImageService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 
 public class BookDetailController extends BaseController {
-
-    // Book details section
     @FXML
     private ImageView bookImageView;
     @FXML
@@ -50,11 +47,11 @@ public class BookDetailController extends BaseController {
     @FXML
     private Label notiLabel;
 
-    // Description section
+
     @FXML
     private Label descriptionLabel;
 
-    // Information section
+
     @FXML
     private Label anotherAuthorLabel;
     @FXML
@@ -85,10 +82,8 @@ public class BookDetailController extends BaseController {
     private boolean isBorrowed;
     private boolean isOverdue;
 
-    // Initialize the controller
     @FXML
     public void initialize(Document document) {
-
         filterGenreService = new FilterGenreService();
         callAPIService = new CallAPIService();
         loadImageService = new LoadImageService(callAPIService);
@@ -106,7 +101,7 @@ public class BookDetailController extends BaseController {
 
         if (isBorrowed || isOverdue) {
             visibleIfBorrow();
-            setNotiLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
+            setNotificationLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
                     borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()));
             notiLabel.setVisible(true);
         } else {
@@ -116,7 +111,6 @@ public class BookDetailController extends BaseController {
     }
 
     private void setContent() {
-
         titleLabel.setText(document.getTitle());
         authorLabel.setText(document.getAuthorName());
         genreLabel.setText(filterGenreService.formatGenres(document.getGenre()));
@@ -177,20 +171,90 @@ public class BookDetailController extends BaseController {
     @FXML
     private void handleBorrowButtonAction() {
         if (borrowDocumentDAO.limitOverdueDocument(user.getUserId())) {
-            // Handle if overdue borrowDocuments is greater than 3
-
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Overdue Limit Exceeded");
+            alert.setHeaderText(null);
+            alert.setContentText("You have more than 3 overdue documents. Please return them before borrowing more.");
+            alert.showAndWait();
+        } else if (!borrowDocumentDAO.canBorrowAfterReturn(document.getDocumentId(), user.getUserId())) {
+            Alert errorAlert = new Alert(Alert.AlertType.WARNING);
+            errorAlert.setTitle("Cannot Borrow Yet");
+            errorAlert.setHeaderText(null);
+            errorAlert.setContentText("You have just borrowed this book.");
+            errorAlert.showAndWait();
         } else {
             visibleIfBorrow();
             interactWithBorrowDocumentInDB();
+
+            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+            successAlert.setTitle("Borrow Successful");
+            successAlert.setHeaderText(null);
+            successAlert.setContentText("You have successfully borrowed the document.");
+            successAlert.showAndWait();
         }
     }
 
-    private void handleExtendButtonAction() {
+    public void handleExtendButtonAction() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Extend Borrow Period");
+        alert.setHeaderText("Extend Due Date");
+        alert.setContentText("Extend the due date for this document by 1 week?");
 
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                boolean success = borrowDocumentDAO.updateDueDate(document.getDocumentId(), user.getUserId());
+                if (success) {
+                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                    successAlert.setTitle("Extension Successful");
+                    successAlert.setHeaderText(null);
+                    successAlert.setContentText("The due date has been successfully extended by 1 week.");
+                    successAlert.showAndWait();
+                } else {
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Extension Failed");
+                    errorAlert.setHeaderText(null);
+                    errorAlert.setContentText("Failed to extend the due date. Please try again.");
+                    errorAlert.showAndWait();
+                }
+            } else {
+                Alert cancelAlert = new Alert(Alert.AlertType.INFORMATION);
+                cancelAlert.setTitle("Extension Cancelled");
+                cancelAlert.setHeaderText(null);
+                cancelAlert.setContentText("The due date extension has been cancelled.");
+                cancelAlert.showAndWait();
+            }
+        });
     }
 
     private void handleReturnButtonAction() {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirm Return");
+        confirmAlert.setHeaderText(null);
+        confirmAlert.setContentText("Are you sure you want to return this document?");
 
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            processReturnDocument();
+
+            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+            successAlert.setTitle("Return Successful");
+            successAlert.setHeaderText(null);
+            successAlert.setContentText("You have successfully returned the document.");
+            successAlert.showAndWait();
+        } else {
+            Alert cancelAlert = new Alert(Alert.AlertType.INFORMATION);
+            cancelAlert.setTitle("Return Cancelled");
+            cancelAlert.setHeaderText(null);
+            cancelAlert.setContentText("The return process has been cancelled.");
+            cancelAlert.showAndWait();
+        }
+    }
+
+    private void processReturnDocument() {
+        visibleIfNotBorrow();
+        notiLabel.setVisible(false);
+        borrowDocumentDAO.updateBorrowDocumentStateToReturned(document.getDocumentId(), user.getUserId());
     }
 
 
@@ -201,13 +265,13 @@ public class BookDetailController extends BaseController {
                 this.document,
                 this.user,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusDays(7),
+                LocalDateTime.now().plusDays(0),
                 null,
                 EState.BORROWED
         );
 
         borrowDocumentDAO.add(borrowDocument);
-        setNotiLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
+        setNotificationLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
                 borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()));
     }
 
@@ -216,7 +280,6 @@ public class BookDetailController extends BaseController {
         returnButton.setVisible(true);
         extendButton.setVisible(true);
         printButton.setVisible(true);
-
         notiLabel.setVisible(true);
     }
 
@@ -231,7 +294,6 @@ public class BookDetailController extends BaseController {
     private void handleSendButtonAction() {
         ReviewDAO reviewDAO = new ReviewDAO();
         String comment = commentTextArea.getText();
-
         Review review = new Review(
                 0,
                 document,
@@ -264,7 +326,7 @@ public class BookDetailController extends BaseController {
         }
     }
 
-    private void setNotiLabel(LocalDateTime borrowDate, LocalDateTime dueDate) {
+    private void setNotificationLabel(LocalDateTime borrowDate, LocalDateTime dueDate) {
         String noti = "";
 
         if (isBorrowed) {
@@ -281,6 +343,5 @@ public class BookDetailController extends BaseController {
 
         notiLabel.setText(noti);
     }
-
 
 }
