@@ -1,0 +1,4 @@
+.image-box {
+    -fx-border-color: red;   /* Đặt viền nếu muốn */
+    -fx-border-width: 2;       /* Đặt độ dày viền */
+}

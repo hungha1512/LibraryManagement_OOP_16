@@ -147,6 +147,7 @@ public class MainMyBooksController extends BaseController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/AllBooks/BookDetail.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load());
+            scene.getStylesheets().add(getClass().getResource("/com/hunghq/librarymanagement/Style/style.css").toExternalForm());
 
             BookDetailController bookDetailController = fxmlLoader.getController();
 

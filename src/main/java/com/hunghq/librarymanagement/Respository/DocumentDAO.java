@@ -357,4 +357,21 @@ public class DocumentDAO implements IRepository<Document> {
         }
         return documents;
     }
+
+    public boolean updateBookQuantity(String documentId, boolean isBorrowing) {
+        String sql = isBorrowing
+                ? "UPDATE document SET quantity = quantity - 1 WHERE documentId = ? AND quantity > 0"
+                : "UPDATE document SET quantity = quantity + 1 WHERE documentId = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, documentId);
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0; 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
