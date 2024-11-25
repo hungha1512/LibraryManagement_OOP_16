@@ -400,7 +400,6 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         WHERE bd.documentId = ? AND bd.userId = ?
         """;
 
-
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, documentId);
             pstmt.setInt(2, userId);
@@ -418,7 +417,6 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
             e.printStackTrace();
         }
     }
-
 
     public boolean canBorrowAfterReturn(String documentId, int userId) {
         String sql = "SELECT returnDate FROM borrowdocuments WHERE documentId = ? " +

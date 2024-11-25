@@ -64,7 +64,6 @@ public class MainManageController extends BaseController {
         initializeTableViewBook();
         initializeTableViewBorrowBook();
 
-        // Set up button actions
         btn_add_book.setOnAction(event -> handleAddBook());
         btn_delete_book.setOnAction(event -> handleDeleteBook());
         btn_edit_book.setOnAction(event -> handleEditBook());

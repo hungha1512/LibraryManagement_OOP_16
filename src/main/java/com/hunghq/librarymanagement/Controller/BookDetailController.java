@@ -349,6 +349,12 @@ public class BookDetailController extends BaseController {
             }
         }
     }
+
+    /**
+     *
+     * @param borrowDate
+     * @param dueDate
+     */
     private void setNotificationLabel(LocalDateTime borrowDate, LocalDateTime dueDate) {
         isBorrowed = borrowDocumentDAO.isDocumentBorrowed(document.getDocumentId(), user.getUserId());
         isOverdue = borrowDocumentDAO.isDocumentOverdue(document.getDocumentId(), user.getUserId());

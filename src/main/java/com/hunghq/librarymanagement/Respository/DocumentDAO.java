@@ -358,6 +358,12 @@ public class DocumentDAO implements IRepository<Document> {
         return documents;
     }
 
+    /**
+     *
+     * @param documentId
+     * @param userId
+     * @return
+     */
     public boolean updateBookQuantityWhenReturn(String documentId, int userId) {
         String sql = """
         UPDATE documents d
