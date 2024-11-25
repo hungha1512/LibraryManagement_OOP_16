@@ -332,7 +332,6 @@ public class BookDetailController extends BaseController {
             }
         }
     }
-
     private void setNotificationLabel(LocalDateTime borrowDate, LocalDateTime dueDate) {
         String noti = "";
 
