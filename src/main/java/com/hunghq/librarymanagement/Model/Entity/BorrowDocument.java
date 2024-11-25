@@ -14,6 +14,7 @@ public class BorrowDocument {
     private LocalDateTime borrowDate;
     private LocalDateTime dueDate;
     private LocalDateTime returnDate;
+    private LocalDateTime extendDate;
     private double fee;
     private EState eState;
 
@@ -21,8 +22,8 @@ public class BorrowDocument {
 
     }
 
-    public BorrowDocument(int borrowId, Document document, User user,
-                          LocalDateTime borrowDate, LocalDateTime dueDate, LocalDateTime returnDate, EState eState) {
+    public BorrowDocument(int borrowId, Document document, User user, LocalDateTime borrowDate,
+                          LocalDateTime dueDate, LocalDateTime returnDate, LocalDateTime extendDate, EState eState) {
         this.borrowId = borrowId;
         this.document = document;
         this.user = user;
@@ -80,6 +81,13 @@ public class BorrowDocument {
         this.returnDate = returnDate;
     }
 
+    public LocalDateTime getExtendDate() {
+        return this.extendDate;
+    }
+
+    public void setExtendDate(LocalDateTime extendDate) {
+        this.extendDate = extendDate;
+    }
     public double getFee() {
         return fee;
     }

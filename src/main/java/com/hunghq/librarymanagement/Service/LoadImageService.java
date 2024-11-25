@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 public class LoadImageService {
 
     private final String defaultImagePath = "com/hunghq/librarymanagement/Media/LogoUet.jpg";
-    private final int maxRetry = 20;
+    private final int maxRetry = 25;
     private final CallAPIService callAPIService;
     private final ImageCacheService imageCacheService = new ImageCacheService();
 
@@ -34,12 +34,12 @@ public class LoadImageService {
                     try {
                         String coverImgDb = document.getCoverImg();
                         if (coverImgUrl != null) {
-                            Image image = new Image(coverImgUrl, true);
+                            Image image = new Image(coverImgUrl, 120, 120 , true, true);
                             imageCacheService.putImage(document.getTitle(), image);
                             return image;
                         }
                         else if (coverImgDb != null) {
-                            Image image = new Image(coverImgDb, true);
+                            Image image = new Image(coverImgDb, 120, 120, true, true);
                             imageCacheService.putImage(document.getTitle(), image);
                             return image;
                         }
@@ -67,7 +67,7 @@ public class LoadImageService {
 
         loadImageTask.setOnFailed(event -> {
             System.err.println("Failed to load image after " + maxRetry + " retries.");
-            imageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream(defaultImagePath)));
+            //imageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream(defaultImagePath)));
         });
 
         new Thread(loadImageTask).start();
