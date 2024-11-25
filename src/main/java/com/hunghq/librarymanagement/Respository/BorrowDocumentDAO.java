@@ -321,6 +321,23 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         return false;
     }
 
+    public LocalDateTime getLatestReturnDateTime() {
+        String sql = "SELECT returnDate FROM borrowDocuments WHERE state = 'Returned' ORDER BY returnDate DESC LIMIT 1";
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                Timestamp timestamp = rs.getTimestamp("returnDate");
+                if (timestamp != null) {
+                    return timestamp.toLocalDateTime();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public LocalDateTime getBorrowDate(String documentId, int userId) {
         String sql = "SELECT borrowDate FROM borrowDocuments WHERE documentId = ? AND userId = ? AND state = 'Borrowed'";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -372,11 +389,22 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
     }
 
     public void updateBorrowDocumentStateToReturned(String documentId, int userId) {
-        String sql = "UPDATE borrowdocuments SET state = 'Returned', returnDate = NOW() " +
-                "WHERE documentId = ? AND userId = ?";
+        String sql = """
+        UPDATE borrowDocuments bd
+        JOIN (
+            SELECT MAX(borrowDate) AS maxBorrowDate 
+            FROM borrowDocuments 
+            WHERE documentId = ? AND userId = ?
+        ) subquery ON bd.borrowDate = subquery.maxBorrowDate
+        SET bd.state = 'Returned', bd.returnDate = NOW()
+        WHERE bd.documentId = ? AND bd.userId = ?
+        """;
+
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, documentId);
             pstmt.setInt(2, userId);
+            pstmt.setString(3, documentId);  // documentId cho subquery
+            pstmt.setInt(4, userId);         // userId cho subquery
 
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -404,7 +432,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(returnDate);
-                    calendar.add(Calendar.MONTH, 3);
+                    calendar.add(Calendar.MINUTE, 1 );
                     Date threeMonthsLater = new Date(calendar.getTimeInMillis());
 
                     return new Date(System.currentTimeMillis()).after(threeMonthsLater);

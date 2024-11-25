@@ -5,6 +5,7 @@ import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
 
 import java.time.LocalDateTime;
 
+
 public class User {
 
     private int userId;

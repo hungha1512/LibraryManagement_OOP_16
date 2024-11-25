@@ -358,19 +358,84 @@ public class DocumentDAO implements IRepository<Document> {
         return documents;
     }
 
-    public boolean updateBookQuantity(String documentId, boolean isBorrowing) {
-        String sql = isBorrowing
-                ? "UPDATE document SET quantity = quantity - 1 WHERE documentId = ? AND quantity > 0"
-                : "UPDATE document SET quantity = quantity + 1 WHERE documentId = ?";
+    /**
+     *
+     * @param documentId
+     * @param userId
+     * @return
+     */
+    public boolean updateBookQuantityWhenReturn(String documentId, int userId) {
+        String sql = """
+        UPDATE documents d
+        JOIN borrowDocuments bd ON d.documentId = bd.documentId
+        SET d.quantity = d.quantity + 1
+        WHERE d.documentId = ? AND bd.userId = ? 
+        AND bd.state = 'Returned'
+        AND bd.borrowDate = (
+            SELECT MAX(borrowDate) 
+            FROM borrowDocuments 
+            WHERE documentId = ? AND userId = ?
+        ) AND d.quantity >= 0
+    """;
 
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, documentId);
+            pstmt.setInt(2, userId);
+            pstmt.setString(3, documentId); // documentId cho subquery
+            pstmt.setInt(4, userId); // userId cho subquery
+
             int rowsUpdated = pstmt.executeUpdate();
-            return rowsUpdated > 0; 
+            return rowsUpdated > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean updateBookQuantityWhenBorrow(String documentId, int userId) {
+        String sql = """
+        UPDATE documents d
+        JOIN borrowDocuments bd ON d.documentId = bd.documentId
+        SET d.quantity = d.quantity - 1
+        WHERE d.documentId = ? AND bd.userId = ?
+        AND bd.state = 'Borrowed'
+        AND bd.borrowDate = (
+            SELECT MAX(borrowDate) 
+            FROM borrowDocuments 
+            WHERE documentId = ? AND userId = ?
+        ) AND d.quantity > 0
+    """;
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, documentId);
+            pstmt.setInt(2, userId);
+            pstmt.setString(3, documentId); // documentId cho subquery
+            pstmt.setInt(4, userId); // userId cho subquery
+
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public int getDocumentQuantity(String documentId) {
+        String sql = "SELECT quantity FROM documents WHERE documentId = ?";
+        int quantity = 0;
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, documentId);  // Set the documentId parameter
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    quantity = rs.getInt("quantity");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return quantity;
     }
 
 
