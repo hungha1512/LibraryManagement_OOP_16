@@ -6,6 +6,7 @@ import com.hunghq.librarymanagement.Model.Enum.EGender;
 import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
 import com.hunghq.librarymanagement.Model.Enum.EState;
 import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
+import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Respository.ReviewDAO;
 import com.hunghq.librarymanagement.Respository.RoleDAO;
 import com.hunghq.librarymanagement.Service.CallAPIService;
@@ -78,11 +79,13 @@ public class BookDetailController extends BaseController {
     private LoadImageService loadImageService;
     private FilterGenreService filterGenreService;
     private BorrowDocumentDAO borrowDocumentDAO;
+    private DocumentDAO documentDAO;
     private Document document;
     private User user;
     private int rating;
     private boolean isBorrowed;
     private boolean isOverdue;
+    private boolean isReturned;
 
     @FXML
     public void initialize(Document document) {
@@ -90,6 +93,7 @@ public class BookDetailController extends BaseController {
         callAPIService = new CallAPIService();
         loadImageService = new LoadImageService(callAPIService);
         borrowDocumentDAO = new BorrowDocumentDAO();
+        documentDAO = new DocumentDAO();
 
         this.document = document;
         this.user = userBorrow();
@@ -100,6 +104,7 @@ public class BookDetailController extends BaseController {
 
         isBorrowed = borrowDocumentDAO.isDocumentBorrowed(document.getDocumentId(), user.getUserId());
         isOverdue = borrowDocumentDAO.isDocumentOverdue(document.getDocumentId(), user.getUserId());
+        //isReturned = borrowDocumentDAO.
 
         if (isBorrowed || isOverdue) {
             visibleIfBorrow();
@@ -182,10 +187,25 @@ public class BookDetailController extends BaseController {
                     "You have just borrowed this book.",
                     Alert.AlertType.WARNING);
         } else {
+
+            if (documentDAO.getDocumentQuantity(document.getDocumentId()) > 0) {
+                interactWithBorrowDocumentInDB();
+            }
+
+            boolean enoughQuantityToBorrow = documentDAO.updateBookQuantityWhenBorrow(document.getDocumentId(), user.getUserId());
+
+            if (!enoughQuantityToBorrow) {
+                showAlert("Insufficient Quantity",
+                        "Sorry, there are no more copies of this document available for borrowing.",
+                        Alert.AlertType.WARNING);
+                return;
+            }
             visibleIfBorrow();
-            interactWithBorrowDocumentInDB();
+            setNotificationLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
+                    borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()));
             showAlert("Borrow Successful",
-                    "You have successfully borrowed the document.",
+                    "You have successfully borrowed the document. Your due date is: " +
+                            borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()).toString(),
                     Alert.AlertType.INFORMATION);
         }
     }
@@ -244,13 +264,12 @@ public class BookDetailController extends BaseController {
         }
     }
 
-
     private void processReturnDocument() {
         visibleIfNotBorrow();
         notiLabel.setVisible(false);
         borrowDocumentDAO.updateBorrowDocumentStateToReturned(document.getDocumentId(), user.getUserId());
+        documentDAO.updateBookQuantityWhenReturn(document.getDocumentId(), user.getUserId());
     }
-
 
     private void interactWithBorrowDocumentInDB () {
 
@@ -266,8 +285,6 @@ public class BookDetailController extends BaseController {
         );
 
         borrowDocumentDAO.add(borrowDocument);
-        setNotificationLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
-                borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()));
     }
 
     private void visibleIfBorrow() {
@@ -333,15 +350,12 @@ public class BookDetailController extends BaseController {
         }
     }
     private void setNotificationLabel(LocalDateTime borrowDate, LocalDateTime dueDate) {
-        String noti = "";
+        isBorrowed = borrowDocumentDAO.isDocumentBorrowed(document.getDocumentId(), user.getUserId());
+        isOverdue = borrowDocumentDAO.isDocumentOverdue(document.getDocumentId(), user.getUserId());
 
+        String noti = "";
         if (isBorrowed) {
             noti = "You borrowed this document at " + borrowDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-
-            if (dueDate.isAfter(LocalDateTime.now())) {
-                long daysRemaining = Duration.between(LocalDateTime.now(), dueDate).toDays();
-                noti += "\nYou have " + daysRemaining + " day(s) remaining to return.";
-            }
         } else if (isOverdue) {
             long daysOverdue = Duration.between(dueDate, LocalDateTime.now()).toDays();
             noti = "Overdue for " + daysOverdue + " day(s).";
@@ -357,6 +371,5 @@ public class BookDetailController extends BaseController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 
 }
