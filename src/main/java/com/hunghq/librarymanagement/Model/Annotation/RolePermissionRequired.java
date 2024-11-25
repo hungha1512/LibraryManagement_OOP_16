@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * Applied at runtime to enforce role-based access control.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
 public @interface RolePermissionRequired {
 
     /**
