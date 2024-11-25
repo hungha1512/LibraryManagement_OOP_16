@@ -11,11 +11,21 @@ import com.hunghq.librarymanagement.Respository.RoleDAO;
 import com.hunghq.librarymanagement.Service.CallAPIService;
 import com.hunghq.librarymanagement.Service.FilterGenreService;
 import com.hunghq.librarymanagement.Service.LoadImageService;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
+import com.itextpdf.layout.element.LineSeparator;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.font.FontProvider;
+import com.itextpdf.layout.properties.Property;
+import com.itextpdf.layout.properties.TextAlignment;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -104,6 +114,8 @@ public class BookDetailController extends BaseController {
             setNotificationLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
                     borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()));
             notiLabel.setVisible(true);
+            System.out.println(borrowDocumentDAO.getByStringId(document.getDocumentId()));
+            printButton.setOnAction(event -> handlePrintButtonAction(borrowDocumentDAO.getByStringId(document.getDocumentId())));
         } else {
             visibleIfNotBorrow();
             notiLabel.setVisible(false);
@@ -258,7 +270,7 @@ public class BookDetailController extends BaseController {
     }
 
 
-    private void interactWithBorrowDocumentInDB () {
+    private void interactWithBorrowDocumentInDB() {
 
         BorrowDocument borrowDocument = new BorrowDocument(
                 0,
@@ -273,6 +285,104 @@ public class BookDetailController extends BaseController {
         borrowDocumentDAO.add(borrowDocument);
         setNotificationLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
                 borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()));
+    }
+
+    private void handlePrintButtonAction(BorrowDocument borrowDocument) {
+        try {
+            String destinationFileName = "Bill_" + borrowDocument.getUser().getUserId()
+                    + "_" + borrowDocument.getDocument().getDocumentId()
+                    + "_" + borrowDocument.getBorrowDate().format(DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss"));
+            String borrowBill = "Borrow_Invoice.pdf";
+            File bill = new File(borrowBill);
+
+            if (!bill.exists()) {
+                bill.mkdirs();
+            }
+
+            String fullPath = borrowBill + File.separator + destinationFileName;
+            PdfWriter pdfWriter = new PdfWriter(fullPath);
+
+            PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+            com.itextpdf.layout.Document pdfDoc = new com.itextpdf.layout.Document(pdfDocument);
+            pdfDoc.setMargins(20, 20, 20, 20);
+
+            FontProvider fontProvider = new FontProvider();
+            fontProvider.addStandardPdfFonts();
+            pdfDoc.setProperty(Property.FONT_PROVIDER, fontProvider);
+
+            pdfDoc.add(new Paragraph("VNU University of Engineering and Technology")
+                    .setFontSize(20)
+                    .setFontFamily("Times New Roman")
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(5));
+
+            pdfDoc.add(new Paragraph("UET Library Management System")
+                    .setFontSize(24)
+                    .setFontFamily("Times New Roman")
+                    .setBold()
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(20));
+
+            LineSeparator ls = new LineSeparator(new SolidLine());
+            pdfDoc.add(ls);
+
+            pdfDoc.add(new Paragraph("Library Transaction")
+                    .setBold()
+                    .setFontSize(12)
+                    .setMarginBottom(5));
+            pdfDoc.add(new Paragraph("144 Xuan Thuy, Cau Giay, Ha Noi")
+                    .setFontSize(10));
+            pdfDoc.add(new Paragraph("Email: librarymanagementuet@gmail.com")
+                    .setFontSize(10)
+                    .setMarginBottom(20));
+
+            pdfDoc.add(new Paragraph("Invoice Date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+                    .setFontSize(10));
+
+            pdfDoc.add(new Paragraph("\nBill To:")
+                    .setBold()
+                    .setFontSize(12)
+                    .setMarginBottom(5));
+            pdfDoc.add(new Paragraph("User Name: " + user.getFullName())
+                    .setFontSize(10));
+            pdfDoc.add(new Paragraph("User Email: " + user.getEmail())
+                    .setFontSize(10)
+                    .setMarginBottom(5));
+
+            pdfDoc.add(new LineSeparator(new SolidLine()));
+
+            pdfDoc.add(new Paragraph("Document Title: " + document.getTitle())
+                    .setFontSize(10));
+            pdfDoc.add(new Paragraph("Author: " + document.getAuthorName())
+                    .setFontSize(10));
+            pdfDoc.add(new Paragraph("Borrow Date: " + borrowDocument.getBorrowDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+                    .setFontSize(10));
+            pdfDoc.add(new Paragraph("Due Date: " + borrowDocument.getDueDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+                    .setFontSize(10)
+                    .setMarginBottom(20));
+
+            pdfDoc.add(new LineSeparator(new SolidLine()));
+
+            pdfDoc.add(new Paragraph("Thank you for using the UET Library Management System.")
+                    .setFontSize(12)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginTop(20));
+
+            pdfDoc.close();
+
+            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+            successAlert.setTitle("Print Successful");
+            successAlert.setHeaderText(null);
+            successAlert.setContentText("The borrow invoice has been successfully printed to " + fullPath);
+            successAlert.showAndWait();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Print Failed");
+            errorAlert.setHeaderText(null);
+            errorAlert.setContentText("Failed to print the borrow invoice. Please try again.");
+            errorAlert.showAndWait();
+        }
     }
 
     private void visibleIfBorrow() {
