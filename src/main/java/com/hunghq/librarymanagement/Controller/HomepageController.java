@@ -1,6 +1,7 @@
 package com.hunghq.librarymanagement.Controller;
 
 import com.hunghq.librarymanagement.Global.AppProperties;
+import com.hunghq.librarymanagement.Model.Annotation.RolePermissionRequired;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Service.AuthenticationService;
@@ -25,21 +26,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HomepageController implements Initializable {
+public class HomepageController extends BaseController implements Initializable {
     @FXML
     public Button btn_all_books;
-
-    @FXML
-    public Button btn_recent;
 
     @FXML
     public Button btn_my_books;
 
     @FXML
-    public Button btn_favorites;
-
-    @FXML
-    public Button btn_service;
+    @RolePermissionRequired(roles = {"Librarian"})
+    public Button btn_manage;
 
     @FXML
     public Button btn_user;
@@ -99,8 +95,6 @@ public class HomepageController implements Initializable {
 
         txt_name_user.setText("Welcome back, " + AppProperties.getProperty("user.fullName") + "!");
 
-        //TODO: Write logout controller
-
         getContentPane("/com/hunghq/librarymanagement/View/AllBooks/MainAllBooks.fxml");
 
         btn_all_books.setOnAction(new EventHandler<ActionEvent>() {
@@ -124,12 +118,19 @@ public class HomepageController implements Initializable {
             }
         });
 
+        btn_manage.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                getContentPane("/com/hunghq/librarymanagement/View/Manage/MainManage.fxml");
+            }
+        });
+
         btn_user.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 getContentPane("/com/hunghq/librarymanagement/View/User/MainUser.fxml");
             }
-        }) ;
+        });
 
         btn_search.setOnAction(actionEvent -> handleSearch());
 
@@ -148,7 +149,7 @@ public class HomepageController implements Initializable {
                 stage.setScene(scene);
                 stage.setTitle("UET Library Management System");
                 stage.show();
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
