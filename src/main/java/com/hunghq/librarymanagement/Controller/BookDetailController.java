@@ -195,6 +195,16 @@ public class BookDetailController extends BaseController {
     }
 
     public void handleExtendButtonAction() {
+        LocalDateTime extendDate = borrowDocumentDAO.getExtendDate(document.getDocumentId(), user.getUserId());
+        if (extendDate != null) {
+            Alert alreadyExtendedAlert = new Alert(Alert.AlertType.WARNING);
+            alreadyExtendedAlert.setTitle("Extension Not Allowed");
+            alreadyExtendedAlert.setHeaderText(null);
+            alreadyExtendedAlert.setContentText("This document's due date has already been extended and cannot be extended again.");
+            alreadyExtendedAlert.showAndWait();
+            return; // Kết thúc hàm nếu đã gia hạn
+        }
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Extend Borrow Period");
         alert.setHeaderText("Extend Due Date");
@@ -202,8 +212,9 @@ public class BookDetailController extends BaseController {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                boolean success = borrowDocumentDAO.updateDueDate(document.getDocumentId(), user.getUserId());
-                if (success) {
+                boolean canUpdateExtendDate = borrowDocumentDAO.updateExtendDate(document.getDocumentId(), user.getUserId());
+                boolean canUpdateDueDate = borrowDocumentDAO.updateDueDate(document.getDocumentId(), user.getUserId());
+                if (canUpdateExtendDate && canUpdateDueDate) {
                     Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                     successAlert.setTitle("Extension Successful");
                     successAlert.setHeaderText(null);
@@ -266,6 +277,7 @@ public class BookDetailController extends BaseController {
                 this.user,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(0),
+                null,
                 null,
                 EState.BORROWED
         );
