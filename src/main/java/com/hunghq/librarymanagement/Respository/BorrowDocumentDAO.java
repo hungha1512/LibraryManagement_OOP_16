@@ -37,7 +37,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
             Document document = (Document) documentDAO.getByStringId(reS.getString("documentId"));
 
             UserDAO userDAO = new UserDAO();
-            User user = (User) userDAO.getByStringId(reS.getString("userId"));
+            User user = userDAO.getByIntId(reS.getInt("userId"));
 
             return new BorrowDocument(
                     reS.getInt("borrowId"),
@@ -106,7 +106,22 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
      */
     @Override
     public BorrowDocument getByStringId(String borrowId) {
-        return null;
+        String sql = "SELECT * FROM borrowdocuments WHERE documentId = ?";
+        BorrowDocument borrowDocument = null;
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
+            prS.setString(1, borrowId);
+            ResultSet reS = prS.executeQuery();
+
+            if (reS.next()) {
+                borrowDocument = make(reS);
+            } else {
+                System.out.println("No document found with id: " + borrowId);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return borrowDocument;
     }
 
     /**
