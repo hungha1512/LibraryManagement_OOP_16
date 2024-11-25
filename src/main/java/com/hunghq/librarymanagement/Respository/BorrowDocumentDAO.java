@@ -49,6 +49,8 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
                             ? reS.getTimestamp("dueDate").toLocalDateTime() : null,
                     reS.getTimestamp("returnDate") != null
                             ? reS.getTimestamp("returnDate").toLocalDateTime() : null,
+                    reS.getTimestamp("extendDate") != null
+                            ? reS.getTimestamp("extendDate").toLocalDateTime() : null,
                     EState.fromValue(reS.getString("state"))
             );
         } catch (SQLException e) {
@@ -66,7 +68,8 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
     public void add(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
 
-        String sql = "INSERT INTO borrowDocuments (documentId, userId, borrowDate, dueDate, returnDate, state) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO borrowDocuments (documentId, userId, borrowDate, dueDate, returnDate, state) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement prS = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -196,7 +199,8 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
     @Override
     public void update(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
-        String sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, borrowDate = ?, dueDate = ?, returnDate = ?, state = ? WHERE borrowId = ?";
+        String sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, borrowDate = ?, " +
+                "dueDate = ?, returnDate = ?, state = ? WHERE borrowId = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
@@ -318,6 +322,24 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         return null;
     }
 
+    public LocalDateTime getExtendDate(String documentId, int userId) {
+        String sql = "SELECT extendDate FROM borrowDocuments WHERE documentId = ? AND userId = ? AND state = 'Borrowed'";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, documentId);
+            stmt.setInt(2, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Timestamp timestamp = rs.getTimestamp("extendDate");
+                    LocalDateTime extendDate = timestamp != null ? timestamp.toLocalDateTime() : null;
+                    return extendDate;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public LocalDateTime getDueDate(String documentId, int userId) {
         String sql = "SELECT dueDate FROM borrowDocuments WHERE documentId = ? AND userId = ?";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -398,6 +420,22 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
     }
 
+    public boolean updateExtendDate(String documentId, int userId) {
+        String sql = "UPDATE borrowdocuments SET extendDate = CURRENT_TIMESTAMP WHERE" +
+                " documentId = ? AND userId = ? AND state = 'Borrowed'";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, documentId);
+            pstmt.setInt(2, userId);
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     public boolean limitOverdueDocument(int userId) {
         boolean result = false;
@@ -416,5 +454,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
         return result;
     }
+
+
 
 }

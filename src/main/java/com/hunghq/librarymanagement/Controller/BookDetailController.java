@@ -70,6 +70,8 @@ public class BookDetailController extends BaseController {
     @FXML
     private TextArea commentTextArea;
     @FXML
+    private Button btnCancelRating;
+    @FXML
     private Button sendButton;
 
     private CallAPIService callAPIService;
@@ -135,8 +137,10 @@ public class BookDetailController extends BaseController {
         btnStar4.setOnAction(event -> handleStarRating(4));
         btnStar5.setOnAction(event -> handleStarRating(5));
 
+        btnCancelRating.setOnAction(event -> handleCancelRating());
         sendButton.setOnAction(event -> handleSendButtonAction());
     }
+
 
     private User userBorrow() {
         RoleDAO roleDAO = new RoleDAO();
@@ -195,6 +199,17 @@ public class BookDetailController extends BaseController {
     }
 
     public void handleExtendButtonAction() {
+        LocalDateTime extendDate = borrowDocumentDAO.getExtendDate(document.getDocumentId(), user.getUserId());
+
+        if (extendDate != null) {
+            Alert alreadyExtendedAlert = new Alert(Alert.AlertType.WARNING);
+            alreadyExtendedAlert.setTitle("Extension Not Allowed");
+            alreadyExtendedAlert.setHeaderText("Already Extended");
+            alreadyExtendedAlert.setContentText("You have already extended the due date for this document. Further extensions are not allowed.");
+            alreadyExtendedAlert.showAndWait();
+            return;
+        }
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Extend Borrow Period");
         alert.setHeaderText("Extend Due Date");
@@ -202,8 +217,9 @@ public class BookDetailController extends BaseController {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                boolean success = borrowDocumentDAO.updateDueDate(document.getDocumentId(), user.getUserId());
-                if (success) {
+                boolean canUpdateExtendDate = borrowDocumentDAO.updateExtendDate(document.getDocumentId(), user.getUserId());
+                boolean canUpdateDueDate = borrowDocumentDAO.updateDueDate(document.getDocumentId(), user.getUserId());
+                if (canUpdateExtendDate && canUpdateDueDate) {
                     Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                     successAlert.setTitle("Extension Successful");
                     successAlert.setHeaderText(null);
@@ -213,7 +229,7 @@ public class BookDetailController extends BaseController {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setTitle("Extension Failed");
                     errorAlert.setHeaderText(null);
-                    errorAlert.setContentText("Failed to extend the due date. Please try again.");
+                    errorAlert.setContentText("Failed to extend. Please try again.");
                     errorAlert.showAndWait();
                 }
             } else {
@@ -257,7 +273,6 @@ public class BookDetailController extends BaseController {
         borrowDocumentDAO.updateBorrowDocumentStateToReturned(document.getDocumentId(), user.getUserId());
     }
 
-
     private void interactWithBorrowDocumentInDB () {
 
         BorrowDocument borrowDocument = new BorrowDocument(
@@ -265,7 +280,8 @@ public class BookDetailController extends BaseController {
                 this.document,
                 this.user,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusDays(0),
+                LocalDateTime.now().plusDays(7),
+                null,
                 null,
                 EState.BORROWED
         );
@@ -304,8 +320,17 @@ public class BookDetailController extends BaseController {
         );
         if (this.rating != 0 && !comment.isEmpty()) {
             reviewDAO.add(review);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Thank you!");
+            alert.setContentText("Your feedback has been submitted successfully.");
+            alert.showAndWait();
         } else {
-            // Handle if rating and comment is null
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setHeaderText("Incomplete Information");
+            alert.setContentText("Please make sure to enter your review before sending!");
+            alert.showAndWait();
         }
 
     }
@@ -323,6 +348,15 @@ public class BookDetailController extends BaseController {
                 starButton.setText("☆");
                 starButton.setStyle(starButton.getStyle() + "-fx-text-fill: black; -fx-font-weight: normal;");
             }
+        }
+    }
+
+    private void handleCancelRating() {
+        for (int i = 1; i <= 5; i++) {
+            Button starButton = (Button) hBoxStarsInactive.getChildren().get(i - 1);
+            starButton.setStyle("-fx-background-color: transparent;");
+            starButton.setText("☆");
+            starButton.setStyle(starButton.getStyle() + "-fx-text-fill: black; -fx-font-weight: normal;");
         }
     }
 

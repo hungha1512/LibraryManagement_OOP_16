@@ -89,6 +89,7 @@
                            </font></Button>
                      </children>
                   </HBox>
+                  <Button fx:id="btnCancelRating" layoutX="285.0" layoutY="13.0" mnemonicParsing="false" style="-fx-background-color: #04558A;" text="Cancel" textFill="WHITE" />
                </children>
             </AnchorPane>
             <Label fx:id="notiLabel" layoutX="53.0" layoutY="270.0" prefHeight="17.0" prefWidth="455.0" style="-fx-font-weight: bold;" textFill="RED" />
