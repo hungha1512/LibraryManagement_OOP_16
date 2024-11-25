@@ -17,6 +17,8 @@ module com.hunghq.librarymanagement {
     requires org.json;
     requires java.desktop;
     requires com.google.common;
+    requires kernel;
+    requires layout;
 
     opens com.hunghq.librarymanagement.Controller to javafx.fxml;
     exports com.hunghq.librarymanagement;
