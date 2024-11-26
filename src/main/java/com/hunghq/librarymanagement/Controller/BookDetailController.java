@@ -85,7 +85,6 @@ public class BookDetailController extends BaseController {
     private int rating;
     private boolean isBorrowed;
     private boolean isOverdue;
-    private boolean isReturned;
 
     @FXML
     public void initialize(Document document) {
@@ -104,7 +103,6 @@ public class BookDetailController extends BaseController {
 
         isBorrowed = borrowDocumentDAO.isDocumentBorrowed(document.getDocumentId(), user.getUserId());
         isOverdue = borrowDocumentDAO.isDocumentOverdue(document.getDocumentId(), user.getUserId());
-        //isReturned = borrowDocumentDAO.
 
         if (isBorrowed || isOverdue) {
             visibleIfBorrow();
@@ -119,11 +117,11 @@ public class BookDetailController extends BaseController {
 
     private void setContent() {
         titleLabel.setText(document.getTitle());
-        authorLabel.setText(document.getAuthorName());
+        authorLabel.setText(document.getAuthor());
         genreLabel.setText(filterGenreService.formatGenres(document.getGenre()));
         descriptionLabel.setText(document.getDescription());
 
-        anotherAuthorLabel.setText(document.getAuthorName());
+        anotherAuthorLabel.setText(document.getAuthor());
         publisherLabel.setText(document.getPublisher());
         publishedDateLabel.setText(document.getPublishedDate());
         languageLabel.setText(document.getLanguage());
@@ -350,11 +348,7 @@ public class BookDetailController extends BaseController {
         }
     }
 
-    /**
-     *
-     * @param borrowDate
-     * @param dueDate
-     */
+
     private void setNotificationLabel(LocalDateTime borrowDate, LocalDateTime dueDate) {
         isBorrowed = borrowDocumentDAO.isDocumentBorrowed(document.getDocumentId(), user.getUserId());
         isOverdue = borrowDocumentDAO.isDocumentOverdue(document.getDocumentId(), user.getUserId());

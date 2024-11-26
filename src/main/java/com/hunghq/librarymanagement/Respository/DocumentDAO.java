@@ -40,15 +40,15 @@ public class DocumentDAO implements IRepository<Document> {
                     reS.getString("title"),
                     reS.getString("author"),
                     reS.getDouble("rating"),
+                    reS.getString("description"),
+                    reS.getString("language"),
+                    reS.getString("isbn"),
                     reS.getString("genre"),
                     reS.getInt("quantity"),
-                    reS.getString("language"),
-                    reS.getString("description"),
-                    reS.getInt("numRatings"),
                     reS.getString("publisher"),
-                    reS.getString("isbn"),
                     reS.getString("publishedDate"),
                     reS.getString("award"),
+                    reS.getInt("numRatings"),
                     reS.getString("coverImg")
             );
         } catch (SQLException e) {
@@ -65,25 +65,25 @@ public class DocumentDAO implements IRepository<Document> {
     @Override
     public void add(Document entity) {
         Document document = (Document) entity;
-        String sql = "INSERT INTO documents (documentId, title, author, rating, genre, " +
-                "quantity, language, description, numRatings, " +
-                "publisher, isbn, publishedDate, award, coverImg) " +
+        String sql = "INSERT INTO documents (documentId, title, author, rating, description, " +
+                "language, isbn, genre, quantity, " +
+                "publisher, publishedDate, award, numRatings, coverImg) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
             prS.setString(1, document.getDocumentId());
             prS.setString(2, document.getTitle());
-            prS.setString(3, document.getAuthorName());
+            prS.setString(3, document.getAuthor());
             prS.setDouble(4, document.getRating());
-            prS.setString(5, document.getGenre());
-            prS.setInt(6, document.getQuantity());
-            prS.setString(7, document.getLanguage());
-            prS.setString(8, document.getDescription());
-            prS.setInt(9, document.getNumRatings());
+            prS.setString(5, document.getDescription());
+            prS.setString(6, document.getLanguage());
+            prS.setString(7, document.getIsbn());
+            prS.setString(8, document.getGenre());
+            prS.setInt(9, document.getQuantity());
             prS.setString(10, document.getPublisher());
-            prS.setString(11, document.getIsbn());
-            prS.setString(12, document.getPublishedDate());
-            prS.setString(13, document.getAward());
+            prS.setString(11, document.getPublishedDate());
+            prS.setString(12, document.getAward());
+            prS.setInt(13, document.getNumRatings());
             prS.setString(14, document.getCoverImg());
 
             prS.executeUpdate();
@@ -186,24 +186,25 @@ public class DocumentDAO implements IRepository<Document> {
     public void update(Document entity) {
         Document document = (Document) entity;
         String sql = "UPDATE documents SET title = ?, author = ?, rating = ?, " +
-                "genre = ?, quantity = ?, language = ?, description = ?, " +
-                "numRatings = ?, publisher = ?, isbn = ?, publishedDate = ?, " +
-                "award = ?, coverImg = ? WHERE documentId = ?";
+                "description = ?, language = ?, isbn = ?, genre = ?, " +
+                "quantity = ?, publisher = ?, publishedDate = ?, award = ?, " +
+                "numRatings = ?, coverImg = ? WHERE documentId = ?";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
             prS.setString(1, document.getTitle());
-            prS.setString(2, document.getAuthorName());
+            prS.setString(2, document.getAuthor());
             prS.setDouble(3, document.getRating());
-            prS.setString(4, document.getGenre());
+            prS.setString(4, document.getDescription());
             prS.setString(5, document.getLanguage());
-            prS.setString(6, document.getDescription());
-            prS.setInt(7, document.getNumRatings());
-            prS.setString(8, document.getPublisher());
-            prS.setString(9, document.getIsbn());
+            prS.setString(6, document.getIsbn());
+            prS.setString(7, document.getGenre());
+            prS.setInt(8, document.getQuantity());
+            prS.setString(9, document.getPublisher());
             prS.setString(10, document.getPublishedDate());
             prS.setString(11, document.getAward());
-            prS.setString(12, document.getCoverImg());
-            prS.setString(13, document.getDocumentId());
+            prS.setInt(12, document.getNumRatings());
+            prS.setString(13, document.getCoverImg());
+            prS.setString(14, document.getDocumentId());
 
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -259,7 +260,7 @@ public class DocumentDAO implements IRepository<Document> {
         if (documentById != null) {
             System.out.println("Document found with ID " + testId + ":");
             System.out.println("Title: " + documentById.getTitle());
-            System.out.println("Author: " + documentById.getAuthorName());
+            System.out.println("Author: " + documentById.getAuthor());
             System.out.println("Rating: " + documentById.getRating());
         } else {
             System.out.println("No document found with ID: " + testId);
@@ -270,7 +271,7 @@ public class DocumentDAO implements IRepository<Document> {
         if (!documentsByName.isEmpty()) {
             System.out.println("\nDocuments found with name containing \"" + testName + "\":");
             for (Document doc : documentsByName) {
-                System.out.println("ID: " + doc.getDocumentId() + ", Title: " + doc.getTitle() + ", Author: " + doc.getAuthorName());
+                System.out.println("ID: " + doc.getDocumentId() + ", Title: " + doc.getTitle() + ", Author: " + doc.getAuthor());
             }
         } else {
             System.out.println("No document found with name containing: " + testName);
@@ -437,6 +438,5 @@ public class DocumentDAO implements IRepository<Document> {
 
         return quantity;
     }
-
 
 }

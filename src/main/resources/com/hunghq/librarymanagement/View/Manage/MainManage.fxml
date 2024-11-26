@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
@@ -8,7 +7,6 @@
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -16,105 +14,113 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
-    <SplitPane orientation="VERTICAL" prefHeight="550.0" prefWidth="840.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <VBox prefHeight="270.0" prefWidth="840.0" spacing="10.0">
-            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Dashboard Overview">
-                <VBox.margin>
-                    <Insets left="10.0" />
-                </VBox.margin>
-            </Label>
-            <HBox alignment="CENTER" spacing="20.0">
-                <!-- Bar Chart Example -->
-                <BarChart fx:id="bc_books_by_genre" prefHeight="200.0" prefWidth="250.0" title="Books by Genre">
-                    <xAxis>
-                        <CategoryAxis label="Genre" />
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Number of Books" />
-                    </yAxis>
-                </BarChart>
+<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
+      <TabPane prefHeight="550.0" prefWidth="838.0" tabClosingPolicy="UNAVAILABLE">
+          <tabs>
+              <Tab text="Manage Books">
+                  <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
+                          <children>
+                              <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-2.0" prefHeight="38.0" prefWidth="300.0" spacing="10.0">
+                                  <Button fx:id="btn_add_book" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Add Book" textFill="WHITE" />
+                                  <Button fx:id="btn_delete_book" style="-fx-background-color: red; -fx-font-weight: bold;" text="Delete Book" textFill="WHITE" />
+                                  <Button fx:id="btn_edit_book" style="-fx-font-weight: bold; -fx-background-color: #89a8b2;" text="Edit Book Details" textFill="WHITE" />
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="534.0" layoutY="-2.0" prefHeight="38.0" prefWidth="290.0" spacing="10.0">
+                                  <children>
+                                      <TextField fx:id="tf_search_book" prefHeight="25.0" prefWidth="220.0" promptText="Search Books..." style="-fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                                      <Button fx:id="btn_search_book" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Search" textFill="WHITE" />
+                                  </children>
+                              </HBox>
+                              <TableView fx:id="tv_book" layoutX="1.0" layoutY="34.0" prefHeight="487.0" prefWidth="840.0">
+                                  <columns>
+                                      <TableColumn fx:id="col_book_id" prefWidth="48.666688203811646" text="Book ID" />
+                                      <TableColumn fx:id="col_title" prefWidth="40.666683197021484" text="Title" />
+                                      <TableColumn fx:id="col_author" prefWidth="54.66669464111328" text="Author" />
+                                      <TableColumn fx:id="col_rating" prefWidth="50.0" text="Rating" />
+                                      <TableColumn fx:id="col_description" prefWidth="73.99998474121094" text="Description" />
+                                      <TableColumn fx:id="col_language" prefWidth="62.66668701171875" text="Language" />
+                                      <TableColumn fx:id="col_isbn" prefWidth="38.0" text="ISBN" />
+                                      <TableColumn fx:id="col_genre" prefWidth="43.99993896484375" text="Genre" />
+                                      <TableColumn fx:id="col_quantity" prefWidth="58.0" text="Quantity" />
+                                      <TableColumn fx:id="col_publisher" prefWidth="62.666656494140625" text="Publisher" />
+                                      <TableColumn fx:id="col_published_date" prefWidth="93.33331298828125" text="Published Date" />
+                                      <TableColumn fx:id="col_award" prefWidth="54.0" text="Award" />
+                                      <TableColumn fx:id="col_num_ratings" prefWidth="79.3333740234375" text="Num Ratings" />
+                                      <TableColumn fx:id="col_cover_img" prefWidth="73.33331298828125" text="CoverImg" />
+                                  </columns>
+                              </TableView>
 
-                <PieChart fx:id="pc_borrow_status" prefHeight="200.0" prefWidth="250.0" title="Borrow Status" />
+                          </children>
+                      </AnchorPane>
+                  </content>
+              </Tab>
+              <Tab text="Manage Borrowing Status">
+                  <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
+                          <children>
+                              <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-2.0" prefHeight="38.0" prefWidth="242.0" spacing="10.0">
+                                  <children>
+                                      <Button fx:id="btn_send_noti" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Send Notification" textFill="WHITE" />
+                                      <Button fx:id="btn_return_book" prefWidth="110.0" style="-fx-background-color: red; -fx-font-weight: bold;" text="Return Book" textFill="WHITE" />
+                                  </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="548.0" layoutY="-2.0" prefHeight="38.0" prefWidth="290.0" spacing="10.0">
+                                  <children>
+                                      <TextField fx:id="tf_search_user" prefHeight="25.0" prefWidth="220.0" promptText="Search Users..." style="-fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                                      <Button fx:id="btn_search_user" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Search" textFill="WHITE" />
+                                  </children>
+                              </HBox>
+                              <TableView fx:id="tv_borrowDocument" layoutY="38.0" prefHeight="483.0" prefWidth="838.0">
+                                  <columns>
+                                      <TableColumn fx:id="col_borrow_id" prefWidth="90.0" text="Borrow ID" />
+                                      <TableColumn fx:id="col_document_id" prefWidth="100.0" text="Book ID" />
+                                      <TableColumn fx:id="col_user_id" prefWidth="96.0" text="User ID" />
+                                      <TableColumn fx:id="col_fee" prefWidth="65.0" text="Fee" />
+                                      <TableColumn fx:id="col_borrow_date" prefWidth="100.0" text="Borrow Date" />
+                                      <TableColumn fx:id="col_due_date" prefWidth="100.0" text="Due Date" />
+                                      <TableColumn fx:id="col_return_date" prefWidth="100.0" text="Return Date" />
+                                      <TableColumn fx:id="col_extend_date" prefWidth="100.0" text="Extend Date" />
+                                      <TableColumn fx:id="col_state" prefWidth="85.33331298828125" text="State" />
+                                  </columns>
+                              </TableView>
 
-                <LineChart fx:id="lc_borrowing_trends" prefHeight="200.0" prefWidth="300.0" title="Borrowing Trends Over Time">
-                    <xAxis>
-                        <CategoryAxis label="Month" />
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Books Borrowed" />
-                    </yAxis>
-                </LineChart>
-            </HBox>
-            <TabPane prefHeight="301.0" prefWidth="838.0" tabClosingPolicy="UNAVAILABLE">
-                <tabs>
-                    <Tab text="Manage Books">
-                        <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="300.0" spacing="10.0">
-                                        <Button fx:id="btn_add_book" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Add Book" textFill="WHITE" />
-                                        <Button fx:id="btn_delete_book" style="-fx-background-color: red; -fx-font-weight: bold;" text="Delete Book" textFill="WHITE" />
-                                        <Button fx:id="btn_edit_book" style="-fx-font-weight: bold; -fx-background-color: #89a8b2;" text="Edit Book Details" textFill="WHITE" />
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" layoutX="551.0" prefHeight="38.0" prefWidth="290.0" spacing="10.0">
-                                        <children>
-                                            <TextField fx:id="tf_search_book" prefHeight="25.0" prefWidth="220.0" promptText="Search Books..." style="-fx-background-radius: 5px; -fx-border-radius: 5px;" />
-                                            <Button fx:id="btn_search_book" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Search" textFill="WHITE" />
-                                        </children>
-                                    </HBox>
-                                    <TableView fx:id="tv_book" layoutY="36.0" prefHeight="235.0" prefWidth="838.0">
-                                        <columns>
-                                            <TableColumn text="Book ID" />
-                                            <TableColumn prefWidth="123.0" text="Title" />
-                                            <TableColumn prefWidth="90.0" text="Author" />
-                                            <TableColumn prefWidth="95.0" text="Genre" />
-                                            <TableColumn prefWidth="86.0" text="Quantity" />
-                                        </columns>
-                                    </TableView>
-                                </children>
-                            </AnchorPane>
-                        </content>
-                    </Tab>
-                    <Tab text="Manage Borrowing Status">
-                        <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="242.0" spacing="10.0">
-                                        <children>
-                                            <Button fx:id="btn_send_noti" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Send Notification" textFill="WHITE" />
-                                            <Button fx:id="btn_return_book" prefWidth="110.0" style="-fx-background-color: red; -fx-font-weight: bold;" text="Return Book" textFill="WHITE" />
-                                        </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" layoutX="548.0" prefHeight="38.0" prefWidth="290.0" spacing="10.0">
-                                        <children>
-                                            <TextField fx:id="tf_search_user" prefHeight="25.0" prefWidth="220.0" promptText="Search Users..." style="-fx-background-radius: 5px; -fx-border-radius: 5px;" />
-                                            <Button fx:id="btn_search_user" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Search" textFill="WHITE" />
-                                        </children>
-                                    </HBox>
-                                    <TableView layoutY="38.0" prefHeight="235.0" prefWidth="838.0">
-                                        <columns>
-                                            <TableColumn prefWidth="61.0" text="User ID" />
-                                            <TableColumn prefWidth="124.0" text="User Name" />
-                                            <TableColumn prefWidth="96.0" text="Book ID" />
-                                            <TableColumn prefWidth="124.0" text="Book Title" />
-                                            <TableColumn prefWidth="62.0" text="Fee" />
-                                            <TableColumn prefWidth="109.0" text="Borrow Date" />
-                                            <TableColumn prefWidth="89.0" text="Due Date" />
-                                            <TableColumn prefWidth="83.0" text="Return Date" />
-                                            <TableColumn prefWidth="88.0" text="Status" />
-                                        </columns>
-                                    </TableView>
-                                </children>
-                            </AnchorPane>
-                        </content>
-                    </Tab>
-                </tabs>
-            </TabPane>
-        </VBox>
-
-
-    </SplitPane>
+                          </children>
+                      </AnchorPane>
+                  </content>
+              </Tab>
+         <Tab text="Overview">
+            <content>
+               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
+                  <children>
+                        <Label layoutX="14.0" layoutY="14.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Dashboard Overview" />
+                        <HBox alignment="CENTER" layoutX="-1.0" layoutY="60.0" spacing="20.0">
+                            <!-- Bar Chart Example -->
+                            <BarChart fx:id="bc_books_by_genre" prefHeight="200.0" prefWidth="250.0" title="Books by Genre">
+                                <xAxis>
+                                    <CategoryAxis label="Genre" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Number of Books" />
+                                </yAxis>
+                            </BarChart>
+                  
+                                                                                     <PieChart fx:id="pc_borrow_status" prefHeight="200.0" prefWidth="250.0" title="Borrow Status" />
+                  
+                                                                                     <LineChart fx:id="lc_borrowing_trends" prefHeight="200.0" prefWidth="300.0" title="Borrowing Trends Over Time">
+                                <xAxis>
+                                    <CategoryAxis label="Month" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Books Borrowed" />
+                                </yAxis>
+                            </LineChart>
+                        </HBox>
+                  </children>
+               </AnchorPane>
+            </content>
+         </Tab>
+          </tabs>
+      </TabPane>
 </AnchorPane>
