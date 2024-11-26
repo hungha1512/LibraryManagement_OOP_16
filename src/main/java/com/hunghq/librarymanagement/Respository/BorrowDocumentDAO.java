@@ -73,23 +73,19 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
         try (PreparedStatement prS = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            // Thiết lập các giá trị cho câu lệnh SQL
-            prS.setString(1, borrowDocument.getDocument().getDocumentId()); // Document ID (String)
-            prS.setInt(2, borrowDocument.getUser().getUserId());            // User ID (Integer)
-            prS.setTimestamp(3, Timestamp.valueOf(borrowDocument.getBorrowDate())); // Borrow Date
-            prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getDueDate()));    // Due Date
+            prS.setString(1, borrowDocument.getDocument().getDocumentId());
+            prS.setInt(2, borrowDocument.getUser().getUserId());
+            prS.setTimestamp(3, Timestamp.valueOf(borrowDocument.getBorrowDate()));
+            prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getDueDate()));
             prS.setTimestamp(5, borrowDocument.getReturnDate() != null
-                    ? Timestamp.valueOf(borrowDocument.getReturnDate())    // Return Date nếu có
+                    ? Timestamp.valueOf(borrowDocument.getReturnDate())
                     : null);
-            prS.setString(6, borrowDocument.getState().getState());        // State
+            prS.setString(6, borrowDocument.getState().getState());
 
-            // Thực thi câu lệnh
             prS.executeUpdate();
 
-            // Lấy giá trị ID tự động tăng (borrowId)
             try (ResultSet generatedKeys = prS.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    // Gán giá trị borrowId cho đối tượng BorrowDocument
                     borrowDocument.setBorrowId(generatedKeys.getInt(1));
                 }
             }
@@ -403,8 +399,8 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, documentId);
             pstmt.setInt(2, userId);
-            pstmt.setString(3, documentId);  // documentId cho subquery
-            pstmt.setInt(4, userId);         // userId cho subquery
+            pstmt.setString(3, documentId);
+            pstmt.setInt(4, userId);
 
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -432,7 +428,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(returnDate);
-                    calendar.add(Calendar.MINUTE, 1 );
+                    calendar.add(Calendar.MONTH, 3 );
                     Date threeMonthsLater = new Date(calendar.getTimeInMillis());
 
                     return new Date(System.currentTimeMillis()).after(threeMonthsLater);
@@ -497,7 +493,5 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
         return result;
     }
-
-
 
 }

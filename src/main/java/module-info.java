@@ -20,6 +20,7 @@ module com.hunghq.librarymanagement {
     requires kernel;
     requires layout;
 
+    opens com.hunghq.librarymanagement.Model.Entity to javafx.base;
     opens com.hunghq.librarymanagement.Controller to javafx.fxml;
     exports com.hunghq.librarymanagement;
 }

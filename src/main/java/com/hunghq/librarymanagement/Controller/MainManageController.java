@@ -1,21 +1,31 @@
 package com.hunghq.librarymanagement.Controller;
 
 import com.hunghq.librarymanagement.Model.Annotation.RolePermissionRequired;
+import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
+import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Service.FilterGenreService;
+
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
 
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
+
+
 
 public class MainManageController extends BaseController {
     @FXML
@@ -37,8 +47,37 @@ public class MainManageController extends BaseController {
     public TextField tf_search_book;
     @FXML
     public Button btn_search_book;
-    @FXML
-    public TableView tv_book;
+
+
+    @FXML private TableColumn<Document, String> col_book_id;
+    @FXML private TableColumn<Document, String> col_title;
+    @FXML private TableColumn<Document, String> col_author;
+    @FXML private TableColumn<Document, Double> col_rating;
+    @FXML private TableColumn<Document, String> col_description;
+    @FXML private TableColumn<Document, String> col_language;
+    @FXML private TableColumn<Document, String> col_isbn;
+    @FXML private TableColumn<Document, String> col_genre;
+    @FXML private TableColumn<Document, Integer> col_quantity;
+    @FXML private TableColumn<Document, String> col_publisher;
+    @FXML private TableColumn<Document, String> col_published_date;
+    @FXML private TableColumn<Document, String> col_award;
+    @FXML private TableColumn<Document, Integer> col_num_ratings;
+    @FXML private TableColumn<Document, String> col_cover_img;
+    @FXML private TableView<Document> tv_book;
+
+
+    @FXML private TableColumn<BorrowDocument, String> col_borrow_id;
+    @FXML private TableColumn<BorrowDocument, String> col_document_id;
+    @FXML private TableColumn<BorrowDocument, String> col_user_id;
+    @FXML private TableColumn<BorrowDocument, Double> col_fee;
+    @FXML private TableColumn<BorrowDocument, String> col_borrow_date;
+    @FXML private TableColumn<BorrowDocument, String> col_due_date;
+    @FXML private TableColumn<BorrowDocument, String> col_return_date;
+    @FXML private TableColumn<BorrowDocument, String> col_extend_date;
+    @FXML private TableColumn<BorrowDocument, String> col_state;
+    @FXML private TableView<BorrowDocument> tv_borrowDocument;
+
+
     @FXML
     @RolePermissionRequired(roles = {"Librarian"})
     public Button btn_send_noti;
@@ -52,6 +91,7 @@ public class MainManageController extends BaseController {
 
     private FilterGenreService filterGenreService = new FilterGenreService();
     private DocumentDAO documentDAO = new DocumentDAO();
+    private BorrowDocumentDAO borrowDocumentDAO = new BorrowDocumentDAO();
 
     @FXML
     @RolePermissionRequired(roles = {"Librarian"})
@@ -114,10 +154,90 @@ public class MainManageController extends BaseController {
     }
 
     public void initializeTableViewBook() {
+
+        col_book_id.setCellValueFactory(new PropertyValueFactory<>("documentId"));
+        col_title.setCellValueFactory(new PropertyValueFactory<>("title"));
+        col_author.setCellValueFactory(new PropertyValueFactory<>("author"));
+        col_rating.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        col_description.setCellValueFactory(new PropertyValueFactory<>("description"));
+        col_language.setCellValueFactory(new PropertyValueFactory<>("language"));
+        col_isbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+        col_genre.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        col_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        col_publisher.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+        col_published_date.setCellValueFactory(new PropertyValueFactory<>("publishedDate"));
+        col_award.setCellValueFactory(new PropertyValueFactory<>("award"));
+        col_num_ratings.setCellValueFactory(new PropertyValueFactory<>("numRatings"));
+        col_cover_img.setCellValueFactory(new PropertyValueFactory<>("coverImg"));
+
+        Task<ObservableList<Document>> loadDataTask = new Task<ObservableList<Document>>() {
+            @Override
+            protected ObservableList<Document> call() throws Exception {
+                return FXCollections.observableArrayList(documentDAO.getAll());
+            }
+
+            @Override
+            protected void succeeded() {
+                tv_book.setItems(getValue());
+            }
+
+            @Override
+            protected void failed() {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error loading data");
+                alert.setContentText("There was an error while loading data.");
+                alert.showAndWait();
+            }
+        };
+
+        Thread loadDataThread = new Thread(loadDataTask);
+        loadDataThread.setDaemon(true);
+        loadDataThread.start();
     }
 
+
     public void initializeTableViewBorrowBook() {
+
+        col_borrow_id.setCellValueFactory(new PropertyValueFactory<>("borrowId"));
+        col_document_id.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getDocument().getDocumentId()));
+        col_user_id.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getUser().getUserId())));
+        col_fee.setCellValueFactory(new PropertyValueFactory<>("fee"));
+        col_borrow_date.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+        col_due_date.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+        col_return_date.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
+        col_extend_date.setCellValueFactory(new PropertyValueFactory<>("extendDate"));
+        col_state.setCellValueFactory(new PropertyValueFactory<>("state"));
+
+
+        Task<ObservableList<BorrowDocument>> loadDataTask = new Task<ObservableList<BorrowDocument>>() {
+            @Override
+            protected ObservableList<BorrowDocument> call() throws Exception {
+                return FXCollections.observableArrayList(borrowDocumentDAO.getAll());
+            }
+
+            @Override
+            protected void succeeded() {
+                tv_borrowDocument.setItems(getValue());
+            }
+
+            @Override
+            protected void failed() {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error loading data");
+                alert.setContentText("There was an error while loading data.");
+                alert.showAndWait();
+            }
+        };
+
+        Thread loadDataThread = new Thread(loadDataTask);
+        loadDataThread.setDaemon(true);
+        loadDataThread.start();
     }
+
 
     public void handleAddBook() {
     }
