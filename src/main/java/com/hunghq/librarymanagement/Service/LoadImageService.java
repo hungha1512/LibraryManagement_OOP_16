@@ -37,10 +37,13 @@ public class LoadImageService {
                             Image image = new Image(coverImgUrl, 120, 120 , true, true);
                             imageCacheService.putImage(document.getTitle(), image);
                             return image;
+                        } else {
+                            Image image = new Image(coverImgDb, 120, 120, true, true); // Tải ảnh từ database
+                            imageCacheService.putImage(document.getTitle(), image);   // Cache ảnh
+                            return image;
                         }
 
                         //Using API is better but CPU is used more
-
 
                     } catch (Exception e) {
                         retry++;
@@ -69,6 +72,7 @@ public class LoadImageService {
         new Thread(loadImageTask).start();
     }
 
+
     public void loadImage(String url, ImageView imageView) {
         Task<Image> loadImageTask = new Task<>() {
             private int retry = 0;
@@ -85,7 +89,7 @@ public class LoadImageService {
                     try {
                         // Load the image from the URL
                         if (url != null && !url.isEmpty()) {
-                            Image image = new Image(url,  120, 120, true, true);
+                            Image image = new Image(url,  110, 110, true, true);
                             imageCacheService.putImage(url, image); // Cache the image
                             return image;
                         }

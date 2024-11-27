@@ -135,9 +135,7 @@ public class BookDetailController extends BaseController {
 
     private void setQR() {
         String infoLink = callAPIService.getQR(document.getTitle());
-        System.out.println(infoLink);
         String qrURL = callAPIService.generateQRUrl(infoLink);
-        System.out.println(qrURL);
         loadImageService.loadImage(qrURL, qrImageView);
     }
 
@@ -183,6 +181,7 @@ public class BookDetailController extends BaseController {
                 role,
                 otp,
                 eIsDeleted
+                //
         );
     }
 

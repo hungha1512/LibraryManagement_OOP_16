@@ -3,6 +3,7 @@ package com.hunghq.librarymanagement.Controller;
 import com.hunghq.librarymanagement.Global.AppProperties;
 import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
+import com.hunghq.librarymanagement.Model.Enum.EState;
 import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
 import com.hunghq.librarymanagement.Service.CallAPIService;
 import com.hunghq.librarymanagement.Service.LoadImageService;
@@ -12,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -33,8 +35,12 @@ public class MainMyBooksController extends BaseController {
     public Label lbl_page_info;
     @FXML
     public Button btn_next;
+    @FXML
+    public ComboBox<String> cb_filter_state;
 
     private ObservableList<BorrowDocument> allBorrowBooks;
+    private ObservableList<BorrowDocument> filteredList;
+
 
     private int currentPage = 1;
     private final int limit = 15;
@@ -49,28 +55,59 @@ public class MainMyBooksController extends BaseController {
         callAPIService = new CallAPIService();
         loadImageService = new LoadImageService(callAPIService);
 
+        cb_filter_state.getItems().addAll("All", "Borrowed", "Overdue");
+        cb_filter_state.setValue("All");
+
+        cb_filter_state.valueProperty().addListener((observable, oldValue, newValue) -> {
+            filterBorrowDocumentByState(newValue);
+        });
+
         loadBooks();
 
         btn_previous.setOnAction(event -> {
             if (currentPage > 1) {
                 currentPage--;
-                displayPage(allBorrowBooks);
+                displayPage(filteredList);
                 updatePaginationButtons();
             }
         });
 
         btn_next.setOnAction(event -> {
-            if (!allBorrowBooks.isEmpty()) {
+            if (!filteredList.isEmpty() && currentPage < totalPages) {
                 currentPage++;
-                displayPage(allBorrowBooks);
+                displayPage(filteredList);
                 updatePaginationButtons();
             }
         });
+
+    }
+
+    private void filterBorrowDocumentByState(String filterState) {
+        switch (filterState) {
+            case "Borrowed":
+                filteredList = allBorrowBooks.filtered(borrowDocument -> borrowDocument.getState().equals(EState.fromValue("Borrowed")));
+                break;
+            case "Overdue":
+                filteredList = allBorrowBooks.filtered(borrowDocument -> borrowDocument.getState().equals(EState.fromValue("Overdue")));
+                break;
+                default:
+                    filteredList = allBorrowBooks;
+                    break;
+        }
+
+        currentPage = 1;
+        totalPages = (int) Math.ceil((double) filteredList.size() / limit);
+        displayPage(filteredList);
+        updatePaginationButtons();
     }
 
     private void loadBooks() {
         allBorrowBooks = borrowDocumentDAO.getBorrowDocumentByUserId(parseInt(AppProperties.getProperty("user.userId")));
+        filterBorrowDocumentByState(cb_filter_state.getValue());
+
         totalPages = (int) Math.ceil((double) allBorrowBooks.size() / limit);
+
+        filterBorrowDocumentByState(cb_filter_state.getValue());
         displayPage(allBorrowBooks);
         updatePaginationButtons();
     }

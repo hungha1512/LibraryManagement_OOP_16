@@ -93,7 +93,7 @@
                </children>
             </AnchorPane>
             <Label fx:id="notiLabel" layoutX="53.0" layoutY="270.0" prefHeight="17.0" prefWidth="455.0" style="-fx-font-weight: bold;" textFill="RED" />
-            <ImageView fx:id="qrImageView" fitHeight="118.0" fitWidth="125.0" layoutX="816.0" layoutY="190.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="qrImageView" fitHeight="110.0" fitWidth="110.0" layoutX="817.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true" />
             <Label layoutX="742.0" layoutY="238.0" style="-fx-font-weight: bold;" text="Scan me :">
                <font>
                   <Font size="15.0" />

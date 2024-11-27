@@ -19,13 +19,13 @@ public class MainUserController {
     private Button btn_update_info;
 
     @FXML
-    private Label lbl_borrowed_book_area;
+    private Label lbl_returned_book_area;
 
     @FXML
     private Label lbl_notifications_area;
 
     @FXML
     public void initialize() {
-        // shiba inu chuwa nghĩ ra
+        
     }
 }
