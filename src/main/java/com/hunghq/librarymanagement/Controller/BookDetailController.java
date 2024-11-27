@@ -14,6 +14,7 @@ import com.hunghq.librarymanagement.Service.FilterGenreService;
 import com.hunghq.librarymanagement.Service.LoadImageService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
@@ -27,6 +28,8 @@ import static java.lang.Integer.parseInt;
 public class BookDetailController extends BaseController {
     @FXML
     private ImageView bookImageView;
+    @FXML
+    private ImageView qrImageView;
     @FXML
     private Label titleLabel;
     @FXML
@@ -126,7 +129,16 @@ public class BookDetailController extends BaseController {
         publishedDateLabel.setText(document.getPublishedDate());
         languageLabel.setText(document.getLanguage());
 
-        loadImageService.loadImage(document, bookImageView);
+        loadImageService.loadImageWithEntity(document, bookImageView);
+        setQR();
+    }
+
+    private void setQR() {
+        String infoLink = callAPIService.getQR(document.getTitle());
+        System.out.println(infoLink);
+        String qrURL = callAPIService.generateQRUrl(infoLink);
+        System.out.println(qrURL);
+        loadImageService.loadImage(qrURL, qrImageView);
     }
 
     private void setActionButton() {

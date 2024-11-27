@@ -16,7 +16,7 @@ public class LoadImageService {
         this.callAPIService = callAPIService;
     }
 
-    public void loadImage(Document document, ImageView imageView) {
+    public void loadImageWithEntity(Document document, ImageView imageView) {
         Task<Image> loadImageTask = new Task<>() {
             private int retry = 0;
 
@@ -38,11 +38,7 @@ public class LoadImageService {
                             imageCacheService.putImage(document.getTitle(), image);
                             return image;
                         }
-                        else if (coverImgDb != null) {
-                            Image image = new Image(coverImgDb, 120, 120, true, true);
-                            imageCacheService.putImage(document.getTitle(), image);
-                            return image;
-                        }
+
                         //Using API is better but CPU is used more
 
 
@@ -72,4 +68,52 @@ public class LoadImageService {
 
         new Thread(loadImageTask).start();
     }
+
+    public void loadImage(String url, ImageView imageView) {
+        Task<Image> loadImageTask = new Task<>() {
+            private int retry = 0;
+
+            @Override
+            protected Image call() {
+                // Check if the image is already cached
+                Image cachedImage = imageCacheService.getImage(url);
+                if (cachedImage != null) {
+                    return cachedImage;
+                }
+
+                while (retry < maxRetry) {
+                    try {
+                        // Load the image from the URL
+                        if (url != null && !url.isEmpty()) {
+                            Image image = new Image(url,  120, 120, true, true);
+                            imageCacheService.putImage(url, image); // Cache the image
+                            return image;
+                        }
+                    } catch (Exception e) {
+                        retry++;
+                        System.err.println("Error loading image: " + e.getMessage());
+                    }
+                }
+
+                // If loading fails, use the default image
+                Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream(defaultImagePath));
+                imageCacheService.putImage(url, defaultImage); // Cache the default image
+                return defaultImage;
+            }
+        };
+
+        loadImageTask.setOnSucceeded(event -> {
+            Image image = loadImageTask.getValue();
+            if (image != null) {
+                imageView.setImage(image);
+            }
+        });
+
+        loadImageTask.setOnFailed(event -> {
+            System.err.println("Failed to load image after " + maxRetry + " retries.");
+        });
+
+        new Thread(loadImageTask).start();
+    }
+
 }

@@ -109,7 +109,7 @@ public class MainAllBooksController extends BaseController {
             nameLabel.setStyle("-fx-alignment: center;");
             vBox.getChildren().add(nameLabel);
 
-            loadImageService.loadImage(document, imageView);
+            loadImageService.loadImageWithEntity(document, imageView);
 
             gp_all_books.add(vBox, column, row);
             vBox.getStyleClass().add("service-box");

@@ -14,10 +14,102 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
       <TabPane prefHeight="550.0" prefWidth="838.0" tabClosingPolicy="UNAVAILABLE">
           <tabs>
+         <Tab text="Overview">
+            <content>
+               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
+                  <children>
+                        <Label layoutX="14.0" layoutY="6.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Dashboard Overview" textFill="#04558a" />
+                        <HBox alignment="CENTER" layoutY="321.0" spacing="20.0">
+                            <!-- Bar Chart Example -->
+                            <BarChart fx:id="bc_books_by_genre" prefHeight="200.0" prefWidth="250.0" title="Books by Genre">
+                                <xAxis>
+                                    <CategoryAxis label="Genre" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Number of Books" />
+                                </yAxis>
+                            </BarChart>
+                            <PieChart fx:id="pc_borrow_status" prefHeight="200.0" prefWidth="250.0" title="Borrow Status" />
+                            <LineChart fx:id="lc_borrowing_trends" prefHeight="200.0" prefWidth="300.0" title="Borrowing Trends Over Time">
+                                <xAxis>
+                                    <CategoryAxis label="Month" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Books Borrowed" />
+                                </yAxis>
+                            </LineChart>
+                        </HBox>
+                     <AnchorPane layoutY="25.0" prefHeight="235.0" prefWidth="840.0">
+                        <children>
+                           <AnchorPane layoutX="14.0" layoutY="14.0">
+                              <children>
+                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="86.0" stroke="#09eb1d" strokeType="INSIDE" width="207.0" />
+                                 <Label layoutX="76.0" layoutY="61.0" text="Total User" textFill="#000022" />
+                                 <Label fx:id="lb_total_user" alignment="CENTER" layoutX="75.0" layoutY="28.0" prefHeight="30.0" prefWidth="56.0" style="-fx-font-weight: bold;" text="Label">
+                                    <font>
+                                       <Font size="20.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </AnchorPane>
+                           <AnchorPane layoutX="260.0" layoutY="14.0">
+                              <children>
+                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="86.0" stroke="#db880a" strokeType="INSIDE" width="207.0" />
+                                 <Label layoutX="48.0" layoutY="61.0" text="Total Borrowed Book" textFill="#000022" />
+                                 <Label fx:id="lb_total_borrowed_book" alignment="CENTER" layoutX="76.0" layoutY="28.0" prefHeight="30.0" prefWidth="56.0" style="-fx-font-weight: bold;" text="Label">
+                                    <font>
+                                       <Font size="20.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </AnchorPane>
+                           <AnchorPane layoutX="15.0" layoutY="135.0">
+                              <children>
+                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="86.0" stroke="#1215cc" strokeType="INSIDE" width="207.0" />
+                                 <Label layoutX="75.0" layoutY="63.0" text="Total Book" textFill="#000022" />
+                                 <Label fx:id="lb_total_book" alignment="CENTER" layoutX="78.0" layoutY="28.0" style="-fx-font-weight: bold;" text="Label">
+                                    <font>
+                                       <Font size="20.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </AnchorPane>
+                           <AnchorPane layoutX="260.0" layoutY="135.0">
+                              <children>
+                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="86.0" stroke="#fd0000" strokeType="INSIDE" width="207.0" />
+                                 <Label layoutX="51.0" layoutY="62.0" text="Total Overdue Book" textFill="#000022" />
+                                 <Label fx:id="lb_total_overdue_book" alignment="CENTER" layoutX="76.0" layoutY="28.0" prefHeight="30.0" prefWidth="55.0" style="-fx-font-weight: bold;" text="Label">
+                                    <font>
+                                       <Font size="20.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </AnchorPane>
+                           <Line endX="100.0" layoutX="541.0" layoutY="117.0" rotate="90.0" startX="-100.0" />
+                           <TableView layoutX="612.0" layoutY="37.0" prefHeight="181.0" prefWidth="214.0">
+                             <columns>
+                               <TableColumn prefWidth="75.0" text="User ID" />
+                               <TableColumn prefWidth="136.6666259765625" text="User Name" />
+                             </columns>
+                           </TableView>
+                           <Label layoutX="612.0" layoutY="9.0" style="-fx-font-weight: bold;" text="Restricted Members">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </AnchorPane>
+                  </children>
+               </AnchorPane>
+            </content>
+         </Tab>
               <Tab text="Manage Books">
                   <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
@@ -33,22 +125,16 @@
                                       <Button fx:id="btn_search_book" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Search" textFill="WHITE" />
                                   </children>
                               </HBox>
-                              <TableView fx:id="tv_book" layoutX="1.0" layoutY="34.0" prefHeight="487.0" prefWidth="840.0">
+                              <TableView fx:id="tv_book" layoutX="1.0" layoutY="34.0" prefHeight="487.0" prefWidth="838.0">
                                   <columns>
-                                      <TableColumn fx:id="col_book_id" prefWidth="48.666688203811646" text="Book ID" />
-                                      <TableColumn fx:id="col_title" prefWidth="40.666683197021484" text="Title" />
-                                      <TableColumn fx:id="col_author" prefWidth="54.66669464111328" text="Author" />
-                                      <TableColumn fx:id="col_rating" prefWidth="50.0" text="Rating" />
-                                      <TableColumn fx:id="col_description" prefWidth="73.99998474121094" text="Description" />
-                                      <TableColumn fx:id="col_language" prefWidth="62.66668701171875" text="Language" />
-                                      <TableColumn fx:id="col_isbn" prefWidth="38.0" text="ISBN" />
-                                      <TableColumn fx:id="col_genre" prefWidth="43.99993896484375" text="Genre" />
-                                      <TableColumn fx:id="col_quantity" prefWidth="58.0" text="Quantity" />
-                                      <TableColumn fx:id="col_publisher" prefWidth="62.666656494140625" text="Publisher" />
-                                      <TableColumn fx:id="col_published_date" prefWidth="93.33331298828125" text="Published Date" />
-                                      <TableColumn fx:id="col_award" prefWidth="54.0" text="Award" />
-                                      <TableColumn fx:id="col_num_ratings" prefWidth="79.3333740234375" text="Num Ratings" />
-                                      <TableColumn fx:id="col_cover_img" prefWidth="73.33331298828125" text="CoverImg" />
+                                      <TableColumn fx:id="col_book_id" prefWidth="48.666688203811646" text="ID" />
+                                      <TableColumn fx:id="col_title" prefWidth="81.33337783813477" text="Title" />
+                                      <TableColumn fx:id="col_author" minWidth="0.0" prefWidth="161.3332977294922" text="Author" />
+                                      <TableColumn fx:id="col_isbn" prefWidth="98.6666259765625" text="ISBN" />
+                                      <TableColumn fx:id="col_genre" prefWidth="172.66671752929688" text="Genre" />
+                                      <TableColumn fx:id="col_quantity" prefWidth="55.33331298828125" text="Quantity" />
+                                      <TableColumn fx:id="col_publisher" prefWidth="103.3333740234375" text="Publisher" />
+                                      <TableColumn fx:id="col_published_date" prefWidth="112.66668701171875" text="Published Date" />
                                   </columns>
                               </TableView>
 
@@ -74,15 +160,15 @@
                               </HBox>
                               <TableView fx:id="tv_borrowDocument" layoutY="38.0" prefHeight="483.0" prefWidth="838.0">
                                   <columns>
-                                      <TableColumn fx:id="col_borrow_id" prefWidth="90.0" text="Borrow ID" />
-                                      <TableColumn fx:id="col_document_id" prefWidth="100.0" text="Book ID" />
-                                      <TableColumn fx:id="col_user_id" prefWidth="96.0" text="User ID" />
+                                      <TableColumn fx:id="col_borrow_id" prefWidth="74.00005853176117" text="ID" />
+                                      <TableColumn fx:id="col_document_id" prefWidth="81.9999771118164" text="Book ID" />
+                                      <TableColumn fx:id="col_user_id" prefWidth="134.6666717529297" text="User" />
                                       <TableColumn fx:id="col_fee" prefWidth="65.0" text="Fee" />
-                                      <TableColumn fx:id="col_borrow_date" prefWidth="100.0" text="Borrow Date" />
-                                      <TableColumn fx:id="col_due_date" prefWidth="100.0" text="Due Date" />
-                                      <TableColumn fx:id="col_return_date" prefWidth="100.0" text="Return Date" />
+                                      <TableColumn fx:id="col_borrow_date" prefWidth="92.666748046875" text="Borrow Date" />
+                                      <TableColumn fx:id="col_due_date" prefWidth="93.33334350585938" text="Due Date" />
+                                      <TableColumn fx:id="col_return_date" prefWidth="100.66668701171875" text="Return Date" />
                                       <TableColumn fx:id="col_extend_date" prefWidth="100.0" text="Extend Date" />
-                                      <TableColumn fx:id="col_state" prefWidth="85.33331298828125" text="State" />
+                                      <TableColumn fx:id="col_state" prefWidth="94.6666259765625" text="State" />
                                   </columns>
                               </TableView>
 
@@ -90,33 +176,34 @@
                       </AnchorPane>
                   </content>
               </Tab>
-         <Tab text="Overview">
+         <Tab text="Manage Users">
             <content>
                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
                   <children>
-                        <Label layoutX="14.0" layoutY="14.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Dashboard Overview" />
-                        <HBox alignment="CENTER" layoutX="-1.0" layoutY="60.0" spacing="20.0">
-                            <!-- Bar Chart Example -->
-                            <BarChart fx:id="bc_books_by_genre" prefHeight="200.0" prefWidth="250.0" title="Books by Genre">
-                                <xAxis>
-                                    <CategoryAxis label="Genre" />
-                                </xAxis>
-                                <yAxis>
-                                    <NumberAxis label="Number of Books" />
-                                </yAxis>
-                            </BarChart>
-                  
-                                                                                     <PieChart fx:id="pc_borrow_status" prefHeight="200.0" prefWidth="250.0" title="Borrow Status" />
-                  
-                                                                                     <LineChart fx:id="lc_borrowing_trends" prefHeight="200.0" prefWidth="300.0" title="Borrowing Trends Over Time">
-                                <xAxis>
-                                    <CategoryAxis label="Month" />
-                                </xAxis>
-                                <yAxis>
-                                    <NumberAxis label="Books Borrowed" />
-                                </yAxis>
-                            </LineChart>
-                        </HBox>
+                     <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-2.0" prefHeight="38.0" prefWidth="242.0" spacing="10.0">
+                        <children>
+                           <Button fx:id="btn_add_user" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Add User" textFill="WHITE" />
+                           <Button fx:id="btn_delete_user" prefWidth="110.0" style="-fx-background-color: red; -fx-font-weight: bold;" text="Delete User" textFill="WHITE" />
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" layoutX="548.0" layoutY="-2.0" prefHeight="38.0" prefWidth="290.0" spacing="10.0">
+                        <children>
+                           <TextField fx:id="tf_search_user1" prefHeight="25.0" prefWidth="220.0" promptText="Search Users..." style="-fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                           <Button fx:id="btn_search_user1" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Search" textFill="WHITE" />
+                        </children>
+                     </HBox>
+                     <TableView fx:id="tv_user" layoutY="38.0" prefHeight="483.0" prefWidth="838.0">
+                        <columns>
+                           <TableColumn fx:id="col_user_id1" prefWidth="56.666688323020935" text="ID" />
+                           <TableColumn fx:id="col_full_name" prefWidth="130.0" text="Full Name" />
+                           <TableColumn fx:id="col_gender" prefWidth="52.6666259765625" text="Gender" />
+                           <TableColumn fx:id="col_email" prefWidth="234.0000457763672" text="Email" />
+                           <TableColumn fx:id="col_phone" prefWidth="74.00003051757812" text="Phone" />
+                           <TableColumn fx:id="col_join_date" prefWidth="101.99993896484375" text="Join Date" />
+                           <TableColumn fx:id="col_date_of_birth" prefWidth="100.0" text="Date of Birth" />
+                           <TableColumn fx:id="col_role" prefWidth="88.66668701171875" text="Role" />
+                        </columns>
+                     </TableView>
                   </children>
                </AnchorPane>
             </content>

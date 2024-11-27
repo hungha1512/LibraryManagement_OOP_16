@@ -439,4 +439,22 @@ public class DocumentDAO implements IRepository<Document> {
         return quantity;
     }
 
+    public int getTotalDocumentQuantity() {
+        String sql = "SELECT SUM(quantity) AS totalQuantity FROM documents";
+        int totalQuantity = 0;
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            if (rs.next()) {
+                totalQuantity = rs.getInt("totalQuantity");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalQuantity;
+    }
+
+
 }
