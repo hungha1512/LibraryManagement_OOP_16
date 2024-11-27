@@ -70,7 +70,6 @@ public class AskAIController extends BaseController {
             return "Error: " + error.get("message").getAsString();
         }
 
-        // Kiểm tra và xử lý trường hợp không có "choices"
         if (!jsonResponse.has("choices") || jsonResponse.getAsJsonArray("choices").size() == 0) {
             return "Error: API response does not contain valid choices.";
         }

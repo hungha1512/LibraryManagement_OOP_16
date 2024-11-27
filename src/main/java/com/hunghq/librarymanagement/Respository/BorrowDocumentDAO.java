@@ -311,22 +311,6 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         return false;
     }
 
-    public LocalDateTime getLatestReturnDateTime() {
-        String sql = "SELECT returnDate FROM borrowDocuments WHERE state = 'Returned' ORDER BY returnDate DESC LIMIT 1";
-        try (PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                Timestamp timestamp = rs.getTimestamp("returnDate");
-                if (timestamp != null) {
-                    return timestamp.toLocalDateTime();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     public LocalDateTime getBorrowDate(String documentId, int userId) {
         String sql = "SELECT borrowDate FROM borrowDocuments WHERE documentId = ? AND userId = ? AND state = 'Borrowed'";
@@ -503,6 +487,43 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
         return totalFee;
     }
+
+    public ObservableList<BorrowDocument> getBorrowedDocuments() {
+        ObservableList<BorrowDocument> borrowDocuments = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM borrowDocuments WHERE state = 'Borrowed'";
+
+        try (Statement stM = con.createStatement();
+             ResultSet reS = stM.executeQuery(sql)) {
+
+            while (reS.next()) {
+                BorrowDocument borrowDocument = make(reS);
+                borrowDocuments.add(borrowDocument);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return borrowDocuments;
+    }
+
+    public ObservableList<BorrowDocument> getOverdueDocuments() {
+        ObservableList<BorrowDocument> borrowDocuments = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM borrowDocuments WHERE state = 'Overdue'";
+
+        try (Statement stM = con.createStatement();
+             ResultSet reS = stM.executeQuery(sql)) {
+
+            while (reS.next()) {
+                BorrowDocument borrowDocument = make(reS);
+                borrowDocuments.add(borrowDocument);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return borrowDocuments;
+    }
+
+
+
 
 
 
