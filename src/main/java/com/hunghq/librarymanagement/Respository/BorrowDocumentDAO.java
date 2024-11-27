@@ -43,6 +43,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
                     reS.getInt("borrowId"),
                     document,
                     user,
+                    reS.getDouble("fee"),
                     reS.getTimestamp("borrowDate") != null
                             ? reS.getTimestamp("borrowDate").toLocalDateTime() : null,
                     reS.getTimestamp("dueDate") != null
@@ -68,19 +69,23 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
     public void add(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
 
-        String sql = "INSERT INTO borrowDocuments (documentId, userId, borrowDate, dueDate, returnDate, state) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO borrowDocuments (documentId, userId, fee, borrowDate, dueDate, returnDate, extendDate, state) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement prS = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             prS.setString(1, borrowDocument.getDocument().getDocumentId());
             prS.setInt(2, borrowDocument.getUser().getUserId());
-            prS.setTimestamp(3, Timestamp.valueOf(borrowDocument.getBorrowDate()));
-            prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getDueDate()));
-            prS.setTimestamp(5, borrowDocument.getReturnDate() != null
+            prS.setDouble(3, borrowDocument.getFee());
+            prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getBorrowDate()));
+            prS.setTimestamp(5, Timestamp.valueOf(borrowDocument.getDueDate()));
+            prS.setTimestamp(6, borrowDocument.getReturnDate() != null
                     ? Timestamp.valueOf(borrowDocument.getReturnDate())
                     : null);
-            prS.setString(6, borrowDocument.getState().getState());
+            prS.setTimestamp(7, borrowDocument.getExtendDate() != null
+                    ? Timestamp.valueOf(borrowDocument.getExtendDate())
+                    : null);
+            prS.setString(8, borrowDocument.getState().getState());
 
             prS.executeUpdate();
 
@@ -105,22 +110,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
      */
     @Override
     public BorrowDocument getByStringId(String borrowId) {
-        String sql = "SELECT * FROM borrowdocuments WHERE documentId = ?";
-        BorrowDocument borrowDocument = null;
-        try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, borrowId);
-            ResultSet reS = prS.executeQuery();
-
-            if (reS.next()) {
-                borrowDocument = make(reS);
-            } else {
-                System.out.println("No document found with id: " + borrowId);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return borrowDocument;
+        return null;
     }
 
     /**
@@ -210,20 +200,24 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
     @Override
     public void update(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
-        String sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, borrowDate = ?, " +
-                "dueDate = ?, returnDate = ?, state = ? WHERE borrowId = ?";
+        String sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, fee = ?, borrowDate = ?, " +
+                "dueDate = ?, returnDate = ?, extendDate = ?, state = ? WHERE borrowId = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
             prS.setString(1, borrowDocument.getDocument().getDocumentId());
             prS.setInt(2, borrowDocument.getUser().getUserId());
-            prS.setTimestamp(3, Timestamp.valueOf(borrowDocument.getBorrowDate()));
-            prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getDueDate()));
+            prS.setDouble(3,borrowDocument.getFee());
+            prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getBorrowDate()));
+            prS.setTimestamp(5, Timestamp.valueOf(borrowDocument.getDueDate()));
             prS.setTimestamp(6, borrowDocument.getReturnDate() != null
                     ? Timestamp.valueOf(borrowDocument.getReturnDate())
                     : null);
-            prS.setString(6, borrowDocument.getState().getState());
-            prS.setInt(7, borrowDocument.getBorrowId());
+            prS.setTimestamp(7, borrowDocument.getExtendDate() != null
+                    ? Timestamp.valueOf(borrowDocument.getExtendDate())
+                    : null);
+            prS.setString(8, borrowDocument.getState().getState());
+            prS.setInt(9, borrowDocument.getBorrowId());
 
             prS.executeUpdate();
 
@@ -475,7 +469,6 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
     }
 
-
     public boolean limitOverdueDocument(int userId) {
         boolean result = false;
         String sql = "SELECT COUNT(*) FROM borrowDocuments WHERE userId = ? AND state = 'Overdue'";
@@ -493,5 +486,24 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
         return result;
     }
+
+    public double totalPayment(int userId) {
+        double totalFee = 0.0;
+        String sql = "SELECT SUM(fee) FROM borrowDocuments WHERE userId = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    totalFee = rs.getDouble(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalFee;
+    }
+
+
 
 }

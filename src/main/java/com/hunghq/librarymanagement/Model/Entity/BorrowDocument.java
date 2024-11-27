@@ -11,25 +11,28 @@ public class BorrowDocument {
     private int borrowId;
     private Document document;
     private User user;
+    private double fee;
     private LocalDateTime borrowDate;
     private LocalDateTime dueDate;
     private LocalDateTime returnDate;
     private LocalDateTime extendDate;
-    private double fee;
     private EState eState;
 
     public BorrowDocument() {
 
     }
 
-    public BorrowDocument(int borrowId, Document document, User user, LocalDateTime borrowDate,
-                          LocalDateTime dueDate, LocalDateTime returnDate, LocalDateTime extendDate, EState eState) {
+    public BorrowDocument(int borrowId, Document document, User user,
+                          double fee, LocalDateTime borrowDate, LocalDateTime dueDate,
+                          LocalDateTime returnDate, LocalDateTime extendDate, EState eState) {
         this.borrowId = borrowId;
         this.document = document;
         this.user = user;
+        this.fee = fee;
         this.borrowDate = borrowDate;
         this.dueDate = dueDate;
         this.returnDate = returnDate;
+        this.extendDate = extendDate;
         this.eState = eState;
     }
 
@@ -109,10 +112,11 @@ public class BorrowDocument {
         return "BorrowDocument[borrowId=" + borrowId
                 + ", document=" + document
                 + ", user=" + user
+                + ", fee=" + fee
                 + ", borrowDate=" + borrowDate
                 + ", dueDate=" + dueDate
                 + ", returnDate=" + returnDate
-                + ", fee=" + fee
+                + ", extendDate=" + extendDate
                 + ", state=" + eState
                 + "]";
     }
