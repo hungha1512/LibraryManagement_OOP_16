@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.hunghq.librarymanagement.Controller.ConfirmNotificationController"
+            fx:controller="com.hunghq.librarymanagement.Controller.Login.ConfirmNotificationController"
             minHeight="150.0" minWidth="200.0" prefHeight="150.0" prefWidth="350.0">
     <children>
         <Label fx:id="lbl_message" layoutX="42.0" layoutY="18.0" text="Text label"/>

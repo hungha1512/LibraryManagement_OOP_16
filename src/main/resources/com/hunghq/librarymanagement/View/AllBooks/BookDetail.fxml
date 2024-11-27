@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane hbarPolicy="NEVER" prefHeight="600.0" style="-fx-background-color: #EDEDED;" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.BookDetailController">
+<ScrollPane hbarPolicy="NEVER" prefHeight="600.0" style="-fx-background-color: #EDEDED;" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.AllBooks.BookDetailController">
    <content>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1100.0" prefWidth="1000.0">
          <children>

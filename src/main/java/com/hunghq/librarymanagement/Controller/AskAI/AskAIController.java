@@ -1,5 +1,6 @@
-package com.hunghq.librarymanagement.Controller;
+package com.hunghq.librarymanagement.Controller.AskAI;
 
+import com.hunghq.librarymanagement.Controller.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;

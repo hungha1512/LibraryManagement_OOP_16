@@ -3,14 +3,13 @@ package com.hunghq.librarymanagement.Respository;
 import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
 import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.Bill;
-import com.hunghq.librarymanagement.Model.Entity.Document;
+import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.User;
+import com.hunghq.librarymanagement.Model.Enum.EPaymentStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * BillDAO provides CRUD operations for Bill objects within the library management system.
@@ -29,21 +28,24 @@ public class BillDAO implements IRepository<Bill> {
     @Override
     public Bill make(ResultSet reS) {
         try {
-            // Fetch Document and User from their respective DAOs
-            DocumentDAO documentDAO = new DocumentDAO();
-            Document document = (Document) documentDAO.getByStringId(reS.getString("documentId"));
+            BorrowDocumentDAO borrowDocumentDAO = new BorrowDocumentDAO();
+            BorrowDocument borrowDocument = (BorrowDocument) borrowDocumentDAO.getByIntId(reS.getInt("borrowId"));
 
             UserDAO userDAO = new UserDAO();
-            User user = (User) userDAO.getByStringId(reS.getString("userId"));
+            User user = (User) userDAO.getByIntId(reS.getInt("userId"));
+
+            double totalPayment = borrowDocumentDAO.totalPayment(user.getUserId());
 
             return new Bill(
                     reS.getInt("billId"),
-                    document,
+                    borrowDocument,
                     user,
-                    reS.getTimestamp("timeBorrow"),
-                    reS.getTimestamp("timeReturn"),
-                    reS.getDouble("latelyFee"),
-                    reS.getDouble("costPerDayLate")
+                    totalPayment,
+                    reS.getTimestamp("creationDate") != null
+                            ? reS.getTimestamp("creationDate").toLocalDateTime() : null,
+                    reS.getTimestamp("paymentDate") != null
+                            ? reS.getTimestamp("paymentDate").toLocalDateTime() : null,
+                    EPaymentStatus.fromValue(reS.getString("paymentStatus"))
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -58,17 +60,15 @@ public class BillDAO implements IRepository<Bill> {
      */
     @Override
     public void add(Bill entity) {
-        Bill bill = (Bill) entity;
-
-        String sql = "INSERT INTO bills (documentId, userId, timeBorrow, " +
-                "timeReturn, latelyFee, costPerDayLate) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO `bills` (billId, borrowId, userId, totalPayment, " +
+                "creationDate, paymentDate, paymentStatus) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, bill.getDocument().getDocumentId());
-            prS.setInt(2, bill.getUser().getUserId());
-            prS.setTimestamp(3, bill.getTimeBorrow());
-            prS.setTimestamp(4, bill.getTimeReturn());
-            prS.setDouble(5, bill.getLatelyFee());
-            prS.setDouble(6, bill.getCostPerDayLate());
+            Bill bill = (Bill) entity;
+
+            prS.setInt(1, bill.getBillId());
+            prS.setInt(2, bill.getBorrowDocument().getBorrowId());
+            prS.setInt(3, bill.getUser().getUserId());
+            prS.setDouble(4, bill.getTotalPayment());
 
             prS.executeUpdate();
         } catch (SQLException e) {
@@ -131,18 +131,20 @@ public class BillDAO implements IRepository<Bill> {
     }
 
     /**
-     * Find bill by user ID.
+     * Find bill by username.
      *
-     * @param userId user ID to find
+     * @param fullName username
      * @return bill
      */
     @Override
-    public ObservableList<Bill> findByName(String userId) {
+    public ObservableList<Bill> findByName(String fullName) {
         ObservableList<Bill> bills = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM bills WHERE userId = ?";
+        String sql = "SELECT b.* FROM bills b " +
+                "JOIN users u ON b.userId = u.userId " +
+                "WHERE u.fullName = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, userId);
+            prS.setString(1, fullName);
             ResultSet reS = prS.executeQuery();
 
             while (reS.next()) {
@@ -151,7 +153,7 @@ public class BillDAO implements IRepository<Bill> {
             }
 
             if (bills.isEmpty()) {
-                System.out.println("No Bill found with userId: " + userId);
+                System.out.println("No Bill found for userName: " + fullName);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -168,17 +170,22 @@ public class BillDAO implements IRepository<Bill> {
      */
     @Override
     public void update(Bill entity) {
-        Bill bill = (Bill) entity;
-        String sql = "UPDATE bills SET documentId = ?, userId = ?, timeBorrow = ?, " +
-                "timeReturn = ?, latelyFee = ?, costPerDayLate = ? WHERE billId = ?";
+        String sql = "UPDATE bills SET borrowId = ?, userId = ?, totalPayment = ?, " +
+                "creationDate = ?, paymentDate = ?, paymentStatus = ? WHERE billId = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            prS.setString(1, bill.getDocument().getDocumentId());
+            Bill bill = (Bill) entity;
+
+            prS.setInt(1, bill.getBorrowDocument().getBorrowId());
             prS.setInt(2, bill.getUser().getUserId());
-            prS.setTimestamp(3, bill.getTimeBorrow());
-            prS.setTimestamp(4, bill.getTimeReturn());
-            prS.setDouble(5, bill.getLatelyFee());
-            prS.setDouble(6, bill.getCostPerDayLate());
+            prS.setDouble(3, bill.getTotalPayment());
+            prS.setTimestamp(4, bill.getCreationDate() != null
+                    ? Timestamp.valueOf(bill.getCreationDate())
+                    : null);
+            prS.setTimestamp(5, bill.getPaymentDate() != null
+                    ? Timestamp.valueOf(bill.getPaymentDate())
+                    : null);
+            prS.setString(6, bill.getPaymentStatus().getStatus());
             prS.setInt(7, bill.getBillId());
 
             prS.executeUpdate();
@@ -219,4 +226,6 @@ public class BillDAO implements IRepository<Bill> {
         }
         return bill;
     }
+
+
 }

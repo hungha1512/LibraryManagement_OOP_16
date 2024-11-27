@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.AskAIController">
+<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.AskAI.AskAIController">
 
    <!-- TextField để nhập câu hỏi -->
     <TextField fx:id="questionInput" layoutX="20.0" layoutY="20.0" prefHeight="34.0" prefWidth="684.0" promptText="Enter your question here..." style="-fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #1e90ff; -fx-border-width: 2px;">

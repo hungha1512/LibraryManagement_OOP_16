@@ -1,6 +1,6 @@
 package com.hunghq.librarymanagement.Service;
 
-import com.hunghq.librarymanagement.Controller.ChangePasswordController;
+import com.hunghq.librarymanagement.Controller.Login.ChangePasswordController;
 import com.hunghq.librarymanagement.Global.AppProperties;
 import com.hunghq.librarymanagement.Global.Format;
 import com.hunghq.librarymanagement.Model.Entity.Role;

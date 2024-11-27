@@ -1,30 +1,33 @@
-package com.hunghq.librarymanagement.Controller;
+package com.hunghq.librarymanagement.Controller.Manage;
 
+import com.hunghq.librarymanagement.Controller.BaseController;
 import com.hunghq.librarymanagement.Model.Annotation.RolePermissionRequired;
 import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Service.FilterGenreService;
-
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 
 public class MainManageController extends BaseController {
@@ -49,33 +52,58 @@ public class MainManageController extends BaseController {
     public Button btn_search_book;
 
 
-    @FXML private TableColumn<Document, String> col_book_id;
-    @FXML private TableColumn<Document, String> col_title;
-    @FXML private TableColumn<Document, String> col_author;
-    @FXML private TableColumn<Document, Double> col_rating;
-    @FXML private TableColumn<Document, String> col_description;
-    @FXML private TableColumn<Document, String> col_language;
-    @FXML private TableColumn<Document, String> col_isbn;
-    @FXML private TableColumn<Document, String> col_genre;
-    @FXML private TableColumn<Document, Integer> col_quantity;
-    @FXML private TableColumn<Document, String> col_publisher;
-    @FXML private TableColumn<Document, String> col_published_date;
-    @FXML private TableColumn<Document, String> col_award;
-    @FXML private TableColumn<Document, Integer> col_num_ratings;
-    @FXML private TableColumn<Document, String> col_cover_img;
-    @FXML private TableView<Document> tv_book;
+    @FXML
+    private TableColumn<Document, String> col_book_id;
+    @FXML
+    private TableColumn<Document, String> col_title;
+    @FXML
+    private TableColumn<Document, String> col_author;
+    @FXML
+    private TableColumn<Document, Double> col_rating;
+    @FXML
+    private TableColumn<Document, String> col_description;
+    @FXML
+    private TableColumn<Document, String> col_language;
+    @FXML
+    private TableColumn<Document, String> col_isbn;
+    @FXML
+    private TableColumn<Document, String> col_genre;
+    @FXML
+    private TableColumn<Document, Integer> col_quantity;
+    @FXML
+    private TableColumn<Document, String> col_publisher;
+    @FXML
+    private TableColumn<Document, String> col_published_date;
+    @FXML
+    private TableColumn<Document, String> col_award;
+    @FXML
+    private TableColumn<Document, Integer> col_num_ratings;
+    @FXML
+    private TableColumn<Document, String> col_cover_img;
+    @FXML
+    private TableView<Document> tv_book;
 
 
-    @FXML private TableColumn<BorrowDocument, String> col_borrow_id;
-    @FXML private TableColumn<BorrowDocument, String> col_document_id;
-    @FXML private TableColumn<BorrowDocument, String> col_user_id;
-    @FXML private TableColumn<BorrowDocument, Double> col_fee;
-    @FXML private TableColumn<BorrowDocument, String> col_borrow_date;
-    @FXML private TableColumn<BorrowDocument, String> col_due_date;
-    @FXML private TableColumn<BorrowDocument, String> col_return_date;
-    @FXML private TableColumn<BorrowDocument, String> col_extend_date;
-    @FXML private TableColumn<BorrowDocument, String> col_state;
-    @FXML private TableView<BorrowDocument> tv_borrowDocument;
+    @FXML
+    private TableColumn<BorrowDocument, String> col_borrow_id;
+    @FXML
+    private TableColumn<BorrowDocument, String> col_document_id;
+    @FXML
+    private TableColumn<BorrowDocument, String> col_user_id;
+    @FXML
+    private TableColumn<BorrowDocument, Double> col_fee;
+    @FXML
+    private TableColumn<BorrowDocument, String> col_borrow_date;
+    @FXML
+    private TableColumn<BorrowDocument, String> col_due_date;
+    @FXML
+    private TableColumn<BorrowDocument, String> col_return_date;
+    @FXML
+    private TableColumn<BorrowDocument, String> col_extend_date;
+    @FXML
+    private TableColumn<BorrowDocument, String> col_state;
+    @FXML
+    private TableView<BorrowDocument> tv_borrowDocument;
 
 
     @FXML
@@ -112,6 +140,12 @@ public class MainManageController extends BaseController {
         btn_send_noti.setOnAction(event -> handleSendNotification());
         btn_return_book.setOnAction(event -> handleReturnBook());
         btn_search_user.setOnAction(event -> handleSearchUser());
+
+        tv_book.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                showBookDetailForm();
+            }
+        });
     }
 
     public void initializeBooksByGenreChart() {
@@ -194,6 +228,30 @@ public class MainManageController extends BaseController {
         Thread loadDataThread = new Thread(loadDataTask);
         loadDataThread.setDaemon(true);
         loadDataThread.start();
+    }
+
+    public void showBookDetailForm() {
+        Document documentSelected = tv_book.getSelectionModel().getSelectedItem();
+
+        if (documentSelected != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/Manage/DocumentDetailForm.fxml"));
+                Parent detailDocumentForm = loader.load();
+                DocumentDetailFormController controller = loader.getController();
+                controller.setDocumentText(documentSelected);
+                Stage stage = new Stage();
+                Scene scene = new Scene(detailDocumentForm);
+                stage.setScene(scene);
+
+                DocumentDetailFormController documentDetailFormController = loader.getController();
+                documentDetailFormController.setDocumentText(documentSelected);
+
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

@@ -1,4 +1,4 @@
-package com.hunghq.librarymanagement.Controller;
+package com.hunghq.librarymanagement.Controller.Login;
 
 import com.hunghq.librarymanagement.Service.AuthenticationService;
 import javafx.fxml.FXML;

@@ -1,9 +1,8 @@
-package com.hunghq.librarymanagement.Controller;
+package com.hunghq.librarymanagement.Controller.AllBooks;
 
-import com.hunghq.librarymanagement.Global.AppProperties;
-import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
+import com.hunghq.librarymanagement.Controller.BaseController;
 import com.hunghq.librarymanagement.Model.Entity.Document;
-import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
+import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Service.CallAPIService;
 import com.hunghq.librarymanagement.Service.LoadImageService;
 import javafx.collections.ObservableList;
@@ -22,9 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static java.lang.Integer.parseInt;
-
-public class MainMyBooksController extends BaseController {
+public class MainAllBooksController extends BaseController {
     @FXML
     public GridPane gp_all_books;
     @FXML
@@ -34,12 +31,12 @@ public class MainMyBooksController extends BaseController {
     @FXML
     public Button btn_next;
 
-    private ObservableList<BorrowDocument> allBorrowBooks;
+    private ObservableList<Document> allBooks;
 
     private int currentPage = 1;
     private final int limit = 15;
     private int totalPages;
-    private BorrowDocumentDAO borrowDocumentDAO = new BorrowDocumentDAO();
+    private DocumentDAO documentDAO = new DocumentDAO();
 
     private CallAPIService callAPIService;
     private LoadImageService loadImageService;
@@ -54,36 +51,36 @@ public class MainMyBooksController extends BaseController {
         btn_previous.setOnAction(event -> {
             if (currentPage > 1) {
                 currentPage--;
-                displayPage(allBorrowBooks);
+                displayPage(allBooks);
                 updatePaginationButtons();
             }
         });
 
         btn_next.setOnAction(event -> {
-            if (!allBorrowBooks.isEmpty()) {
+            if (!allBooks.isEmpty()) {
                 currentPage++;
-                displayPage(allBorrowBooks);
+                displayPage(allBooks);
                 updatePaginationButtons();
             }
         });
     }
 
     private void loadBooks() {
-        allBorrowBooks = borrowDocumentDAO.getBorrowDocumentByUserId(parseInt(AppProperties.getProperty("user.userId")));
-        totalPages = (int) Math.ceil((double) allBorrowBooks.size() / limit);
-        displayPage(allBorrowBooks);
+        allBooks = documentDAO.getAll();
+        totalPages = (int) Math.ceil((double) allBooks.size() / limit);
+        displayPage(allBooks);
         updatePaginationButtons();
     }
 
-    public void updateBooks(ObservableList<BorrowDocument> searchResults) {
-        allBorrowBooks = searchResults;
+    public void updateBooks(ObservableList<Document> searchResults) {
+        allBooks = searchResults;
         totalPages = (int) Math.ceil((double) searchResults.size() / limit);
         currentPage = 1;
-        displayPage(allBorrowBooks);
+        displayPage(allBooks);
         updatePaginationButtons();
     }
 
-    private void displayPage(ObservableList<BorrowDocument> books) {
+    private void displayPage(ObservableList<Document> books) {
         gp_all_books.getChildren().clear();
 
         int startIndex = (currentPage - 1) * limit;
@@ -93,7 +90,7 @@ public class MainMyBooksController extends BaseController {
         int row = 0;
 
         for (int i = startIndex; i < endIndex; i++) {
-            BorrowDocument borrowDocument = books.get(i);
+            Document document = books.get(i);
 
             VBox vBox = new VBox(10);
             vBox.setAlignment(Pos.CENTER);
@@ -107,20 +104,20 @@ public class MainMyBooksController extends BaseController {
             imageView.setSmooth(true);
             vBox.getChildren().add(imageView);
 
-            Label nameLabel = new Label(borrowDocument.getDocument().getTitle());
+            Label nameLabel = new Label(document.getTitle());
             nameLabel.setWrapText(true);
             nameLabel.setMaxWidth(120);
             nameLabel.setStyle("-fx-alignment: center;");
             vBox.getChildren().add(nameLabel);
 
-            loadImageService.loadImage(borrowDocument.getDocument(), imageView);
+            loadImageService.loadImage(document, imageView);
 
             gp_all_books.add(vBox, column, row);
             vBox.getStyleClass().add("service-box");
             imageView.getStyleClass().add("image-box");
 
             vBox.setOnMouseClicked(event -> {
-                showBookDetail(borrowDocument.getDocument());
+                showBookDetail(document);
             });
 
             vBox.setOnMouseEntered(event -> {
@@ -147,7 +144,6 @@ public class MainMyBooksController extends BaseController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/AllBooks/BookDetail.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load());
-            scene.getStylesheets().add(getClass().getResource("/com/hunghq/librarymanagement/Style/style.css").toExternalForm());
 
             BookDetailController bookDetailController = fxmlLoader.getController();
 
@@ -164,7 +160,7 @@ public class MainMyBooksController extends BaseController {
 
     private void updatePaginationButtons() {
         btn_previous.setDisable(currentPage == 1);
-        btn_next.setDisable(currentPage == totalPages || allBorrowBooks.isEmpty());
+        btn_next.setDisable(currentPage == totalPages || allBooks.isEmpty());
     }
 }
 

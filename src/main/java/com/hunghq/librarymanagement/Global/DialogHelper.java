@@ -1,6 +1,6 @@
 package com.hunghq.librarymanagement.Global;
 
-import com.hunghq.librarymanagement.Controller.ConfirmNotificationController;
+import com.hunghq.librarymanagement.Controller.Login.ConfirmNotificationController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

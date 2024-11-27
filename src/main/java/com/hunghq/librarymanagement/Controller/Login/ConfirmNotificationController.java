@@ -1,4 +1,4 @@
-package com.hunghq.librarymanagement.Controller;
+package com.hunghq.librarymanagement.Controller.Login;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

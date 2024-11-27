@@ -5,6 +5,7 @@ import com.hunghq.librarymanagement.Global.DialogHelper;
 import com.hunghq.librarymanagement.Model.Annotation.RolePermissionRequired;
 import javafx.fxml.Initializable;
 
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -13,7 +14,7 @@ import java.util.ResourceBundle;
  * functionality for role-based access control using the {@link RolePermissionRequired} annotation.
  * This class checks if the current user's role has access to specific functionalities.
  */
-abstract class BaseController implements Initializable {
+public abstract class BaseController implements Initializable {
 
     /**
      * Initializes the controller, checking if the {@link RolePermissionRequired} annotation
@@ -64,5 +65,23 @@ abstract class BaseController implements Initializable {
     private void alertAccess(String message) {
         DialogHelper.showNotificationDialog("Warning", message);
         throw new SecurityException(message);
+    }
+
+    protected void checkMethodAccess(Method method) {
+        RolePermissionRequired annotationRole = method.getAnnotation(RolePermissionRequired.class);
+        String currentRoleTitle = AppProperties.getProperty("user.roleTitle");
+        if (annotationRole != null) {
+            boolean hasAccess = false;
+            for (String requiredRole : annotationRole.roles()) {
+                if (requiredRole.equals(currentRoleTitle)) {
+                    hasAccess = true;
+                    System.out.println("Role " + requiredRole + " is allowed.");
+                    break;
+                }
+            }
+            if (!hasAccess) {
+                alertAccess("Role " + currentRoleTitle + " is not allowed.");
+            }
+        }
     }
 }
