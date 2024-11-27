@@ -1,30 +1,18 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
-import java.sql.Timestamp;
+import com.hunghq.librarymanagement.Model.Enum.EPaymentStatus;
+
+import java.time.LocalDateTime;
 
 public class Bill {
 
     private int billId;
-    private Document document;
+    private BorrowDocument borrowDocument;
     private User user;
-    private Timestamp timeBorrow;
-    private Timestamp timeReturn;
-    private double latelyFee;
-    private double costPerDayLate;
-
-    public Bill() {
-
-    }
-    public Bill(int billId, Document document, User user, Timestamp timeBorrow, Timestamp timeReturn,
-                double latelyFee, double costPerDayLate) {
-        this.billId = billId;
-        this.document = document;
-        this.user = user;
-        this.timeBorrow = timeBorrow;
-        this.timeReturn = timeReturn;
-        this.latelyFee = latelyFee;
-        this.costPerDayLate = costPerDayLate;
-    }
+    private double totalPayment;
+    private LocalDateTime creationDate;
+    private LocalDateTime paymentDate;
+    private EPaymentStatus ePaymentStatus;
 
     public int getBillId() {
         return billId;
@@ -34,12 +22,12 @@ public class Bill {
         this.billId = billId;
     }
 
-    public Document getDocument() {
-        return document;
+    public BorrowDocument getBorrowDocument() {
+        return borrowDocument;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setBorrowDocument(BorrowDocument borrowDocument) {
+        this.borrowDocument = borrowDocument;
     }
 
     public User getUser() {
@@ -50,49 +38,58 @@ public class Bill {
         this.user = user;
     }
 
-    public Timestamp getTimeBorrow() {
-        return timeBorrow;
+    public double getTotalPayment() {
+        return totalPayment;
     }
 
-    public void setTimeBorrow(Timestamp timeBorrow) {
-        this.timeBorrow = timeBorrow;
+    public void setTotalPayment(double totalPayment) {
+        this.totalPayment = totalPayment;
     }
 
-    public Timestamp getTimeReturn() {
-        return timeReturn;
+    public LocalDateTime getCreationDate() {
+        return creationDate;
     }
 
-    public void setTimeReturn(Timestamp timeReturn) {
-        this.timeReturn = timeReturn;
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public double getLatelyFee() {
-        return latelyFee;
+    public LocalDateTime getPaymentDate() {
+        return paymentDate;
     }
 
-    public void setLatelyFee(double latelyFee) {
-        this.latelyFee = latelyFee;
+    public void setPaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
-    public double getCostPerDayLate() {
-        return costPerDayLate;
+    public EPaymentStatus getPaymentStatus() {
+        return ePaymentStatus;
     }
 
-    public void setCostPerDayLate(double costPerDayLate) {
-        this.costPerDayLate = costPerDayLate;
+    public void setPaymentStatus(EPaymentStatus paymentStatus) {
+        this.ePaymentStatus = paymentStatus;
+    }
+
+    public Bill(int billId, BorrowDocument borrowDocument, User user,
+                double totalPayment, LocalDateTime creationDate,
+                LocalDateTime paymentDate, EPaymentStatus paymentStatus) {
+        this.billId = billId;
+        this.borrowDocument = borrowDocument;
+        this.user = user;
+        this.totalPayment = totalPayment;
+        this.creationDate = creationDate;
+        this.paymentDate = paymentDate;
+        this.ePaymentStatus = paymentStatus;
     }
 
     public String toString() {
         return "Bill[billId=" + billId
-                + ", document" + document
-                + ", user" + user
-                + ", timeBorrow=" + timeBorrow
-                + ", timeReturn=" + timeReturn
-                + ", latelyFee=" + latelyFee
-                + ", costPerDayLate=" + costPerDayLate
+                + ", borrowDocument=" + borrowDocument
+                + ", user=" + user
+                + ", totalPayment=" + totalPayment
+                + ", creationDate=" + creationDate
+                + ", paymentDate=" + paymentDate
+                + ", paymentStatus=" + ePaymentStatus
                 + "]";
     }
-
-
-
 }

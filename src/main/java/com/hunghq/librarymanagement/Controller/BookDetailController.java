@@ -275,6 +275,7 @@ public class BookDetailController extends BaseController {
                 0,
                 this.document,
                 this.user,
+                10000.0,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(0),
                 null,
