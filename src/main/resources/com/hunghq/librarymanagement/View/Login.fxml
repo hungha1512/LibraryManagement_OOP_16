@@ -29,10 +29,7 @@
                 </PasswordField>
                 <TextField fx:id="txt_password_visible" managed="false" promptText="Enter your password" style="-fx-border-radius: 5px; -fx-background-radius: 5px; -fx-border-width: 3px; -fx-border-color: #1e90ff;" visible="false" HBox.hgrow="ALWAYS">
                 </TextField>
-                <Button fx:id="btn_toggle_password" onAction="#togglePasswordVisibility" prefHeight="35.0" prefWidth="54.0" style="-fx-background-color: #1e90ff; -fx-font-weight: bold;" text="Show" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
-               </font></Button>
+                <Button fx:id="btn_toggle_password" onAction="#togglePasswordVisibility" prefHeight="35.0" prefWidth="54.0" style="-fx-background-color: #1e90ff; -fx-font-weight: bold;" text="Show" textFill="WHITE" />
             </HBox>
             <CheckBox fx:id="cb_remember" mnemonicParsing="false" style="-fx-font-weight: bold;" text="Remember me" />
             <Label fx:id="hl_forgot_password" onMouseClicked="#handleForgotPassword" text="Forgot password?" textFill="DODGERBLUE">

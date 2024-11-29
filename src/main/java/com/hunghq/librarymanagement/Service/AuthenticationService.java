@@ -86,6 +86,7 @@ public class AuthenticationService {
             userSaved.setEmail(properties.getProperty("user.email"));
             if (login(userSaved)) {
                 AppProperties.setProperty("user.loggedIn", "true");
+                AppProperties.setProperty("user.isRemember", "true");
                 return true;
             }
         }
