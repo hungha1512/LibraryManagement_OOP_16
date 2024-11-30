@@ -43,7 +43,7 @@ public class MainMyBooksController extends BaseController {
 
 
     private int currentPage = 1;
-    private final int limit = 15;
+    private final int limit = 10;
     private int totalPages;
     private BorrowDocumentDAO borrowDocumentDAO = new BorrowDocumentDAO();
 

@@ -11,12 +11,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainMyBooksController">
+<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainMyBooksController">
     <children>
       <ComboBox fx:id="cb_filter_state" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="160.0" />
-      <VBox alignment="CENTER_LEFT" layoutY="33.0" prefHeight="581.0" prefWidth="850.0" spacing="10">
+      <VBox alignment="CENTER_LEFT" layoutY="55.0" maxHeight="499.0" prefHeight="495.0" prefWidth="850.0" spacing="100.0">
          <children>
-            <GridPane fx:id="gp_all_books" alignment="CENTER" gridLinesVisible="false" hgap="10" prefHeight="502.0" prefWidth="850.0" vgap="20">
+            <GridPane fx:id="gp_all_books" alignment="CENTER" gridLinesVisible="false" hgap="10" prefHeight="270.0" prefWidth="850.0" vgap="20">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -27,10 +27,9 @@
                <rowConstraints>
                   <RowConstraints maxHeight="150.0" minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="150.0" minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="150.0" minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
-            <HBox alignment="CENTER" prefHeight="50.0" spacing="10">
+            <HBox alignment="CENTER" prefHeight="51.0" prefWidth="850.0" spacing="10">
                <children>
                   <Button fx:id="btn_previous" style="-fx-background-color: #1e90ff; -fx-font-weight: bold;" text="Previous" textFill="WHITE">
                      <font>
