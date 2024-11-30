@@ -14,7 +14,7 @@ import com.hunghq.librarymanagement.Service.FilterGenreService;
 import com.hunghq.librarymanagement.Service.LoadImageService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
@@ -288,7 +288,7 @@ public class BookDetailController extends BaseController {
                 this.user,
                 10000.0,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusDays(0),
+                LocalDateTime.now().plusDays(7),
                 null,
                 null,
                 EState.BORROWED

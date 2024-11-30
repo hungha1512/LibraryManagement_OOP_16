@@ -133,13 +133,14 @@ public class PermissionDAO implements IRepository<Permission>{
     }
 
     @Override
-    public void update(Permission entity) {
-        Permission permission = (Permission) entity;
-        String sql = "UPDATE permissions SET title = ?, slug = ?, description = ?, isDeleted = ?, updatedAt = ? "
-                   + "WHERE permissionId = ?";
+    public boolean update(Permission entity) {
+        String sql = "UPDATE permissions SET title = ?, slug = ?, description = ?, isDeleted = ?, updatedAt = ? " +
+                "WHERE permissionId = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            
+            Permission permission = (Permission) entity;
+
+            // Gán giá trị vào PreparedStatement
             prS.setString(1, permission.getTitle());
             prS.setString(2, permission.getSlug());
             prS.setString(3, permission.getDescription());
@@ -147,11 +148,15 @@ public class PermissionDAO implements IRepository<Permission>{
             prS.setTimestamp(5, permission.getUpdatedAt() != null ? Timestamp.valueOf(permission.getUpdatedAt()) : null);
             prS.setInt(6, permission.getPermissionId());
 
-            prS.executeUpdate();
+            // Thực hiện cập nhật và kiểm tra số dòng bị ảnh hưởng
+            int rowsAffected = prS.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất một dòng được cập nhật
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Trả về false nếu xảy ra lỗi
         }
     }
+
 
     @Override
     public void delete(String id) {

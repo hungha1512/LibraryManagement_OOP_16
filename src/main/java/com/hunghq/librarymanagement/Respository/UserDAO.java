@@ -1,6 +1,7 @@
 package com.hunghq.librarymanagement.Respository;
 
 import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
+import com.hunghq.librarymanagement.Global.AppProperties;
 import com.hunghq.librarymanagement.Global.DialogHelper;
 import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.Role;
@@ -39,7 +40,7 @@ public class UserDAO implements IRepository<User> {
             role = roleDAO.getByIntId(roleId);
             System.out.println(role.toString());
             int isDeletedValue = reS.getInt("isDeleted");
-            System.out.println("Retrieved isDeleted value: " + isDeletedValue); // Debugging statement
+            System.out.println("Retrieved isDeleted value: " + isDeletedValue);
             EIsDeleted isDeletedStatus = EIsDeleted.fromInt(isDeletedValue);
 
             return new User(
@@ -49,8 +50,12 @@ public class UserDAO implements IRepository<User> {
                     EGender.fromValue(reS.getString("gender")),
                     reS.getString("email"),
                     reS.getString("phone"),
-                    reS.getTimestamp("joinDate").toLocalDateTime(),
-                    reS.getTimestamp("dateOfBirth").toLocalDateTime(),
+                    reS.getTimestamp("joinDate") != null
+                            ? reS.getTimestamp("joinDate").toLocalDateTime()
+                            : null,
+                    reS.getTimestamp("dateOfBirth") != null
+                            ? reS.getTimestamp("dateOfBirth").toLocalDateTime()
+                            : null,
                     role,
                     reS.getString("otp"),
                     isDeletedStatus
@@ -80,8 +85,12 @@ public class UserDAO implements IRepository<User> {
             prS.setString(4, user.getGender().toString());
             prS.setString(5, user.getEmail());
             prS.setString(6, user.getPhone());
-            prS.setTimestamp(7, Timestamp.valueOf(user.getJoinDate()));
-            prS.setTimestamp(8, Timestamp.valueOf(user.getDateOfBirth()));
+            prS.setTimestamp(7, user.getJoinDate() != null
+                    ? Timestamp.valueOf(user.getJoinDate())
+                    : null);
+            prS.setTimestamp(8, user.getDateOfBirth() != null
+                    ? Timestamp.valueOf(user.getDateOfBirth())
+                    : null);
             prS.setInt(9, user.getRole().getRoleId());
             prS.setString(10, user.getOtp());
             prS.setInt(11, user.getEIsDeleted().getValue());
@@ -184,25 +193,31 @@ public class UserDAO implements IRepository<User> {
      * @param entity the User object with updated information
      */
     @Override
-    public void update(User entity) {
-        User user = entity;
-        String sql = "UPDATE users SET fullName = ?, passwordHash = ?, email = ?, "
-                + "phone = ?, joinDate = ?, dateOfBirth = ? WHERE userId = ?";
+    public boolean update(User entity) {
+        String sql = "UPDATE users SET fullName = ?, gender = ?, email = ?, " +
+                "phone = ?, dateOfBirth = ? WHERE userId = ?";
+
         try (PreparedStatement prS = con.prepareStatement(sql)) {
+            User user = entity;
 
             prS.setString(1, user.getFullName());
-            prS.setString(2, user.getPasswordHash());
+            prS.setString(2, user.getGender().toString().toLowerCase());
             prS.setString(3, user.getEmail());
             prS.setString(4, user.getPhone());
-            prS.setTimestamp(5, Timestamp.valueOf(user.getJoinDate()));
-            prS.setTimestamp(6, Timestamp.valueOf(user.getDateOfBirth()));
-            prS.setInt(7, user.getUserId());
+            prS.setTimestamp(5, user.getDateOfBirth() != null
+                    ? Timestamp.valueOf(user.getDateOfBirth())
+                    : null);
 
-            prS.executeUpdate();
+            prS.setInt(6, user.getUserId());
+
+            int rowsAffected = prS.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
+
 
     /**
      * Deletes a user by their ID.

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.LoginController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.LoginController">
     <VBox layoutX="14.0" layoutY="293.0" prefHeight="200.0" prefWidth="301.0" spacing="10.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="293.0">
         <children>
             <Label style="-fx-font-weight: bold;" text="Email or phone number">
@@ -38,7 +38,7 @@
             <font>
                <Font name="System Bold" size="14.0" />
             </font></Button>
-            <Label fx:id="lbl_authenticate" cacheShape="false" prefWidth="301.0" visible="false" />
+            <Label fx:id="lbl_authenticate" cacheShape="false" prefHeight="34.0" prefWidth="301.0" visible="false" wrapText="true" />
         </children>
     </VBox>
    <ImageView fitHeight="600.0" fitWidth="700.0" layoutX="328.0" pickOnBounds="true" preserveRatio="true">
@@ -46,7 +46,7 @@
          <Image url="@../Media/HomePage_Lib.jpg" />
       </image>
    </ImageView>
-   <ImageView fitHeight="206.0" fitWidth="220.0" layoutX="55.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+   <ImageView fitHeight="206.0" fitWidth="220.0" layoutX="55.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../Media/LogoUet.jpg" />
       </image>

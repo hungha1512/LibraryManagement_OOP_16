@@ -183,14 +183,16 @@ public class DocumentDAO implements IRepository<Document> {
      * @param entity the Document object with updated information
      */
     @Override
-    public void update(Document entity) {
-        Document document = (Document) entity;
+    public boolean update(Document entity) {
         String sql = "UPDATE documents SET title = ?, author = ?, rating = ?, " +
                 "description = ?, language = ?, isbn = ?, genre = ?, " +
                 "quantity = ?, publisher = ?, publishedDate = ?, award = ?, " +
                 "numRatings = ?, coverImg = ? WHERE documentId = ?";
-        try (PreparedStatement prS = con.prepareStatement(sql)) {
 
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
+            Document document = (Document) entity;
+
+            // Gán giá trị vào PreparedStatement
             prS.setString(1, document.getTitle());
             prS.setString(2, document.getAuthor());
             prS.setDouble(3, document.getRating());
@@ -206,11 +208,15 @@ public class DocumentDAO implements IRepository<Document> {
             prS.setString(13, document.getCoverImg());
             prS.setString(14, document.getDocumentId());
 
-            prS.executeUpdate();
+            // Thực hiện cập nhật và kiểm tra số dòng bị ảnh hưởng
+            int rowsAffected = prS.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất một dòng được cập nhật
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Trả về false nếu xảy ra lỗi
         }
     }
+
 
     /**
      * Deletes a document record from the database by its document ID.

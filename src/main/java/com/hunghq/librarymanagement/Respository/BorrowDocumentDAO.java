@@ -198,16 +198,16 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
      * @param entity the BorrowDocument object with updated information
      */
     @Override
-    public void update(BorrowDocument entity) {
-        BorrowDocument borrowDocument = (BorrowDocument) entity;
+    public boolean update(BorrowDocument entity) {
         String sql = "UPDATE borrowDocuments SET documentId = ?, userId = ?, fee = ?, borrowDate = ?, " +
                 "dueDate = ?, returnDate = ?, extendDate = ?, state = ? WHERE borrowId = ?";
-
         try (PreparedStatement prS = con.prepareStatement(sql)) {
+            BorrowDocument borrowDocument = (BorrowDocument) entity;
 
+            // Gán giá trị vào PreparedStatement
             prS.setString(1, borrowDocument.getDocument().getDocumentId());
             prS.setInt(2, borrowDocument.getUser().getUserId());
-            prS.setDouble(3,borrowDocument.getFee());
+            prS.setDouble(3, borrowDocument.getFee());
             prS.setTimestamp(4, Timestamp.valueOf(borrowDocument.getBorrowDate()));
             prS.setTimestamp(5, Timestamp.valueOf(borrowDocument.getDueDate()));
             prS.setTimestamp(6, borrowDocument.getReturnDate() != null
@@ -219,12 +219,15 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
             prS.setString(8, borrowDocument.getState().getState());
             prS.setInt(9, borrowDocument.getBorrowId());
 
-            prS.executeUpdate();
-
+            // Thực hiện câu lệnh và kiểm tra số dòng bị ảnh hưởng
+            int rowsAffected = prS.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất một dòng được cập nhật
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Trả về false nếu xảy ra lỗi
         }
     }
+
 
     /**
      * Deletes a BorrowDocument record from the database using its borrowId.
