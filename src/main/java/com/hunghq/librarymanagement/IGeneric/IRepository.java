@@ -13,6 +13,6 @@ public interface IRepository<T>
     ObservableList<T> getAll();
     ObservableList<T> findByName(String name);
     T save(T entity);
-    void update(T entity);
+    boolean update(T entity);
     void delete(String id);
 }

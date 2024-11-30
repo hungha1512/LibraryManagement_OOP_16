@@ -139,24 +139,30 @@ public class ReviewDAO implements IRepository<Review>{
     }
 
     @Override
-    public void update(Review entity) {
-        Review review = (Review) entity;
-        String sql = "UPDATE reviews SET documentId = ?, userId = ?, rating = ?, "
-                   + "reviewText = ?, reviewDate = ? WHERE reviewId = ?";
-        
+    public boolean update(Review entity) {
+        String sql = "UPDATE reviews SET documentId = ?, userId = ?, rating = ?, " +
+                "reviewText = ?, reviewDate = ? WHERE reviewId = ?";
+
         try (PreparedStatement prS = con.prepareStatement(sql)) {
+            Review review = (Review) entity;
+
+            // Gán giá trị vào PreparedStatement
             prS.setString(1, review.getDocument().getDocumentId());
             prS.setInt(2, review.getUser().getUserId());
             prS.setDouble(3, review.getRating());
             prS.setString(4, review.getReviewText());
             prS.setTimestamp(5, Timestamp.valueOf(review.getReviewDate()));
             prS.setInt(6, review.getReviewId());
-            
-            prS.executeUpdate();
+
+            // Thực hiện câu lệnh cập nhật và kiểm tra số dòng bị ảnh hưởng
+            int rowsAffected = prS.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất một dòng được cập nhật
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Trả về false nếu xảy ra lỗi
         }
     }
+
 
     @Override
     public void delete(String id) {

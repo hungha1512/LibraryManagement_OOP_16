@@ -169,10 +169,9 @@ public class BillDAO implements IRepository<Bill> {
      * @param entity the Bill object with updated information
      */
     @Override
-    public void update(Bill entity) {
+    public boolean update(Bill entity) {
         String sql = "UPDATE bills SET borrowId = ?, userId = ?, totalPayment = ?, " +
                 "creationDate = ?, paymentDate = ?, paymentStatus = ? WHERE billId = ?";
-
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             Bill bill = (Bill) entity;
 
@@ -188,11 +187,15 @@ public class BillDAO implements IRepository<Bill> {
             prS.setString(6, bill.getPaymentStatus().getStatus());
             prS.setInt(7, bill.getBillId());
 
-            prS.executeUpdate();
+
+            int rowsAffected = prS.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
+
 
     /**
      * Deletes a Bill record from the database using its billId.

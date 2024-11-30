@@ -163,12 +163,14 @@ public class RoleDAO implements IRepository<Role> {
      * @param entity the Role object with updated information
      */
     @Override
-    public void update(Role entity) {
-        Role role = entity;
+    public boolean update(Role entity) {
         String sql = "UPDATE roles SET title = ?, slug = ?, description = ?, isDeleted = ?, " +
                 "createdAt = ?, updatedAt = ? WHERE roleId = ?";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
+            Role role = entity;
+
+            // Gán giá trị cho PreparedStatement
             prS.setString(1, role.getTitle());
             prS.setString(2, role.getSlug());
             prS.setString(3, role.getDescription());
@@ -177,11 +179,15 @@ public class RoleDAO implements IRepository<Role> {
             prS.setTimestamp(6, Timestamp.valueOf(role.getUpdatedAt()));
             prS.setInt(7, role.getRoleId());
 
-            prS.executeUpdate();
+            // Thực hiện cập nhật và kiểm tra số dòng bị ảnh hưởng
+            int rowsAffected = prS.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất một dòng được cập nhật
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Trả về false nếu xảy ra lỗi
         }
     }
+
 
     /**
      * Deletes a role by its ID.
