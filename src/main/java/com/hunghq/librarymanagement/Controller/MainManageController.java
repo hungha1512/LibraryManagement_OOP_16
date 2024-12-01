@@ -395,12 +395,75 @@ public class MainManageController extends BaseController {
 
 
     public void handleDeleteBook() {
+        Document selectedDocument = tv_book.getSelectionModel().getSelectedItem();
 
+        if (selectedDocument == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("No Selection");
+            alert.setContentText("Please select a document to delete.");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirmation");
+        confirmAlert.setHeaderText("Delete Document");
+        confirmAlert.setContentText("Are you sure you want to delete this document: " + selectedDocument.getTitle() + "?");
+
+        if (confirmAlert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            try {
+                documentDAO.delete(selectedDocument.getDocumentId());
+
+                tv_book.getItems().remove(selectedDocument);
+
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Success");
+                successAlert.setHeaderText("Document Deleted");
+                successAlert.setContentText("The document '" + selectedDocument.getTitle() + "' has been deleted.");
+                successAlert.showAndWait();
+            } catch (Exception e) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Delete Error");
+                errorAlert.setContentText("Could not delete the document. Please try again.\n" + e.getMessage());
+                errorAlert.showAndWait();
+            }
+        }
     }
 
     public void handleEditBook() {
+        try {
+            Document selectedDocument = tv_book.getSelectionModel().getSelectedItem();
 
+            if (selectedDocument == null) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("No Book Selected");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select a book to edit.");
+                alert.showAndWait();
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/Manage/EditBook.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Edit Book");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+
+            EditBookController controller = loader.getController();
+
+            controller.initialize(selectedDocument);
+
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error loading EditBook.fxml: " + e.getMessage());
+        }
     }
+
 
     public void handleSearchBook() {
         String query = tf_search_book.getText().trim().toLowerCase();

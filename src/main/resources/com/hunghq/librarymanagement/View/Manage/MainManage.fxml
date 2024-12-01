@@ -18,10 +18,10 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
+<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
       <TabPane prefHeight="550.0" prefWidth="838.0" tabClosingPolicy="UNAVAILABLE">
           <tabs>
-         <Tab text="Overview">
+         <Tab style="-fx-font-weight: bold;" text="Overview">
             <content>
                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
                   <children>
@@ -110,7 +110,7 @@
                </AnchorPane>
             </content>
          </Tab>
-              <Tab text="Manage Books">
+              <Tab style="-fx-font-weight: bold;" text="Manage Books">
                   <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
                           <children>
@@ -157,7 +157,7 @@
                       </AnchorPane>
                   </content>
               </Tab>
-              <Tab text="Manage Borrowing Status">
+              <Tab style="-fx-font-weight: bold;" text="Manage Borrowing Status">
                   <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
                           <children>
@@ -206,7 +206,7 @@
                       </AnchorPane>
                   </content>
               </Tab>
-         <Tab text="Manage Users">
+         <Tab style="-fx-font-weight: bold;" text="Manage Users">
             <content>
                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
                   <children>
