@@ -422,7 +422,7 @@ public class MainManageController extends BaseController {
                     isSearchingBorrowedBook = true;
                     return borrowDocumentDAO.getAll().stream()
                             .filter(doc -> String.valueOf(doc.getBorrowId()).contains(query) ||
-                                    doc.getDocument().getDocumentId().contains(query))
+                                    doc.getDocument().getDocumentId().toLowerCase().contains(query))
                             .collect(Collectors.toList());
                 }
             }
