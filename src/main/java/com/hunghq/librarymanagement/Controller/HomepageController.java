@@ -13,13 +13,17 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -61,6 +65,9 @@ public class HomepageController extends BaseController implements Initializable 
     @FXML
     public Button btn_ask_ai;
 
+    @FXML
+    public VBox vb_navigator;
+
     private DocumentDAO documentDAO = new DocumentDAO();
 
     public void setContent(Parent newContentPane) {
@@ -96,6 +103,14 @@ public class HomepageController extends BaseController implements Initializable 
         txt_name_user.setText("Welcome back, " + AppProperties.getProperty("user.fullName") + "!");
 
         getContentPane("/com/hunghq/librarymanagement/View/AllBooks/MainAllBooks.fxml");
+
+        setMouseCursorStyle(btn_all_books);
+        setMouseCursorStyle(btn_my_books);
+        setMouseCursorStyle(btn_ask_ai);
+        setMouseCursorStyle(btn_manage);
+        setMouseCursorStyle(btn_user);
+        setMouseCursorStyle(btn_search);
+        setMouseCursorStyle(btn_log_out);
 
         btn_all_books.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -153,6 +168,12 @@ public class HomepageController extends BaseController implements Initializable 
                 throw new RuntimeException(e);
             }
         });
+
+        tf_search_bar.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleSearch();
+            }
+        });
     }
 
     private void handleSearch() {
@@ -196,4 +217,8 @@ public class HomepageController extends BaseController implements Initializable 
         }
     }
 
+    private void setMouseCursorStyle(javafx.scene.Node node) {
+        node.setOnMouseEntered(event -> node.setCursor(Cursor.HAND));
+        node.setOnMouseExited(event -> node.setCursor(Cursor.DEFAULT));
+    }
 }
