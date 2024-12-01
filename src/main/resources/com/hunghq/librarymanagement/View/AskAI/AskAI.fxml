@@ -8,19 +8,16 @@
 
 <AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.AskAIController">
 
-   <!-- TextField để nhập câu hỏi -->
     <TextField fx:id="questionInput" layoutX="20.0" layoutY="20.0" prefHeight="34.0" prefWidth="684.0" promptText="Enter your question here..." style="-fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #1e90ff; -fx-border-width: 2px;">
       <font>
          <Font name="System Italic" size="14.0" />
       </font></TextField>
 
-    <!-- Button để gửi câu hỏi -->
     <Button layoutX="714.0" layoutY="22.0" onAction="#handleSend" prefWidth="100.0" style="-fx-background-color: #1e90ff; -fx-background-radius: 5px;" text="Send" textFill="WHITE">
       <font>
          <Font name="System Bold" size="14.0" />
       </font></Button>
 
-    <!-- TextArea để hiển thị phản hồi -->
     <TextArea fx:id="responseArea" editable="false" layoutX="20.0" layoutY="70.0" prefHeight="465.0" prefWidth="794.0" promptText="AI response will appear here..." style="-fx-border-color: #1e90ff; -fx-border-radius: 5px; -fx-border-width: 2px;" wrapText="true">
       <font>
          <Font name="System Italic" size="14.0" />
