@@ -4,9 +4,7 @@ import com.hunghq.librarymanagement.Global.GenerateDocumentID;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +19,13 @@ public class AddBookController {
     @FXML
     private TextField tf_rating;
     @FXML
-    private TextField tf_description;
+    private TextArea ta_description;
     @FXML
     private TextField tf_language;
     @FXML
     private TextField tf_isbn;
     @FXML
-    private TextField tf_genre;
+    private TextArea ta_genre;
     @FXML
     private TextField tf_quantity;
     @FXML
@@ -35,7 +33,7 @@ public class AddBookController {
     @FXML
     private TextField tf_published_date;
     @FXML
-    private TextField tf_award;
+    private TextArea ta_award;
     @FXML
     private TextField tf_num_ratings;
     @FXML
@@ -75,14 +73,14 @@ public class AddBookController {
         tf_title.setPromptText("Enter book title");
         tf_author.setPromptText("Enter author name");
         tf_rating.setPromptText("Enter book rating");
-        tf_description.setPromptText("Enter book description");
+        ta_description.setPromptText("Enter book description");
         tf_language.setPromptText("Enter language");
         tf_isbn.setPromptText("Enter ISBN number");
-        tf_genre.setPromptText("Enter genre");
+        ta_genre.setPromptText("Enter genre");
         tf_quantity.setPromptText("Enter quantity available");
         tf_publisher.setPromptText("Enter publisher name");
         tf_published_date.setPromptText("Enter published date");
-        tf_award.setPromptText("Enter awards if any");
+        ta_award.setPromptText("Enter awards if any");
         tf_num_ratings.setPromptText("Enter number of ratings");
         tf_cover_image.setPromptText("Enter cover image URL or path");
     }
@@ -110,14 +108,14 @@ public class AddBookController {
                     tf_title.getText(),
                     tf_author.getText(),
                     Double.parseDouble(tf_rating.getText()),
-                    tf_description.getText(),
+                    ta_description.getText(),
                     tf_language.getText(),
                     tf_isbn.getText(),
-                    tf_genre.getText(),
+                    ta_genre.getText(),
                     Integer.parseInt(tf_quantity.getText()),
                     tf_publisher.getText(),
                     tf_published_date.getText(),
-                    tf_award.getText(),
+                    ta_award.getText(),
                     Integer.parseInt(tf_num_ratings.getText()),
                     tf_cover_image.getText()
             );
@@ -134,55 +132,93 @@ public class AddBookController {
 
     private boolean checkEmptyFields() {
 
-        List<TextField> textFields = new ArrayList<>();
+        List<Control> inputFields = new ArrayList<>();
 
-        textFields.add(tf_title);
-        textFields.add(tf_author);
-        textFields.add(tf_rating);
-        textFields.add(tf_description);
-        textFields.add(tf_language);
-        textFields.add(tf_isbn);
-        textFields.add(tf_genre);
-        textFields.add(tf_quantity);
-        textFields.add(tf_publisher);
-        textFields.add(tf_published_date);
-        textFields.add(tf_award);
-        textFields.add(tf_num_ratings);
-        textFields.add(tf_cover_image);
+        inputFields.add(tf_title);
+        inputFields.add(tf_author);
+        inputFields.add(tf_rating);
+        inputFields.add(tf_language);
+        inputFields.add(tf_isbn);
+        inputFields.add(tf_quantity);
+        inputFields.add(tf_publisher);
+        inputFields.add(tf_published_date);
+        inputFields.add(tf_num_ratings);
+        inputFields.add(tf_cover_image);
+
+        inputFields.add(ta_description);
+        inputFields.add(ta_genre);
+        inputFields.add(ta_award);
 
         List<String> emptyFields = new ArrayList<>();
 
-        for (TextField textField : textFields) {
-            if (textField.getText().trim().isEmpty()) {
-                emptyFields.add(textField.getPromptText());
+
+        for (Control control : inputFields) {
+            String value = "";
+            if (control instanceof TextField) {
+                value = ((TextField) control).getText().trim();
+            } else if (control instanceof TextArea) {
+                value = ((TextArea) control).getText().trim();
+            }
+
+            if (value.isEmpty()) {
+                emptyFields.add(control.getAccessibleText() != null
+                        ? control.getAccessibleText()
+                        : "Unnamed Field");
             }
         }
+
 
         if (!emptyFields.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
-            alert.setContentText("Empty Field Found");
+            alert.setHeaderText(null);
+            alert.setContentText("Empty Field(s) Found");
             alert.showAndWait();
             return false;
         }
+
         return true;
     }
 
+
     private void handleDeleteAll() {
-        tf_title.clear();
-        tf_author.clear();
-        tf_rating.clear();
-        tf_description.clear();
-        tf_language.clear();
-        tf_isbn.clear();
-        tf_genre.clear();
-        tf_quantity.clear();
-        tf_publisher.clear();
-        tf_published_date.clear();
-        tf_award.clear();
-        tf_num_ratings.clear();
-        tf_cover_image.clear();
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirm Delete");
+        confirmationAlert.setHeaderText(null);
+        confirmationAlert.setContentText("Are you sure you want to clear all fields?");
+
+        confirmationAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+
+                tf_title.clear();
+                tf_author.clear();
+                tf_rating.clear();
+                ta_description.clear();
+                tf_language.clear();
+                tf_isbn.clear();
+                ta_genre.clear();
+                tf_quantity.clear();
+                tf_publisher.clear();
+                tf_published_date.clear();
+                ta_award.clear();
+                tf_num_ratings.clear();
+                tf_cover_image.clear();
+
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Fields Cleared");
+                successAlert.setHeaderText(null);
+                successAlert.setContentText("All fields have been cleared successfully.");
+                successAlert.showAndWait();
+            } else {
+                Alert cancelAlert = new Alert(Alert.AlertType.INFORMATION);
+                cancelAlert.setTitle("Action Cancelled");
+                cancelAlert.setHeaderText(null);
+                cancelAlert.setContentText("No fields were cleared.");
+                cancelAlert.showAndWait();
+            }
+        });
     }
+
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
@@ -194,19 +230,19 @@ public class AddBookController {
 
     private boolean isDouble(String value) {
         try {
-            Double.parseDouble(value); // Cố gắng chuyển đổi chuỗi thành kiểu double
-            return true; // Nếu không có lỗi, giá trị là kiểu double hợp lệ
+            Double.parseDouble(value);
+            return true;
         } catch (NumberFormatException e) {
-            return false; // Nếu có lỗi, giá trị không phải là double
+            return false;
         }
     }
 
     private boolean isInt(String value) {
         try {
-            Integer.parseInt(value); // Cố gắng chuyển đổi chuỗi thành kiểu int
-            return true; // Nếu không có lỗi, giá trị là kiểu int hợp lệ
+            Integer.parseInt(value);
+            return true;
         } catch (NumberFormatException e) {
-            return false; // Nếu có lỗi, giá trị không phải là int
+            return false;
         }
     }
 

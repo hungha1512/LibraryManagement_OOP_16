@@ -17,7 +17,7 @@
    <children>
       <TabPane prefHeight="550.0" prefWidth="840.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-            <Tab style=" -fx-font-weight: bold; -fx-font-size: 14;" text="Profile">
+            <Tab style="-fx-font-weight: bold; -fx-font-size: 14;" text="Profile">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -94,19 +94,19 @@
                               </Button>
                            </children>
                         </AnchorPane>
-                        <Pane layoutX="139.0" layoutY="6.0">
+                        <Pane layoutX="117.0" layoutY="6.0" prefHeight="30.0" prefWidth="589.0">
                            <children>
-                              <TextField fx:id="tf_search_bar" prefHeight="30.0" prefWidth="351.0" promptText="Search your returned book" style="-fx-border-radius: 5px; -fx-background-radius: 5px; -fx-background-color: white;">
+                              <TextField fx:id="tf_search_bar" prefHeight="30.0" prefWidth="351.0" promptText="Search your returned book" style="-fx-border-radius: 5px; -fx-background-radius: 5px; -fx-background-color: white; -fx-border-color: #1e90ff;">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </TextField>
-                              <Button fx:id="btn_search" layoutX="492.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: #0078d7; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Search" textFill="#f8f8f8">
+                              <Button fx:id="btn_search" layoutX="507.0" layoutY="1.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: #0078d7; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Search" textFill="#f8f8f8">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Button>
-                              <ComboBox fx:id="cb_search_option" layoutX="351.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                              <ComboBox fx:id="cb_search_option" layoutX="361.0" prefHeight="32.0" prefWidth="130.0" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #1e90ff;" />
                            </children>
                         </Pane>
                      </children>
