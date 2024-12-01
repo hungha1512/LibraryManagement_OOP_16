@@ -52,7 +52,7 @@ public class RoleDAO implements IRepository<Role> {
      * @param entity the User object to add
      */
     @Override
-    public void add(Role entity) {
+    public boolean add(Role entity) {
         Role role = entity;
         String sql = "INSERT INTO roles (roleId, title, slug, description, isDeleted, createdAt, updatedAt) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -66,11 +66,14 @@ public class RoleDAO implements IRepository<Role> {
             prS.setTimestamp(6, Timestamp.valueOf(role.getCreatedAt()));
             prS.setTimestamp(7, Timestamp.valueOf(role.getUpdatedAt()));
 
-            prS.executeUpdate();
+            int rowsInserted = prS.executeUpdate();
+            return rowsInserted > 0;  // Trả về true nếu có bản ghi được thêm
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;  // Trả về false nếu có lỗi
         }
     }
+
 
     @Override
     public Role getByStringId(String id) {

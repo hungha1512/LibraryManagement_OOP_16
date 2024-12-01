@@ -17,10 +17,13 @@ import javafx.scene.control.*;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -86,9 +89,15 @@ public class MainUserController {
         initializeTextFields();
 
         btn_update.setVisible(false);
-        btn_edit.setOnAction(e -> {editable();});
-        btn_update.setOnAction(e -> {updateUserInformation();});
-        btn_edit_password.setOnAction(e -> {openForgotPassword();});
+        btn_edit.setOnAction(e -> {
+            editable();
+        });
+        btn_update.setOnAction(e -> {
+            updateUserInformation();
+        });
+        btn_edit_password.setOnAction(e -> {
+            openForgotPassword();
+        });
 
         setComboBox();
 
@@ -112,6 +121,12 @@ public class MainUserController {
         });
 
         btn_search.setOnAction(_ -> handleSearch());
+
+        tf_search_bar.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleSearch();
+            }
+        });
 
     }
 
@@ -219,7 +234,6 @@ public class MainUserController {
 
     private void loadBooks() {
         returnedBooks = documentDAO.getDocumentsWithReturnedState();
-        // Fix getAll()
         totalPages = (int) Math.ceil((double) returnedBooks.size() / limit);
         displayPage(returnedBooks);
         updatePaginationButtons();
@@ -321,33 +335,26 @@ public class MainUserController {
         String searchOption = cb_search_option.getValue();
 
         if (query.isEmpty()) {
-            System.out.println("Search query is empty!");
-            return;
-        }
-
-        switch (searchOption) {
-            case "Book name":
-                searchResults = returnedBooks.filtered(document -> document.getTitle().toLowerCase().contains(query.toLowerCase()));
-                break;
-            case "ISBN":
-                searchResults = returnedBooks.filtered(document -> document.getIsbn().toLowerCase().contains(query.toLowerCase()));
-                break;
-            case "Genre":
-                searchResults = returnedBooks.filtered(document -> document.getGenre().toLowerCase().contains(query.toLowerCase()));
-                break;
-            case "Author":
-                searchResults = returnedBooks.filtered(document -> document.getAuthor().toLowerCase().contains(query.toLowerCase()));
-                break;
-            default:
-
-        }
-        if (!searchResults.isEmpty()) {
-            updateBooks(searchResults);
+            searchResults = documentDAO.getDocumentsWithReturnedState();
         } else {
-            showAlert("No Results", "No books found matching the search criteria.", Alert.AlertType.INFORMATION);
-            returnedBooks.clear();
-            updateBooks(returnedBooks);
+            switch (searchOption) {
+                case "Book name":
+                    searchResults = returnedBooks.filtered(document -> document.getTitle().toLowerCase().contains(query.toLowerCase()));
+                    break;
+                case "ISBN":
+                    searchResults = returnedBooks.filtered(document -> document.getIsbn().toLowerCase().contains(query.toLowerCase()));
+                    break;
+                case "Genre":
+                    searchResults = returnedBooks.filtered(document -> document.getGenre().toLowerCase().contains(query.toLowerCase()));
+                    break;
+                case "Author":
+                    searchResults = returnedBooks.filtered(document -> document.getAuthor().toLowerCase().contains(query.toLowerCase()));
+                    break;
+                default:
+            }
         }
+        
+        updateBooks(searchResults);
 
     }
 

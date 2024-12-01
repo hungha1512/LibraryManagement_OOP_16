@@ -64,7 +64,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
      * @param entity the BorrowDocument object to be added
      */
     @Override
-    public void add(BorrowDocument entity) {
+    public boolean add(BorrowDocument entity) {
         BorrowDocument borrowDocument = (BorrowDocument) entity;
 
         String sql = "INSERT INTO borrowDocuments (documentId, userId, fee, borrowDate, dueDate, returnDate, extendDate, state) " +
@@ -85,19 +85,25 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
                     : null);
             prS.setString(8, borrowDocument.getState().getState());
 
-            prS.executeUpdate();
+            int rowsInserted = prS.executeUpdate();
 
-            try (ResultSet generatedKeys = prS.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    borrowDocument.setBorrowId(generatedKeys.getInt(1));
+            if (rowsInserted > 0) {
+                try (ResultSet generatedKeys = prS.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        borrowDocument.setBorrowId(generatedKeys.getInt(1));
+                    }
                 }
+                return true;
+            } else {
+                return false;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error adding BorrowDocument", e);
+            return false;
         }
     }
+
 
 
     /**

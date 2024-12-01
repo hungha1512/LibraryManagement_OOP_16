@@ -15,6 +15,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
@@ -23,9 +26,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import javax.mail.MessagingException;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -367,8 +375,24 @@ public class MainManageController extends BaseController {
     }
 
     public void handleAddBook() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/Manage/AddBook.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add Book");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
 
+            AddBookController controller = loader.getController();
+            controller.setMainManageController(this);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error loading AddBook.fxml: " + e.getMessage());
+        }
     }
+
+
 
     public void handleDeleteBook() {
 
@@ -413,15 +437,16 @@ public class MainManageController extends BaseController {
     }
 
     public void handleSendNotification() throws MessagingException {
+        DecimalFormat df = new DecimalFormat("#");
         BorrowDocument borrowDocument = tv_borrowDocument.getSelectionModel().getSelectedItem();
         if (borrowDocument != null) {
             String subject = "UET Library Manage System - Borrow Detail";
             String body = "This is an email to notify about your borrow detail" + "\n"
                     + "- Book: " + borrowDocument.getDocument().getTitle() + "\n"
                     + "- Due Date: " + borrowDocument.getDueDate().toString() + "\n"
-                    + "- Overdue: " + (ChronoUnit.DAYS.between(borrowDocument.getDueDate(), borrowDocument.getBorrowDate()))
+                    + "- Overdue: " + Duration.between(borrowDocument.getDueDate(), LocalDateTime.now()).toDays()
                     + " day(s)" + "\n"
-                    + "- Fee: " + borrowDocument.getFee() + "\n"
+                    + "- Fee: " + df.format(borrowDocument.getFee()) + " VND\n"
                     + "Please return before Due Date!";
             EmailService.sendEmail(borrowDocument.getUser().getEmail(), subject, body);
         }

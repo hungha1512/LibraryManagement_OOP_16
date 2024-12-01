@@ -72,11 +72,12 @@ public class UserDAO implements IRepository<User> {
      * @param entity the User object to add
      */
     @Override
-    public void add(User entity) {
+    public boolean add(User entity) {
         User user = entity;
-        String sql = "INSERT INTO users (userId, fullName, passwordHash, gender,"
+        String sql = "INSERT INTO users (userId, fullName, passwordHash, gender, "
                 + "email, phone, joinDate, dateOfBirth, role, otp, isDeleted) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
             prS.setInt(1, user.getUserId());
@@ -94,12 +95,17 @@ public class UserDAO implements IRepository<User> {
             prS.setInt(9, user.getRole().getRoleId());
             prS.setString(10, user.getOtp());
             prS.setInt(11, user.getEIsDeleted().getValue());
-            prS.executeUpdate();
+
+            int rowsInserted = prS.executeUpdate();
+
+            return rowsInserted > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
+
 
     /**
      * Retrieves a user by their string ID.

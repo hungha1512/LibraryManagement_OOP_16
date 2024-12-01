@@ -63,12 +63,13 @@ public class DocumentDAO implements IRepository<Document> {
      * @param entity the Document object to be added
      */
     @Override
-    public void add(Document entity) {
+    public boolean add(Document entity) {
         Document document = (Document) entity;
-        String sql = "INSERT INTO documents (documentId, title, author, rating, description, " +
-                "language, isbn, genre, quantity, " +
-                "publisher, publishedDate, award, numRatings, coverImg) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO documents (documentId, title, author, rating, description, "
+                + "language, isbn, genre, quantity, "
+                + "publisher, publishedDate, award, numRatings, coverImg) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
             prS.setString(1, document.getDocumentId());
@@ -86,11 +87,16 @@ public class DocumentDAO implements IRepository<Document> {
             prS.setInt(13, document.getNumRatings());
             prS.setString(14, document.getCoverImg());
 
-            prS.executeUpdate();
+            int rowsInserted = prS.executeUpdate();  // Kiểm tra số dòng đã thay đổi
+
+            return rowsInserted > 0;  // Trả về true nếu có bản ghi được thêm, false nếu không
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();  // In lỗi nếu có
+            return false;  // Trả về false nếu có lỗi
         }
     }
+
 
     /**
      * Retrieves a Document by its unique document ID.
@@ -465,5 +471,20 @@ public class DocumentDAO implements IRepository<Document> {
         }
 
         return documents;
+    }
+
+    public String getMaxDocumentID() {
+        String maxID = null;
+        String query = "SELECT MAX(documentId) AS maxDocumentId FROM documents";
+
+        try (PreparedStatement prS = con.prepareStatement(query);
+         ResultSet reS = prS.executeQuery()) {
+            if (reS.next()) {
+                maxID = reS.getString("maxDocumentId");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return maxID;
     }
 }
