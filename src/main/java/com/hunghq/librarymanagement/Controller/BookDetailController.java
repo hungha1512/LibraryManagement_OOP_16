@@ -22,13 +22,13 @@ import com.itextpdf.layout.properties.Property;
 import com.itextpdf.layout.properties.TextAlignment;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -291,14 +291,13 @@ public class BookDetailController extends BaseController {
         documentDAO.updateBookQuantityWhenReturn(document.getDocumentId(), user.getUserId());
     }
 
-     private void handlePrintButtonAction() {
-
+    private void handlePrintButtonAction() {
         BorrowDocument borrowDocument = borrowDocumentDAO.getBorrowedDocumentFromBookIdAndUserId(document.getDocumentId(), user.getUserId());
-        String destinationFileName = System.getProperty("user.dir")
-                + "Bill_"
+        String destinationFileName = "Bill_"
                 + borrowDocument.getUser().getUserId()
                 + "_" + borrowDocument.getDocument().getDocumentId()
                 + "_" + borrowDocument.getBorrowDate().format(DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss"))
+                + "_" + LocalDate.now() 
                 + ".pdf";
 
         try {
@@ -310,6 +309,7 @@ public class BookDetailController extends BaseController {
             }
 
             String fullPath = borrowBill + File.separator + destinationFileName;
+
             PdfWriter pdfWriter = new PdfWriter(fullPath);
 
             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
@@ -346,7 +346,7 @@ public class BookDetailController extends BaseController {
 
             pdfDoc.add(new Paragraph("Invoice Date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
                     .setFontSize(10)
-                    .setTextAlignment(TextAlignment.RIGHT));
+                    .setTextAlignment(TextAlignment.LEFT));
 
             pdfDoc.add(new Paragraph("\nBill To:")
                     .setBold()
@@ -362,11 +362,13 @@ public class BookDetailController extends BaseController {
 
             pdfDoc.add(new Paragraph("Document Title: " + document.getTitle())
                     .setFontSize(10));
-            pdfDoc.add(new Paragraph("Author: " + document.getAuthor())
+            pdfDoc.add(new Paragraph("Author: " + document.getTitle())
                     .setFontSize(10));
             pdfDoc.add(new Paragraph("Borrow Date: " + borrowDocument.getBorrowDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
                     .setFontSize(10));
             pdfDoc.add(new Paragraph("Due Date: " + borrowDocument.getDueDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+                    .setFontSize(10));
+            pdfDoc.add(new Paragraph("Fee: " + borrowDocument.getFee())
                     .setFontSize(10)
                     .setMarginBottom(20));
 
@@ -382,7 +384,7 @@ public class BookDetailController extends BaseController {
             Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
             successAlert.setTitle("Print Successful");
             successAlert.setHeaderText(null);
-            successAlert.setContentText("The borrow invoice has been successfully printed to " + fullPath);
+            successAlert.setContentText("The borrow invoice has been successfully printed to " + System.getProperty("user.dir") + File.separator + fullPath);
             successAlert.showAndWait();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -394,7 +396,7 @@ public class BookDetailController extends BaseController {
         }
     }
 
-    private void interactWithBorrowDocumentInDB () {
+    private void interactWithBorrowDocumentInDB() {
 
         BorrowDocument borrowDocument = new BorrowDocument(
                 0,
