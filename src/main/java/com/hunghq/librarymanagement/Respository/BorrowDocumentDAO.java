@@ -11,9 +11,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * BorrowDocumentDAO provides CRUD operations and specific queries
@@ -367,15 +365,15 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
     public void updateBorrowDocumentStateToReturned(String documentId, int userId) {
         String sql = """
-        UPDATE borrowDocuments bd
-        JOIN (
-            SELECT MAX(borrowDate) AS maxBorrowDate 
-            FROM borrowDocuments 
-            WHERE documentId = ? AND userId = ?
-        ) subquery ON bd.borrowDate = subquery.maxBorrowDate
-        SET bd.state = 'Returned', bd.returnDate = NOW()
-        WHERE bd.documentId = ? AND bd.userId = ?
-        """;
+                UPDATE borrowDocuments bd
+                JOIN (
+                    SELECT MAX(borrowDate) AS maxBorrowDate 
+                    FROM borrowDocuments 
+                    WHERE documentId = ? AND userId = ?
+                ) subquery ON bd.borrowDate = subquery.maxBorrowDate
+                SET bd.state = 'Returned', bd.returnDate = NOW()
+                WHERE bd.documentId = ? AND bd.userId = ?
+                """;
 
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, documentId);
@@ -409,7 +407,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(returnDate);
-                    calendar.add(Calendar.MONTH, 3 );
+                    calendar.add(Calendar.MONTH, 3);
                     Date threeMonthsLater = new Date(calendar.getTimeInMillis());
 
                     return new Date(System.currentTimeMillis()).after(threeMonthsLater);
@@ -525,9 +523,23 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         return borrowDocuments;
     }
 
+    public BorrowDocument getBorrowedDocumentFromBookIdAndUserId(String documentId, int userId) {
+        BorrowDocument borrowDocument = null;
+        String sql = "SELECT * FROM borrowDocuments WHERE documentId = ? AND userId = ?";
 
-
-
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, documentId);
+            pstmt.setInt(2, userId);
+            try (ResultSet reS = pstmt.executeQuery()) {
+                while (reS.next()) {
+                    borrowDocument = make(reS);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return borrowDocument;
+    }
 
 
 }

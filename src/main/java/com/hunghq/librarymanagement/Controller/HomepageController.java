@@ -179,29 +179,26 @@ public class HomepageController extends BaseController implements Initializable 
     private void handleSearch() {
         String query = tf_search_bar.getText().trim();
         String searchOption = cb_search_option.getValue();
-
-        if (query.isEmpty()) {
-            System.out.println("Search query is empty!");
-            return;
-        }
-
         ObservableList<Document> searchResults = FXCollections.observableArrayList();
-
-        switch (searchOption) {
-            case "Book name":
-                searchResults = documentDAO.findByName(query);
-                break;
-            case "ISBN":
-                searchResults = documentDAO.searchByISBN(query);
-                break;
-            case "Genre":
-                searchResults = documentDAO.searchByGenre(query);
-                break;
-            case "Author":
-                searchResults = documentDAO.searchByAuthor(query);
-                break;
-            default:
-                System.out.println("Invalid search option!");
+        if (query.isEmpty()) {
+            searchResults = documentDAO.getAll();
+        } else {
+            switch (searchOption) {
+                case "Book name":
+                    searchResults = documentDAO.findByName(query);
+                    break;
+                case "ISBN":
+                    searchResults = documentDAO.searchByISBN(query);
+                    break;
+                case "Genre":
+                    searchResults = documentDAO.searchByGenre(query);
+                    break;
+                case "Author":
+                    searchResults = documentDAO.searchByAuthor(query);
+                    break;
+                default:
+                    System.out.println("Invalid search option!");
+            }
         }
 
         try {
