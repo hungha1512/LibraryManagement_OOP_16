@@ -7,6 +7,7 @@ import com.hunghq.librarymanagement.Model.Entity.User;
 import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Respository.UserDAO;
+import com.hunghq.librarymanagement.Service.EmailService;
 import com.hunghq.librarymanagement.Service.FilterGenreService;
 import com.hunghq.librarymanagement.Service.ImportDataToTableViewService;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,7 +24,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import javax.mail.MessagingException;
 import java.net.URL;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -224,7 +227,13 @@ public class MainManageController extends BaseController {
         });
 
         //Button on Manage Borrow tab
-        btn_send_noti.setOnAction(_ -> handleSendNotification());
+        btn_send_noti.setOnAction(_ -> {
+            try {
+                handleSendNotification();
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        });
         btn_return_book.setOnAction(_ -> handleReturnBook());
         btn_search_borrow.setOnAction(_ -> handleSearchBorrowBook());
         btn_previous_borrow.setOnAction(_ -> {
@@ -403,10 +412,47 @@ public class MainManageController extends BaseController {
         new Thread(searchTask).start();
     }
 
-    public void handleSendNotification() {
+    public void handleSendNotification() throws MessagingException {
+        BorrowDocument borrowDocument = tv_borrowDocument.getSelectionModel().getSelectedItem();
+        if (borrowDocument != null) {
+            String subject = "UET Library Manage System - Borrow Detail";
+            String body = "This is an email to notify about your borrow detail" + "\n"
+                    + "- Book: " + borrowDocument.getDocument().getTitle() + "\n"
+                    + "- Due Date: " + borrowDocument.getDueDate().toString() + "\n"
+                    + "- Overdue: " + (ChronoUnit.DAYS.between(borrowDocument.getDueDate(), borrowDocument.getBorrowDate()))
+                    + " day(s)" + "\n"
+                    + "- Fee: " + borrowDocument.getFee() + "\n"
+                    + "Please return before Due Date!";
+            EmailService.sendEmail(borrowDocument.getUser().getEmail(), subject, body);
+        }
     }
 
     public void handleReturnBook() {
+        BorrowDocument borrowDocument = tv_borrowDocument.getSelectionModel().getSelectedItem();
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirm Return");
+        confirmAlert.setHeaderText(null);
+        confirmAlert.setContentText("Are you sure you want to return this document?");
+
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            if (borrowDocument != null && !borrowDocument.getState().toString().equalsIgnoreCase("returned")) {
+                borrowDocumentDAO.updateBorrowDocumentStateToReturned(borrowDocument.getDocument().getDocumentId(), borrowDocument.getUser().getUserId());
+                documentDAO.updateBookQuantityWhenReturn(borrowDocument.getDocument().getDocumentId(), borrowDocument.getUser().getUserId());
+            }
+            showAlert("Return Successful", "You have successfully returned the document.", Alert.AlertType.INFORMATION);
+        } else {
+            showAlert("Return Cancelled", "The return process has been cancelled.", Alert.AlertType.INFORMATION);
+        }
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public void handleSearchBorrowBook() {
