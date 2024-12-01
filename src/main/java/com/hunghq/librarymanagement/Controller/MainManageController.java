@@ -20,6 +20,8 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import java.net.URL;
 import java.util.*;
@@ -215,6 +217,11 @@ public class MainManageController extends BaseController {
                 updatePaginationBookButtons();
             }
         });
+        tf_search_book.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleSearchBook();
+            }
+        });
 
         //Button on Manage Borrow tab
         btn_send_noti.setOnAction(_ -> handleSendNotification());
@@ -234,6 +241,11 @@ public class MainManageController extends BaseController {
                 updatePaginationBorrowBookButtons();
             }
         });
+        tf_search_borrow.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleSearchBorrowBook();
+            }
+        });
 
         //Button on Manage user tab
         btn_search_user.setOnAction(_ -> handleSearchUser());
@@ -249,6 +261,11 @@ public class MainManageController extends BaseController {
                 currentPageUser++;
                 updateTableViewUser();
                 updatePaginationUserButtons();
+            }
+        });
+        tf_search_user.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleSearchUser();
             }
         });
     }
