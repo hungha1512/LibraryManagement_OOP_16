@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -13,7 +14,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.HomepageController">
     <!-- Sidebar Menu -->
-    <VBox layoutX="0" layoutY="0" prefHeight="600.0" prefWidth="160.0" style="-fx-background-color: #000022; -fx-padding: 15;">
+    <VBox fx:id="vb_navigator" layoutX="0" layoutY="0" prefHeight="600.0" prefWidth="160.0" style="-fx-background-color: #000022;">
         <Button fx:id="btn_all_books" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="All Books">
             <font>
                 <Font name="System Bold" size="24.0" />
@@ -39,6 +40,9 @@
                 <Font size="14.0" />
             </font>
         </Button>
+      <padding>
+         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+      </padding>
     </VBox>
 
     <HBox layoutX="160.0" layoutY="0" prefHeight="50" prefWidth="840.0" style="-fx-background-color: #000022; -fx-padding: 10;">
