@@ -365,12 +365,6 @@ public class DocumentDAO implements IRepository<Document> {
         return documents;
     }
 
-    /**
-     *
-     * @param documentId
-     * @param userId
-     * @return
-     */
     public boolean updateBookQuantityWhenReturn(String documentId, int userId) {
         String sql = """
         UPDATE documents d
@@ -416,8 +410,8 @@ public class DocumentDAO implements IRepository<Document> {
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, documentId);
             pstmt.setInt(2, userId);
-            pstmt.setString(3, documentId); // documentId cho subquery
-            pstmt.setInt(4, userId); // userId cho subquery
+            pstmt.setString(3, documentId);
+            pstmt.setInt(4, userId);
 
             int rowsUpdated = pstmt.executeUpdate();
             return rowsUpdated > 0;
@@ -445,22 +439,32 @@ public class DocumentDAO implements IRepository<Document> {
         return quantity;
     }
 
-    public int getTotalDocumentQuantity() {
-        String sql = "SELECT SUM(quantity) AS totalQuantity FROM documents";
-        int totalQuantity = 0;
+    public ObservableList<Document> getDocumentsWithReturnedState() {
+        ObservableList<Document> documents = FXCollections.observableArrayList();
 
-        try (PreparedStatement pstmt = con.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        String query = """
+        SELECT d.*
+        FROM documents d
+        JOIN borrowDocuments b ON d.documentId = b.documentId
+        WHERE b.state = 'Returned';
+    """;
 
-            if (rs.next()) {
-                totalQuantity = rs.getInt("totalQuantity");
+        try (PreparedStatement preparedStatement = con.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                // Sử dụng phương thức make để tạo Document
+                Document document = make(resultSet);
+                if (document != null) {
+                    documents.add(document);
+                }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return totalQuantity;
+        return documents;
     }
-
 
 }
