@@ -277,18 +277,10 @@ public class BookDetailController extends BaseController {
         Optional<ButtonType> result = confirmAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            processReturnDocument();
-            showAlert("Return Successful", "You have successfully returned the document.", Alert.AlertType.INFORMATION);
+            showAlert("Return Successful", "Coming to library to complete the process.", Alert.AlertType.INFORMATION);
         } else {
             showAlert("Return Cancelled", "The return process has been cancelled.", Alert.AlertType.INFORMATION);
         }
-    }
-
-    private void processReturnDocument() {
-        visibleIfNotBorrow();
-        notiLabel.setVisible(false);
-        borrowDocumentDAO.updateBorrowDocumentStateToReturned(document.getDocumentId(), user.getUserId());
-        documentDAO.updateBookQuantityWhenReturn(document.getDocumentId(), user.getUserId());
     }
 
     private void handlePrintButtonAction() {
@@ -297,7 +289,7 @@ public class BookDetailController extends BaseController {
                 + borrowDocument.getUser().getUserId()
                 + "_" + borrowDocument.getDocument().getDocumentId()
                 + "_" + borrowDocument.getBorrowDate().format(DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss"))
-                + "_" + LocalDate.now() 
+                + "_" + LocalDate.now()
                 + ".pdf";
 
         try {
