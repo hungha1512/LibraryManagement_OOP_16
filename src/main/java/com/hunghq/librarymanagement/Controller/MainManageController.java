@@ -157,10 +157,10 @@ public class MainManageController extends BaseController {
     @RolePermissionRequired(roles = {"Librarian"})
     public Button btn_return_book;
 
-    private FilterGenreService filterGenreService = new FilterGenreService();
-    private DocumentDAO documentDAO = new DocumentDAO();
-    private BorrowDocumentDAO borrowDocumentDAO = new BorrowDocumentDAO();
-    private UserDAO userDAO = new UserDAO();
+    private final FilterGenreService filterGenreService = new FilterGenreService();
+    private final DocumentDAO documentDAO = new DocumentDAO();
+    private final BorrowDocumentDAO borrowDocumentDAO = new BorrowDocumentDAO();
+    private final UserDAO userDAO = new UserDAO();
 
     //TODO: Pagination for each tab manage
     private int currentPageBook = 1;
@@ -187,24 +187,28 @@ public class MainManageController extends BaseController {
         initializeBooksByGenreChart();
         initializeBorrowStatusPieChart();
         initializeBorrowingTrendsLineChart();
-        initializeTableViewBorrowBook();
-        initializeTableViewBook();
         initializeTotalDataView();
+
+        isSearchingBook = false;
+        initializeTableViewBook();
+        isSearchingBorrowedBook = false;
+        initializeTableViewBorrowBook();
+        isSearchingUser = false;
         initializeTableViewUser();
 
         //Button on Manage Book tab
-        btn_add_book.setOnAction(event -> handleAddBook());
-        btn_delete_book.setOnAction(event -> handleDeleteBook());
-        btn_edit_book.setOnAction(event -> handleEditBook());
-        btn_search_book.setOnAction(event -> handleSearchBook());
-        btn_previous_book.setOnAction(event -> {
+        btn_add_book.setOnAction(_ -> handleAddBook());
+        btn_delete_book.setOnAction(_ -> handleDeleteBook());
+        btn_edit_book.setOnAction(_ -> handleEditBook());
+        btn_search_book.setOnAction(_ -> handleSearchBook());
+        btn_previous_book.setOnAction(_ -> {
             if (currentPageBook > 1) {
                 currentPageBook--;
                 updateTableViewBook();
                 updatePaginationBookButtons();
             }
         });
-        btn_next_book.setOnAction(event -> {
+        btn_next_book.setOnAction(_ -> {
             if (currentPageBook < totalPagesBook) {
                 currentPageBook++;
                 updateTableViewBook();
@@ -213,17 +217,17 @@ public class MainManageController extends BaseController {
         });
 
         //Button on Manage Borrow tab
-        btn_send_noti.setOnAction(event -> handleSendNotification());
-        btn_return_book.setOnAction(event -> handleReturnBook());
-        btn_search_borrow.setOnAction(event -> handleSearchBorrowBook());
-        btn_previous_borrow.setOnAction(event -> {
+        btn_send_noti.setOnAction(_ -> handleSendNotification());
+        btn_return_book.setOnAction(_ -> handleReturnBook());
+        btn_search_borrow.setOnAction(_ -> handleSearchBorrowBook());
+        btn_previous_borrow.setOnAction(_ -> {
             if (currentPageBorrowedBook > 1) {
                 currentPageBorrowedBook--;
                 updateTableViewBorrowedBook();
                 updatePaginationBorrowBookButtons();
             }
         });
-        btn_next_borrow.setOnAction(event -> {
+        btn_next_borrow.setOnAction(_ -> {
             if (currentPageBorrowedBook < totalPagesBorrowedBook) {
                 currentPageBorrowedBook++;
                 updateTableViewBorrowedBook();
@@ -232,15 +236,15 @@ public class MainManageController extends BaseController {
         });
 
         //Button on Manage user tab
-        btn_search_user.setOnAction(event -> handleSearchUser());
-        btn_previous_user.setOnAction(event -> {
+        btn_search_user.setOnAction(_ -> handleSearchUser());
+        btn_previous_user.setOnAction(_ -> {
             if (currentPageUser > 1) {
                 currentPageUser--;
                 updateTableViewUser();
                 updatePaginationUserButtons();
             }
         });
-        btn_next_user.setOnAction(event -> {
+        btn_next_user.setOnAction(_ -> {
             if (currentPageUser < totalPagesUser) {
                 currentPageUser++;
                 updateTableViewUser();
@@ -297,15 +301,7 @@ public class MainManageController extends BaseController {
         col_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         col_publisher.setCellValueFactory(new PropertyValueFactory<>("publisher"));
         col_published_date.setCellValueFactory(new PropertyValueFactory<>("publishedDate"));
-
-
-        Task<ObservableList<Document>> loadBookDataTask = new Task<>() {
-            @Override
-            protected ObservableList<Document> call() throws Exception {
-                return FXCollections.observableArrayList(documentDAO.getAll());
-            }
-        };
-        ImportDataToTableViewService.loadDataToTableView(tv_book, loadBookDataTask);
+        updateTableViewBook();
     }
 
 
@@ -321,8 +317,6 @@ public class MainManageController extends BaseController {
         col_return_date.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
         col_extend_date.setCellValueFactory(new PropertyValueFactory<>("extendDate"));
         col_state.setCellValueFactory(new PropertyValueFactory<>("state"));
-
-
         updateTableViewBorrowedBook();
     }
 
@@ -343,7 +337,6 @@ public class MainManageController extends BaseController {
         col_join_date.setCellValueFactory(new PropertyValueFactory<>("joinDate"));
         col_date_of_birth.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
         col_role.setCellValueFactory(new PropertyValueFactory<>("role"));
-
         updateTableViewUser();
     }
 
@@ -380,13 +373,13 @@ public class MainManageController extends BaseController {
             }
         };
 
-        searchTask.setOnSucceeded(event -> {
+        searchTask.setOnSucceeded(_ -> {
             searchResultsDocument = searchTask.getValue();
             currentPageBook = 1;
             updateTableViewBook();
         });
 
-        searchTask.setOnFailed(event -> {
+        searchTask.setOnFailed(_ -> {
             System.out.println("Search Task failed: " + searchTask.getException().getMessage());
         });
 
@@ -418,13 +411,13 @@ public class MainManageController extends BaseController {
             }
         };
 
-        searchTask.setOnSucceeded(event -> {
+        searchTask.setOnSucceeded(_ -> {
             searchResultsBorrowedDocument = searchTask.getValue();
             currentPageBorrowedBook = 1;
             updateTableViewBorrowedBook();
         });
 
-        searchTask.setOnFailed(event -> {
+        searchTask.setOnFailed(_ -> {
             System.out.println("Search Task failed: " + searchTask.getException().getMessage());
         });
 
@@ -452,13 +445,13 @@ public class MainManageController extends BaseController {
             }
         };
 
-        searchTask.setOnSucceeded(event -> {
+        searchTask.setOnSucceeded(_ -> {
             searchResultsUser = searchTask.getValue();
             currentPageUser = 1;
             updateTableViewUser();
         });
 
-        searchTask.setOnFailed(event -> {
+        searchTask.setOnFailed(_ -> {
             System.out.println("Search Task failed: " + searchTask.getException().getMessage());
         });
 
@@ -479,7 +472,7 @@ public class MainManageController extends BaseController {
                 return FXCollections.observableArrayList(sourceList.subList(startIndex, endIndex));
             }
         };
-        loadPaginatedBooksTask.setOnSucceeded(event -> {
+        loadPaginatedBooksTask.setOnSucceeded(_ -> {
             tv_book.setItems(loadPaginatedBooksTask.getValue());
         });
         ImportDataToTableViewService.loadDataToTableView(tv_book, loadPaginatedBooksTask);
@@ -499,14 +492,14 @@ public class MainManageController extends BaseController {
                 return FXCollections.observableArrayList(sourceList.subList(startIndex, endIndex));
             }
         };
-        loadPaginatedBorrowedBooksTask.setOnSucceeded(event -> {
+        loadPaginatedBorrowedBooksTask.setOnSucceeded(_ -> {
             tv_borrowDocument.setItems(loadPaginatedBorrowedBooksTask.getValue());
         });
         ImportDataToTableViewService.loadDataToTableView(tv_borrowDocument, loadPaginatedBorrowedBooksTask);
     }
 
     private void updateTableViewUser() {
-        List<User> sourceList = isSearchingBorrowedBook ? searchResultsUser : userDAO.getAll();
+        List<User> sourceList = isSearchingUser ? searchResultsUser : userDAO.getAll();
         totalPagesUser = (int) Math.ceil((double) sourceList.size() / limit);
         int startIndex = (currentPageUser - 1) * limit;
         int endIndex = Math.min(startIndex + limit, sourceList.size());
@@ -519,7 +512,7 @@ public class MainManageController extends BaseController {
                 return FXCollections.observableArrayList(sourceList.subList(startIndex, endIndex));
             }
         };
-        loadPaginatedUserTask.setOnSucceeded(event -> {
+        loadPaginatedUserTask.setOnSucceeded(_ -> {
             tv_user.setItems(loadPaginatedUserTask.getValue());
         });
         ImportDataToTableViewService.loadDataToTableView(tv_user, loadPaginatedUserTask);
