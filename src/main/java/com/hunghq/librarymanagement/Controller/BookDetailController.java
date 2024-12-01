@@ -435,8 +435,9 @@ public class BookDetailController extends BaseController {
 
 
         if (this.rating != 0 && !comment.isEmpty()) {
-            reviewDAO.add(review);
-            showAlert("Success", "Review submitted successfully!", Alert.AlertType.INFORMATION);
+            if (reviewDAO.add(review)) {
+                showAlert("Success", "Review submitted successfully!", Alert.AlertType.INFORMATION);
+            }
         } else {
             showAlert("Missing Information", "Missing information.", Alert.AlertType.WARNING);
         }

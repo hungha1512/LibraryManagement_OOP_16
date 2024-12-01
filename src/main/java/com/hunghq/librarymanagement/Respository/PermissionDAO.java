@@ -42,13 +42,13 @@ public class PermissionDAO implements IRepository<Permission>{
     }
 
     @Override
-    public void add(Permission entity) {
+    public boolean add(Permission entity) {
         Permission permission = entity;
         String sql = "INSERT INTO permissions (permissionId, title, slug, description, isDeleted, createdAt, updatedAt) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
-            
+
             prS.setInt(1, permission.getPermissionId());
             prS.setString(2, permission.getTitle());
             prS.setString(3, permission.getSlug());
@@ -57,11 +57,16 @@ public class PermissionDAO implements IRepository<Permission>{
             prS.setTimestamp(6, Timestamp.valueOf(permission.getCreatedAt()));
             prS.setTimestamp(7, permission.getUpdatedAt() != null ? Timestamp.valueOf(permission.getUpdatedAt()) : null);
 
-            prS.executeUpdate();
+            int rowsInserted = prS.executeUpdate();
+
+            return rowsInserted > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
+
 
     @Override
     public Permission getByStringId(String id) {

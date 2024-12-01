@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 public interface IRepository<T>
 {
     T make(ResultSet reS);
-    void add(T entity);
+    boolean add(T entity);
     T getByStringId(String id);
     T getByIntId(int id);
     ObservableList<T> getAll();

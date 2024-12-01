@@ -47,12 +47,12 @@ public class ReviewDAO implements IRepository<Review>{
     }
 
     @Override
-    public void add(Review entity) {
-        Review review = (Review) entity;
+    public boolean add(Review entity) {
+        Review review = entity;
         String sql = "INSERT INTO reviews (reviewId, documentId, userId, "
-                   + "rating, reviewText, reviewDate) " 
-                   + "VALUES (?, ?, ?, ?, ?, ?)";
-        
+                + "rating, reviewText, reviewDate) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement prS = con.prepareStatement(sql)) {
 
             prS.setInt(1, review.getReviewId());
@@ -61,12 +61,16 @@ public class ReviewDAO implements IRepository<Review>{
             prS.setDouble(4, review.getRating());
             prS.setString(5, review.getReviewText());
             prS.setTimestamp(6, Timestamp.valueOf(review.getReviewDate()));
-            
-            prS.executeUpdate();
+
+            int rowsInserted = prS.executeUpdate();
+
+            return rowsInserted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
+
 
     @Override
     public Review getByStringId(String id) {

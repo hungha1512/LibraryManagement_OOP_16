@@ -59,9 +59,10 @@ public class BillDAO implements IRepository<Bill> {
      * @param entity the Bill object to be added
      */
     @Override
-    public void add(Bill entity) {
-        String sql = "INSERT INTO `bills` (billId, borrowId, userId, totalPayment, " +
+    public boolean add(Bill entity) {
+        String sql = "INSERT INTO bills (billId, borrowId, userId, totalPayment, " +
                 "creationDate, paymentDate, paymentStatus) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement prS = con.prepareStatement(sql)) {
             Bill bill = (Bill) entity;
 
@@ -70,11 +71,15 @@ public class BillDAO implements IRepository<Bill> {
             prS.setInt(3, bill.getUser().getUserId());
             prS.setDouble(4, bill.getTotalPayment());
 
-            prS.executeUpdate();
+            int rowsInserted = prS.executeUpdate();
+            return rowsInserted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
+
+
 
     /**
      * Retrieves a Bill by its unique billId.
