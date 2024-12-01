@@ -1,7 +1,6 @@
 package com.hunghq.librarymanagement.Controller;
 
 import com.hunghq.librarymanagement.Global.AppProperties;
-import com.hunghq.librarymanagement.Model.Annotation.RolePermissionRequired;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Service.AuthenticationService;
@@ -38,7 +37,7 @@ public class HomepageController extends BaseController implements Initializable 
     public Button btn_my_books;
 
     @FXML
-    @RolePermissionRequired(roles = {"Librarian"})
+//    @RolePermissionRequired(roles = {"Librarian"})
     public Button btn_manage;
 
     @FXML
@@ -132,13 +131,19 @@ public class HomepageController extends BaseController implements Initializable 
                 getContentPane("/com/hunghq/librarymanagement/View/AskAI/AskAI.fxml");
             }
         });
+        if (AppProperties.getProperty("user.roleTitle").equals("Librarian")) {
+            btn_manage.setVisible(true);
+            btn_manage.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    getContentPane("/com/hunghq/librarymanagement/View/Manage/MainManage.fxml");
+                }
+            });
+        } else {
+            btn_manage.setVisible(false);
+        }
 
-        btn_manage.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                getContentPane("/com/hunghq/librarymanagement/View/Manage/MainManage.fxml");
-            }
-        });
+
 
         btn_user.setOnAction(new EventHandler<ActionEvent>() {
             @Override

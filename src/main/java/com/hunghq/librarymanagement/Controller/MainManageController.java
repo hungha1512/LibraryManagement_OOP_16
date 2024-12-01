@@ -1,6 +1,5 @@
 package com.hunghq.librarymanagement.Controller;
 
-import com.hunghq.librarymanagement.Model.Annotation.RolePermissionRequired;
 import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Model.Entity.User;
@@ -16,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
@@ -34,7 +32,6 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,13 +46,13 @@ public class MainManageController extends BaseController {
     @FXML
     public LineChart lc_borrowing_trends;
     @FXML
-    @RolePermissionRequired(roles = {"Librarian"})
+//    @RolePermissionRequired(roles = {"Librarian"})
     public Button btn_add_book;
     @FXML
-    @RolePermissionRequired(roles = {"Librarian"})
+//    @RolePermissionRequired(roles = {"Librarian"})
     public Button btn_delete_book;
     @FXML
-    @RolePermissionRequired(roles = {"Librarian"})
+//    @RolePermissionRequired(roles = {"Librarian"})
     public Button btn_edit_book;
     @FXML
     public TextField tf_search_book;
@@ -164,10 +161,10 @@ public class MainManageController extends BaseController {
 
 
     @FXML
-    @RolePermissionRequired(roles = {"Librarian"})
+//    @RolePermissionRequired(roles = {"Librarian"})
     public Button btn_send_noti;
     @FXML
-    @RolePermissionRequired(roles = {"Librarian"})
+//    @RolePermissionRequired(roles = {"Librarian"})
     public Button btn_return_book;
 
     private final FilterGenreService filterGenreService = new FilterGenreService();
@@ -175,7 +172,6 @@ public class MainManageController extends BaseController {
     private final BorrowDocumentDAO borrowDocumentDAO = new BorrowDocumentDAO();
     private final UserDAO userDAO = new UserDAO();
 
-    //TODO: Pagination for each tab manage
     private int currentPageBook = 1;
     private final int limit = 16;
     private int totalPagesBook;
@@ -193,7 +189,7 @@ public class MainManageController extends BaseController {
     private boolean isSearchingUser = false;
 
     @FXML
-    @RolePermissionRequired(roles = {"Librarian"})
+//    @RolePermissionRequired(roles = {"Librarian"})
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
 
@@ -321,9 +317,60 @@ public class MainManageController extends BaseController {
     }
 
     public void initializeBorrowStatusPieChart() {
+        List<BorrowDocument> allBorrowDocuments = borrowDocumentDAO.getAll();
+
+        // Đếm số lượng sách đang mượn (chưa trả) và đã trả
+        long borrowedCount = allBorrowDocuments.stream()
+                .filter(doc -> !doc.getState().getState().equalsIgnoreCase("returned"))
+                .count();
+
+        long returnedCount = allBorrowDocuments.stream()
+                .filter(doc -> doc.getState().getState().equalsIgnoreCase("returned"))
+                .count();
+
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Borrowed", borrowedCount),
+                new PieChart.Data("Returned", returnedCount)
+        );
+
+        pc_borrow_status.setData(pieChartData);
+
+        pc_borrow_status.setTitle("Borrow Status");
+        pc_borrow_status.setLegendVisible(true);
+        pc_borrow_status.setLabelsVisible(true);
+
+        for (PieChart.Data data : pieChartData) {
+            data.getNode().addEventHandler(javafx.scene.input.MouseEvent.MOUSE_ENTERED, event -> {
+                Tooltip.install(data.getNode(),
+                        new Tooltip(data.getName() + ": " + (int) data.getPieValue() + " books"));
+            });
+        }
     }
 
     public void initializeBorrowingTrendsLineChart() {
+        List<BorrowDocument> allBorrowDocuments = borrowDocumentDAO.getAll();
+
+        Map<String, Long> borrowingTrends = allBorrowDocuments.stream()
+                .filter(doc -> doc.getBorrowDate() != null)
+                .collect(Collectors.groupingBy(
+                        doc -> doc.getBorrowDate().toLocalDate().toString(), //Date formatter
+                        TreeMap::new, // Sort list overtime
+                        Collectors.counting() //
+                ));
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Borrowing Trends");
+
+        for (Map.Entry<String, Long> entry : borrowingTrends.entrySet()) {
+            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
+
+        lc_borrowing_trends.getData().clear();
+        lc_borrowing_trends.getData().add(series);
+
+        lc_borrowing_trends.setTitle("Borrowing Trends Over Time (Daily)");
+        lc_borrowing_trends.getXAxis().setLabel("Date (YYYY-MM-DD)");
+        lc_borrowing_trends.getYAxis().setLabel("Number of Borrowings");
     }
 
     public void initializeTableViewBook() {
@@ -391,7 +438,6 @@ public class MainManageController extends BaseController {
             System.out.println("Error loading AddBook.fxml: " + e.getMessage());
         }
     }
-
 
 
     public void handleDeleteBook() {
