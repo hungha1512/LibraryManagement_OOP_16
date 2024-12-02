@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
+<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
       <TabPane prefHeight="550.0" prefWidth="838.0" tabClosingPolicy="UNAVAILABLE">
           <tabs>
          <Tab style="-fx-font-weight: bold;" text="Overview">
@@ -115,14 +115,14 @@
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
                           <children>
                               <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-2.0" prefHeight="38.0" prefWidth="300.0" spacing="10.0">
-                                  <Button fx:id="btn_add_book" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Add Book" textFill="WHITE" />
-                                  <Button fx:id="btn_delete_book" style="-fx-background-color: red; -fx-font-weight: bold;" text="Delete Book" textFill="WHITE" />
-                                  <Button fx:id="btn_edit_book" style="-fx-font-weight: bold; -fx-background-color: #89a8b2;" text="Edit Book Details" textFill="WHITE" />
+                                  <Button fx:id="btn_add_book" style="-fx-background-color: #0078d7; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Add Book" textFill="WHITE" />
+                                  <Button fx:id="btn_delete_book" style="-fx-background-color: red; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Delete Book" textFill="WHITE" />
+                                  <Button fx:id="btn_edit_book" style="-fx-font-weight: bold; -fx-background-color: #89a8b2; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Edit Book Details" textFill="WHITE" />
                               </HBox>
                               <HBox alignment="CENTER_LEFT" layoutX="534.0" layoutY="-2.0" prefHeight="38.0" prefWidth="290.0" spacing="10.0">
                                   <children>
                                       <TextField fx:id="tf_search_book" prefHeight="25.0" prefWidth="220.0" promptText="Search Books..." style="-fx-background-radius: 5px; -fx-border-radius: 5px;" />
-                                      <Button fx:id="btn_search_book" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Search" textFill="WHITE" />
+                                      <Button fx:id="btn_search_book" style="-fx-background-color: #0078d7; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Search" textFill="WHITE" />
                                   </children>
                               </HBox>
                               <TableView fx:id="tv_book" layoutY="34.0" prefHeight="434.0" prefWidth="838.0">
@@ -139,13 +139,13 @@
                               </TableView>
                      <HBox alignment="CENTER" layoutX="317.0" layoutY="468.0" prefHeight="50.0" spacing="10">
                         <children>
-                           <Button fx:id="btn_previous_book" style="-fx-background-color: #1e90ff; -fx-font-weight: bold;" text="Previous" textFill="WHITE">
+                           <Button fx:id="btn_previous_book" style="-fx-background-color: #1e90ff; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Previous" textFill="WHITE">
                               <font>
                                  <Font size="14.0" />
                               </font>
                            </Button>
                            <Label fx:id="lbl_page_info_book" text="Page 1 of 1" />
-                           <Button fx:id="btn_next_book" style="-fx-background-color: #1d90ff; -fx-font-weight: bold;" text="Next" textFill="WHITE">
+                           <Button fx:id="btn_next_book" style="-fx-background-color: #1d90ff; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Next" textFill="WHITE">
                               <font>
                                  <Font size="14.0" />
                               </font>
@@ -163,14 +163,14 @@
                           <children>
                               <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-2.0" prefHeight="38.0" prefWidth="242.0" spacing="10.0">
                                   <children>
-                                      <Button fx:id="btn_send_noti" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Send Notification" textFill="WHITE" />
-                                      <Button fx:id="btn_return_book" prefWidth="110.0" style="-fx-background-color: red; -fx-font-weight: bold;" text="Return Book" textFill="WHITE" />
+                                      <Button fx:id="btn_send_noti" style="-fx-background-color: #0078d7; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Send Notification" textFill="WHITE" />
+                                      <Button fx:id="btn_return_book" prefWidth="110.0" style="-fx-background-color: red; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Return Book" textFill="WHITE" />
                                   </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" layoutX="534.0" layoutY="-2.0" prefHeight="38.0" prefWidth="290.0" spacing="10.0">
                                   <children>
                                       <TextField fx:id="tf_search_borrow" prefHeight="25.0" prefWidth="220.0" promptText="Search Borrowed Books..." style="-fx-background-radius: 5px; -fx-border-radius: 5px;" />
-                                      <Button fx:id="btn_search_borrow" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Search" textFill="WHITE" />
+                                      <Button fx:id="btn_search_borrow" style="-fx-background-color: #0078d7; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Search" textFill="WHITE" />
                                   </children>
                               </HBox>
                               <TableView fx:id="tv_borrowDocument" layoutY="34.0" prefHeight="434.0" prefWidth="838.0">
@@ -188,13 +188,13 @@
                               </TableView>
                      <HBox alignment="CENTER" layoutX="317.0" layoutY="468.0" prefHeight="50.0" spacing="10">
                         <children>
-                           <Button fx:id="btn_previous_borrow" style="-fx-background-color: #1e90ff; -fx-font-weight: bold;" text="Previous" textFill="WHITE">
+                           <Button fx:id="btn_previous_borrow" style="-fx-background-color: #1e90ff; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Previous" textFill="WHITE">
                               <font>
                                  <Font size="14.0" />
                               </font>
                            </Button>
                            <Label fx:id="lbl_page_info_borrow" text="Page 1 of 1" />
-                           <Button fx:id="btn_next_borrow" style="-fx-background-color: #1d90ff; -fx-font-weight: bold;" text="Next" textFill="WHITE">
+                           <Button fx:id="btn_next_borrow" style="-fx-background-color: #1d90ff; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Next" textFill="WHITE">
                               <font>
                                  <Font size="14.0" />
                               </font>
@@ -212,14 +212,14 @@
                   <children>
                      <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-2.0" prefHeight="38.0" prefWidth="242.0" spacing="10.0">
                         <children>
-                           <Button fx:id="btn_add_user" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Add User" textFill="WHITE" />
-                           <Button fx:id="btn_delete_user" prefWidth="110.0" style="-fx-background-color: red; -fx-font-weight: bold;" text="Delete User" textFill="WHITE" />
+                           <Button fx:id="btn_add_user" style="-fx-background-color: #0078d7; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Add User" textFill="WHITE" />
+                           <Button fx:id="btn_delete_user" prefWidth="110.0" style="-fx-background-color: red; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Delete User" textFill="WHITE" />
                         </children>
                      </HBox>
                      <HBox alignment="CENTER_LEFT" layoutX="534.0" layoutY="-2.0" prefHeight="38.0" prefWidth="290.0" spacing="10.0">
                         <children>
                            <TextField fx:id="tf_search_user" prefHeight="25.0" prefWidth="220.0" promptText="Search Users..." style="-fx-background-radius: 5px; -fx-border-radius: 5px;" />
-                           <Button fx:id="btn_search_user" style="-fx-background-color: #0078d7; -fx-font-weight: bold;" text="Search" textFill="WHITE" />
+                           <Button fx:id="btn_search_user" style="-fx-background-color: #0078d7; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Search" textFill="WHITE" />
                         </children>
                      </HBox>
                      <TableView fx:id="tv_user" layoutY="34.0" prefHeight="434.0" prefWidth="838.0">
@@ -236,13 +236,13 @@
                      </TableView>
                      <HBox alignment="CENTER" layoutX="317.0" layoutY="468.0" prefHeight="50.0" spacing="10">
                         <children>
-                           <Button fx:id="btn_previous_user" style="-fx-background-color: #1e90ff; -fx-font-weight: bold;" text="Previous" textFill="WHITE">
+                           <Button fx:id="btn_previous_user" style="-fx-background-color: #1e90ff; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Previous" textFill="WHITE">
                               <font>
                                  <Font size="14.0" />
                               </font>
                            </Button>
                            <Label fx:id="lbl_page_info_user" text="Page 1 of 1" />
-                           <Button fx:id="btn_next_user" style="-fx-background-color: #1d90ff; -fx-font-weight: bold;" text="Next" textFill="WHITE">
+                           <Button fx:id="btn_next_user" style="-fx-background-color: #1d90ff; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Next" textFill="WHITE">
                               <font>
                                  <Font size="14.0" />
                               </font>
