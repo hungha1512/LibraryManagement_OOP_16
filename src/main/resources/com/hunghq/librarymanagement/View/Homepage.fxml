@@ -14,8 +14,8 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.HomepageController">
 
-    <HBox layoutX="160.0" layoutY="0" prefHeight="50" prefWidth="840.0" style="-fx-background-color: #000022; -fx-padding: 10;">
-        <Pane prefHeight="30.0" prefWidth="834.0" HBox.hgrow="ALWAYS">
+    <HBox layoutX="149.0" layoutY="0" prefHeight="50" prefWidth="851.0" style="-fx-background-color: #000022; -fx-padding: 10;">
+        <Pane prefHeight="30.0" prefWidth="951.0" HBox.hgrow="ALWAYS">
             <children>
                 <TextField fx:id="tf_search_bar" layoutX="1.0" prefHeight="30.0" prefWidth="350.0" promptText="Search your favourite book" style="-fx-border-radius: 5px; -fx-background-radius: 5px; -fx-background-color: white;">
                     <font>
@@ -28,7 +28,7 @@
                     </font>
                 </Button>
                 <ComboBox fx:id="cb_search_option" layoutX="351.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
-              <Label fx:id="txt_name_user" layoutX="583.0" layoutY="4.0" prefHeight="20.0" prefWidth="236.0" text="User" textFill="WHITE">
+              <Label fx:id="txt_name_user" alignment="CENTER" layoutX="583.0" layoutY="4.0" prefHeight="20.0" prefWidth="248.0" text="User" textFill="WHITE">
                   <font>
                       <Font name="System Bold" size="14.0" />
                   </font>
@@ -51,7 +51,7 @@
                            <Font name="System Bold" size="16.0" />
                         </font>
                      </Label>
-                     <ImageView fitHeight="60.0" fitWidth="62.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fitHeight="60.0" fitWidth="62.0" layoutX="16.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                            <Image url="@../../../../icons/icons8-books-64.png" />
                         </image>
@@ -60,7 +60,7 @@
                </AnchorPane>
             </graphic>
          </Button>
-         <Button fx:id="btn_my_books" layoutX="25.0" layoutY="109.0" prefHeight="80.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+         <Button fx:id="btn_my_books" layoutX="25.0" layoutY="103.0" prefHeight="80.0" prefWidth="110.0" style="-fx-background-color: #000022;">
             <font>
                <Font size="14.0" />
             </font>
@@ -81,7 +81,7 @@
                </AnchorPane>
             </graphic>
          </Button>
-         <Button fx:id="btn_ask_ai" layoutX="25.0" layoutY="216.0" prefHeight="80.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+         <Button fx:id="btn_ask_ai" layoutX="25.0" layoutY="218.0" prefHeight="80.0" prefWidth="110.0" style="-fx-background-color: #000022;">
             <font>
                <Font size="14.0" />
             </font>
@@ -123,7 +123,7 @@
                </AnchorPane>
             </graphic>
          </Button>
-         <Button fx:id="btn_manage" layoutX="25.0" layoutY="406.0" prefHeight="85.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+         <Button fx:id="btn_manage" layoutX="25.0" layoutY="404.0" prefHeight="85.0" prefWidth="110.0" style="-fx-background-color: #000022;">
             <font>
                <Font size="14.0" />
             </font>
@@ -144,7 +144,7 @@
                </AnchorPane>
             </graphic>
          </Button>
-         <Button fx:id="btn_log_out" layoutX="25.0" layoutY="507.0" prefHeight="65.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+         <Button fx:id="btn_log_out" layoutX="25.0" layoutY="503.0" prefHeight="65.0" prefWidth="110.0" style="-fx-background-color: #000022;">
             <font>
                <Font size="14.0" />
             </font>
