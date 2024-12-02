@@ -3,6 +3,7 @@ package com.hunghq.librarymanagement.Controller;
 import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Model.Entity.User;
+import com.hunghq.librarymanagement.Model.Enum.EState;
 import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Respository.UserDAO;
@@ -548,18 +549,49 @@ public class MainManageController extends BaseController {
     public void handleSendNotification() throws MessagingException {
         DecimalFormat df = new DecimalFormat("#");
         BorrowDocument borrowDocument = tv_borrowDocument.getSelectionModel().getSelectedItem();
+
         if (borrowDocument != null) {
             String subject = "UET Library Manage System - Borrow Detail";
-            String body = "This is an email to notify about your borrow detail" + "\n"
-                    + "- Book: " + borrowDocument.getDocument().getTitle() + "\n"
-                    + "- Due Date: " + borrowDocument.getDueDate().toString() + "\n"
-                    + "- Overdue: " + Duration.between(borrowDocument.getDueDate(), LocalDateTime.now()).toDays()
-                    + " day(s)" + "\n"
-                    + "- Fee: " + df.format(borrowDocument.getFee()) + " VND\n"
-                    + "Please return before Due Date!";
-            EmailService.sendEmail(borrowDocument.getUser().getEmail(), subject, body);
+            String body = "";
+
+            switch (borrowDocument.getState()) {
+                case EState.BORROWED:
+                    body = "This is an email to notify about your borrowed book details:\n"
+                            + "- Book: " + borrowDocument.getDocument().getTitle() + "\n"
+                            + "- ISBN: " + borrowDocument.getDocument().getIsbn() + "\n"
+                            + "- Due Date: " + borrowDocument.getDueDate().toString() + "\n"
+                            + "Please return the book before the due date.";
+                    break;
+
+                case EState.OVERDUE:
+                    long overdueDays = Duration.between(borrowDocument.getDueDate(), LocalDateTime.now()).toDays();
+                    body = "This is an email to notify that the borrowed book is overdue:\n"
+                            + "- Book: " + borrowDocument.getDocument().getTitle() + "\n"
+                            + "- ISBN: " + borrowDocument.getDocument().getIsbn() + "\n"
+                            + "- Due Date: " + borrowDocument.getDueDate().toString() + "\n"
+                            + "- Overdue: " + overdueDays + " day(s)\n"
+                            + "- Fee: " + df.format(borrowDocument.getFee()) + " VND\n"
+                            + "Please return the book as soon as possible.";
+                    break;
+
+                case EState.RETURNED:
+                    body = "This is an email to notify that your borrowed book has been returned successfully:\n"
+                            + "- Book: " + borrowDocument.getDocument().getTitle() + "\n"
+                            + "- ISBN: " + borrowDocument.getDocument().getIsbn() + "\n"
+                            + "- Returned Date: " + borrowDocument.getReturnDate().toString() + "\n"
+                            + "Thank you for using our library service.";
+                    break;
+
+                default:
+                    body = "Unknown state. Unable to send notification.";
+            }
+
+            if (!body.equals("Unknown state. Unable to send notification.")) {
+                EmailService.sendEmail(borrowDocument.getUser().getEmail(), subject, body);
+            }
         }
     }
+
 
     public void handleReturnBook() {
         BorrowDocument borrowDocument = tv_borrowDocument.getSelectionModel().getSelectedItem();
