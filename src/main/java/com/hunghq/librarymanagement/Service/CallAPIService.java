@@ -105,5 +105,10 @@ public class CallAPIService {
         return dubApiUrl;
     }
 
+    public static void main(String[] args) {
+        CallAPIService service = new CallAPIService();
+        System.out.println(service.getImageUrlFromTitle("The Hunger Games"));
+    }
+
 
 }

@@ -28,6 +28,8 @@ import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import static com.hunghq.librarymanagement.Global.Format.isValidDate;
+
 public class MainUserController {
 
     @FXML
@@ -49,8 +51,6 @@ public class MainUserController {
     @FXML
     private TextField txt_phone;
     @FXML
-    private TextField txt_gender;
-    @FXML
     private TextField txt_date_of_birth;
 
     @FXML
@@ -63,6 +63,11 @@ public class MainUserController {
     private Button btn_previous;
     @FXML
     private Button btn_next;
+
+    @FXML
+    private RadioButton rb_male;
+    @FXML
+    private RadioButton rb_female;
 
     @FXML
     private AnchorPane main_screen;
@@ -79,6 +84,8 @@ public class MainUserController {
     private ObservableList<Document> returnedBooks;
     private ObservableList<Document> searchResults = FXCollections.observableArrayList();
 
+    private ToggleGroup toggleGroup;
+
     @FXML
     public void initialize() {
         documentDAO = new DocumentDAO();
@@ -86,7 +93,11 @@ public class MainUserController {
         callAPIService = new CallAPIService();
         loadImageService = new LoadImageService(callAPIService);
 
-        initializeTextFields();
+        toggleGroup = new ToggleGroup();
+        rb_male.setToggleGroup(toggleGroup);
+        rb_female.setToggleGroup(toggleGroup);
+
+        initializeContent();
 
         btn_update.setVisible(false);
         btn_edit.setOnAction(e -> {
@@ -145,17 +156,24 @@ public class MainUserController {
         );
     }
 
-    private void initializeTextFields() {
+    private void initializeContent() {
         txt_user_name.setPromptText(AppProperties.getProperty("user.fullName"));
         txt_email.setPromptText(AppProperties.getProperty("user.email"));
         txt_phone.setPromptText(AppProperties.getProperty("user.phone"));
-        txt_gender.setPromptText(AppProperties.getProperty("user.gender"));
         txt_date_of_birth.setPromptText(AppProperties.getProperty("user.dateOfBirth") + " (YYYY-MM-DD)");
+
+        if(AppProperties.getProperty("user.gender") == "MALE") {
+            rb_male.setSelected(true);
+        } else {
+            rb_female.setSelected(true);
+        }
+
+        rb_female.setDisable(true);
+        rb_male.setDisable(true);
 
         txt_user_name.setEditable(false);
         txt_email.setEditable(false);
         txt_phone.setEditable(false);
-        txt_gender.setEditable(false);
         txt_date_of_birth.setEditable(false);
     }
 
@@ -163,16 +181,19 @@ public class MainUserController {
         txt_user_name.setEditable(true);
         txt_email.setEditable(true);
         txt_phone.setEditable(true);
-        txt_gender.setEditable(true);
+
         txt_date_of_birth.setEditable(true);
 
         btn_edit.setVisible(false);
         btn_update.setVisible(true);
 
+        rb_male.setDisable(false);
+        rb_female.setDisable(false);
+
         txt_user_name.setText(AppProperties.getProperty("user.fullName"));
         txt_email.setText(AppProperties.getProperty("user.email"));
         txt_phone.setText(AppProperties.getProperty("user.phone"));
-        txt_gender.setText(AppProperties.getProperty("user.gender"));
+
         txt_date_of_birth.setText(AppProperties.getProperty("user.dateOfBirth"));
     }
 
@@ -180,8 +201,20 @@ public class MainUserController {
         String userName = txt_user_name.getText();
         String email = txt_email.getText();
         String phone = txt_phone.getText();
-        String gender = txt_gender.getText();
         String dateOfBirth = txt_date_of_birth.getText();
+        String gender;
+
+        if (isValidDate(dateOfBirth)) {
+            showAlert("Success", "The date is valid!", Alert.AlertType.INFORMATION);
+        } else {
+            showAlert("Error", "Invalid date format. Please use YYYY-MM-DD.", Alert.AlertType.ERROR);
+        }
+
+        if (rb_male.isSelected()) {
+            gender = "male";
+        } else {
+            gender = "female";
+        }
 
         try {
             User updatedUser = new User();
@@ -197,14 +230,13 @@ public class MainUserController {
 
             if (isUpdated) {
                 showAlert("Success", "User information updated successfully!", Alert.AlertType.INFORMATION);
-                initializeTextFields();
+                initializeContent();
                 btn_edit.setVisible(true);
                 btn_update.setVisible(false);
             } else {
                 showAlert("Error", "Failed to update user information. Please try again.", Alert.AlertType.ERROR);
             }
         } catch (Exception e) {
-            showAlert("Error", "An error occurred while updating user information: " + e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
         }
     }
