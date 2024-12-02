@@ -1,5 +1,7 @@
 package com.hunghq.librarymanagement.Global;
 
+import javax.mail.internet.InternetAddress;
+
 /**
  * Utility class for validating phone numbers and email addresses.
  * Provides methods to check if the input matches a specific format.

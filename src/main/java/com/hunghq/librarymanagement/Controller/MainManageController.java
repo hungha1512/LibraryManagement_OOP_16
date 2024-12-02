@@ -263,6 +263,9 @@ public class MainManageController extends BaseController {
 
         //Button on Manage user tab
         btn_search_user.setOnAction(_ -> handleSearchUser());
+        btn_add_user.setOnAction(_ -> handleAddUser());
+        btn_delete_user.setOnAction(_ -> handleDeleteUser());
+
         btn_previous_user.setOnAction(_ -> {
             if (currentPageUser > 1) {
                 currentPageUser--;
@@ -320,7 +323,6 @@ public class MainManageController extends BaseController {
     public void initializeBorrowStatusPieChart() {
         List<BorrowDocument> allBorrowDocuments = borrowDocumentDAO.getAll();
 
-        // Đếm số lượng sách đang mượn (chưa trả) và đã trả
         long borrowedCount = allBorrowDocuments.stream()
                 .filter(doc -> !doc.getState().getState().equalsIgnoreCase("returned"))
                 .count();
@@ -544,6 +546,32 @@ public class MainManageController extends BaseController {
         });
 
         new Thread(searchTask).start();
+    }
+
+    public void handleAddUser() {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/Manage/AddUser.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add User");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+
+            AddUserController controller = loader.getController();
+
+            controller.initialize();
+
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error loading AddUser.fxml: " + e.getMessage());
+        }
+    }
+
+    public void handleDeleteUser() {
+
     }
 
     public void handleSendNotification() throws MessagingException {

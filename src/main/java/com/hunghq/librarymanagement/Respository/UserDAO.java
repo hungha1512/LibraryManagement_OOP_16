@@ -75,7 +75,7 @@ public class UserDAO implements IRepository<User> {
     public boolean add(User entity) {
         User user = entity;
         String sql = "INSERT INTO users (userId, fullName, passwordHash, gender, "
-                + "email, phone, joinDate, dateOfBirth, role, otp, isDeleted) "
+                + "email, phone, joinDate, dateOfBirth, roleId, otp, isDeleted) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement prS = con.prepareStatement(sql)) {
@@ -348,5 +348,27 @@ public class UserDAO implements IRepository<User> {
         } catch (SQLException e) {
             DialogHelper.showNotificationDialog("Error", "Failed to update password: " + e.getMessage());
         }
+    }
+
+    /**
+     * Retrieves the maximum userId from the users table.
+     *
+     * @return the maximum userId, or -1 if an error occurs or no users are found
+     */
+    public int getMaxUserId() {
+        String sql = "SELECT MAX(userId) FROM users";
+        int maxUserId = -1; // Default value if no users are found
+
+        try (PreparedStatement prS = con.prepareStatement(sql)) {
+            ResultSet reS = prS.executeQuery();
+
+            if (reS.next()) {
+                maxUserId = reS.getInt(1); // The maximum userId will be in the first column
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return maxUserId;
     }
 }

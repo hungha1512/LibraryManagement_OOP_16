@@ -1,5 +1,7 @@
 package com.hunghq.librarymanagement.Model.Entity;
 
+import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
+
 public class Document {
 
     private String documentId;
@@ -152,6 +154,7 @@ public class Document {
     public void setCoverImg(String coverImg) {
         this.coverImg = coverImg;
     }
+
 
     public String toString() {
         return "Document[" +

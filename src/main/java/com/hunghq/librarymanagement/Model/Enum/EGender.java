@@ -8,12 +8,12 @@ public enum EGender {
     /**
      * Gender representing a male.
      */
-    MALE("male"),
+    male("male"),
 
     /**
      * Gender representing a female.
      */
-    FEMALE("female");
+    female("female");
 
     /**
      * String value associated with the gender.
