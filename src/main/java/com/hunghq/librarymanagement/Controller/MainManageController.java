@@ -585,7 +585,7 @@ public class MainManageController extends BaseController {
                 default:
                     body = "Unknown state. Unable to send notification.";
             }
-
+ 
             if (!body.equals("Unknown state. Unable to send notification.")) {
                 EmailService.sendEmail(borrowDocument.getUser().getEmail(), subject, body);
             }

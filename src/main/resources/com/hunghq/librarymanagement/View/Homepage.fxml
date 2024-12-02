@@ -1,54 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.HomepageController">
-    <!-- Sidebar Menu -->
-    <VBox fx:id="vb_navigator" layoutX="0" layoutY="0" prefHeight="600.0" prefWidth="160.0" style="-fx-background-color: #000022;">
-        <Button fx:id="btn_all_books" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="All Books">
-            <font>
-                <Font name="System Bold" size="24.0" />
-            </font>
-        </Button>
-        <Button fx:id="btn_my_books" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="My Books">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
-      <Button fx:id="btn_ask_ai" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="AskAI">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-        <Button fx:id="btn_user" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="User">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
-        <Button fx:id="btn_manage" style="-fx-background-color: #000022; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Manage">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
-      <padding>
-         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-      </padding>
-    </VBox>
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.HomepageController">
 
     <HBox layoutX="160.0" layoutY="0" prefHeight="50" prefWidth="840.0" style="-fx-background-color: #000022; -fx-padding: 10;">
-        <Pane HBox.hgrow="ALWAYS">
+        <Pane prefHeight="30.0" prefWidth="834.0" HBox.hgrow="ALWAYS">
             <children>
-                <TextField fx:id="tf_search_bar" prefHeight="30.0" prefWidth="351.0" promptText="Search your favourite book" style="-fx-border-radius: 5px; -fx-background-radius: 5px; -fx-background-color: white;">
+                <TextField fx:id="tf_search_bar" layoutX="1.0" prefHeight="30.0" prefWidth="350.0" promptText="Search your favourite book" style="-fx-border-radius: 5px; -fx-background-radius: 5px; -fx-background-color: white;">
                     <font>
                         <Font size="14.0" />
                     </font>
@@ -59,18 +28,143 @@
                     </font>
                 </Button>
                 <ComboBox fx:id="cb_search_option" layoutX="351.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
-              <Label fx:id="txt_name_user" layoutX="583.0" layoutY="4.0" prefHeight="20.0" prefWidth="171.0" text="User" textFill="WHITE">
+              <Label fx:id="txt_name_user" layoutX="583.0" layoutY="4.0" prefHeight="20.0" prefWidth="236.0" text="User" textFill="WHITE">
                   <font>
                       <Font name="System Bold" size="14.0" />
                   </font>
               </Label>
-            <Button fx:id="btn_log_out" layoutX="746.0" layoutY="-1.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="73.0" style="-fx-background-color: red; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Log out" textFill="WHITE">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Button>
             </children>
         </Pane>
     </HBox>
    <StackPane fx:id="main_screen" layoutX="160.0" layoutY="50.0" prefHeight="550.0" prefWidth="840.0" />
+   <AnchorPane prefHeight="600.0" prefWidth="160.0" style="-fx-background-color: #000022;">
+      <children>
+         <Button fx:id="btn_all_books" layoutX="25.0" prefHeight="80.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <graphic>
+               <AnchorPane prefHeight="0.0" prefWidth="0.0">
+                  <children>
+                     <Label alignment="CENTER" layoutX="6.0" layoutY="68.0" prefHeight="20.0" prefWidth="79.0" text="All Books" textFill="WHITE">
+                        <font>
+                           <Font name="System Bold" size="16.0" />
+                        </font>
+                     </Label>
+                     <ImageView fitHeight="60.0" fitWidth="62.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../../../icons/icons8-books-64.png" />
+                        </image>
+                     </ImageView>
+                  </children>
+               </AnchorPane>
+            </graphic>
+         </Button>
+         <Button fx:id="btn_my_books" layoutX="25.0" layoutY="109.0" prefHeight="80.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <graphic>
+               <AnchorPane prefHeight="97.0" prefWidth="89.0">
+                  <children>
+                     <Label alignment="CENTER" layoutX="6.0" layoutY="70.0" prefHeight="5.0" prefWidth="79.0" text="My Books" textFill="WHITE">
+                        <font>
+                           <Font name="System Bold" size="16.0" />
+                        </font>
+                     </Label>
+                     <ImageView fitHeight="70.0" fitWidth="69.0" layoutX="11.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../../../icons/icons8-my-asus-64.png" />
+                        </image>
+                     </ImageView>
+                  </children>
+               </AnchorPane>
+            </graphic>
+         </Button>
+         <Button fx:id="btn_ask_ai" layoutX="25.0" layoutY="216.0" prefHeight="80.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <graphic>
+               <AnchorPane prefHeight="89.0" prefWidth="105.0">
+                  <children>
+                     <Label layoutX="37.0" layoutY="58.0" text="AI" textFill="WHITE">
+                        <font>
+                           <Font name="System Bold" size="16.0" />
+                        </font>
+                     </Label>
+                     <ImageView fitHeight="56.0" fitWidth="63.0" layoutX="18.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../../../icons/icons8-ai-64.png" />
+                        </image>
+                     </ImageView>
+                  </children>
+               </AnchorPane>
+            </graphic>
+         </Button>
+         <Button fx:id="btn_user" layoutX="25.0" layoutY="311.0" prefHeight="81.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <graphic>
+               <AnchorPane prefHeight="0.0" prefWidth="0.0">
+                  <children>
+                     <Label layoutX="28.0" layoutY="58.0" text="User" textFill="WHITE">
+                        <font>
+                           <Font name="System Bold" size="16.0" />
+                        </font>
+                     </Label>
+                     <ImageView fitHeight="58.0" fitWidth="69.0" layoutX="16.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../../../icons/icons8-user-64.png" />
+                        </image>
+                     </ImageView>
+                  </children>
+               </AnchorPane>
+            </graphic>
+         </Button>
+         <Button fx:id="btn_manage" layoutX="25.0" layoutY="406.0" prefHeight="85.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <graphic>
+               <AnchorPane prefHeight="83.0" prefWidth="91.0">
+                  <children>
+                     <Label layoutX="14.0" layoutY="64.0" text="Manage" textFill="WHITE">
+                        <font>
+                           <Font name="System Bold" size="16.0" />
+                        </font>
+                     </Label>
+                     <ImageView fitHeight="64.0" fitWidth="69.0" layoutX="13.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../../../icons/icons8-manage-64.png" />
+                        </image>
+                     </ImageView>
+                  </children>
+               </AnchorPane>
+            </graphic>
+         </Button>
+         <Button fx:id="btn_log_out" layoutX="25.0" layoutY="507.0" prefHeight="65.0" prefWidth="110.0" style="-fx-background-color: #000022;">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <graphic>
+               <AnchorPane prefHeight="0.0" prefWidth="0.0">
+                  <children>
+                     <Label layoutX="16.0" layoutY="64.0" text="Log out" textFill="WHITE">
+                        <font>
+                           <Font name="System Bold" size="16.0" />
+                        </font>
+                     </Label>
+                     <ImageView fitHeight="58.0" fitWidth="54.0" layoutX="18.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../../../icons/icons8-log-out-64.png" />
+                        </image>
+                     </ImageView>
+                  </children>
+               </AnchorPane>
+            </graphic>
+         </Button>
+      </children>
+   </AnchorPane>
 </AnchorPane>
