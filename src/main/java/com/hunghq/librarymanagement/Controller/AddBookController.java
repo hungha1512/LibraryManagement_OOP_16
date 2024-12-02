@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hunghq.librarymanagement.Global.Format.formatInput;
+
 public class AddBookController {
     @FXML
     private TextField tf_document_id;
@@ -111,11 +113,11 @@ public class AddBookController {
                     ta_description.getText(),
                     tf_language.getText(),
                     tf_isbn.getText(),
-                    ta_genre.getText(),
+                    formatInput(ta_genre.getText()),
                     Integer.parseInt(tf_quantity.getText()),
                     tf_publisher.getText(),
                     tf_published_date.getText(),
-                    ta_award.getText(),
+                    formatInput(ta_award.getText()),
                     Integer.parseInt(tf_num_ratings.getText()),
                     tf_cover_image.getText()
             );
