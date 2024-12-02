@@ -3,6 +3,7 @@ package com.hunghq.librarymanagement.Respository;
 import com.hunghq.librarymanagement.Connectivity.MySQLConnection;
 import com.hunghq.librarymanagement.IGeneric.IRepository;
 import com.hunghq.librarymanagement.Model.Entity.Document;
+import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
