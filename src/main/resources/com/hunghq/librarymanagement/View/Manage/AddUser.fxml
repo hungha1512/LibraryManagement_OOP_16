@@ -7,22 +7,22 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.AddUserController">
+<AnchorPane prefHeight="550.0" prefWidth="840.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.AddUserController">
    <children>
-      <Label layoutX="88.0" layoutY="117.0" text="User ID" />
-      <TextField fx:id="tf_user_id" layoutX="181.0" layoutY="113.0" prefHeight="25.0" prefWidth="571.0" />
-      <Label layoutX="88.0" layoutY="199.0" text="Full Name" />
-      <TextField fx:id="tf_full_name" layoutX="181.0" layoutY="195.0" prefHeight="25.0" prefWidth="571.0" />
-      <Label layoutX="89.0" layoutY="242.0" text="Email" />
-      <TextField fx:id="tf_email" layoutX="181.0" layoutY="238.0" prefHeight="25.0" prefWidth="571.0" />
-      <Label layoutX="89.0" layoutY="287.0" text="Phone" />
-      <TextField fx:id="tf_phone" layoutX="181.0" layoutY="283.0" prefHeight="25.0" prefWidth="571.0" />
-      <Label layoutX="88.0" layoutY="331.0" text="Date Of Birth" />
-      <TextField fx:id="tf_date_of_birth" layoutX="180.0" layoutY="327.0" prefHeight="25.0" prefWidth="571.0" />
-      <Label layoutX="89.0" layoutY="381.0" text="Role" />
+      <Label layoutX="88.0" layoutY="117.0" style="-fx-font-weight: bold;" text="User ID" />
+      <TextField fx:id="tf_user_id" layoutX="181.0" layoutY="113.0" prefHeight="25.0" prefWidth="571.0" style="-fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-width: 3px; -fx-border-color: #1e90ff;" />
+      <Label layoutX="88.0" layoutY="199.0" style="-fx-font-weight: bold;" text="Full Name" />
+      <TextField fx:id="tf_full_name" layoutX="181.0" layoutY="195.0" prefHeight="25.0" prefWidth="571.0" style="-fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-width: 3px; -fx-border-color: #1e90ff;" />
+      <Label layoutX="89.0" layoutY="242.0" style="-fx-font-weight: bold;" text="Email" />
+      <TextField fx:id="tf_email" layoutX="181.0" layoutY="238.0" prefHeight="25.0" prefWidth="571.0" style="-fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-width: 3px; -fx-border-color: #1e90ff;" />
+      <Label layoutX="89.0" layoutY="287.0" style="-fx-font-weight: bold;" text="Phone" />
+      <TextField fx:id="tf_phone" layoutX="181.0" layoutY="283.0" prefHeight="25.0" prefWidth="571.0" style="-fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-width: 3px; -fx-border-color: #1e90ff;" />
+      <Label layoutX="88.0" layoutY="331.0" style="-fx-font-weight: bold;" text="Date Of Birth" />
+      <TextField fx:id="tf_date_of_birth" layoutX="180.0" layoutY="327.0" prefHeight="25.0" prefWidth="571.0" style="-fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-width: 3px; -fx-border-color: #1e90ff;" />
+      <Label layoutX="89.0" layoutY="381.0" style="-fx-font-weight: bold;" text="Role" />
       <RadioButton fx:id="rb_librarian" layoutX="180.0" layoutY="381.0" mnemonicParsing="false" text="Librarian" />
       <RadioButton fx:id="rb_user" layoutX="308.0" layoutY="381.0" mnemonicParsing="false" text="User" />
-      <Label layoutX="89.0" layoutY="419.0" text="Gender" />
+      <Label layoutX="89.0" layoutY="419.0" style="-fx-font-weight: bold;" text="Gender" />
       <RadioButton fx:id="rb_male" layoutX="180.0" layoutY="419.0" mnemonicParsing="false" text="Male" />
       <RadioButton fx:id="rb_female" layoutX="308.0" layoutY="419.0" mnemonicParsing="false" text="Female" />
       <Button fx:id="btn_delete_all" layoutX="668.0" layoutY="44.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Delete All" textFill="WHITE">
@@ -35,7 +35,12 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <Label layoutX="88.0" layoutY="157.0" text="Password" />
-      <TextField fx:id="tf_password" layoutX="181.0" layoutY="153.0" prefHeight="25.0" prefWidth="571.0" />
+      <Label layoutX="88.0" layoutY="157.0" style="-fx-font-weight: bold;" text="Password" />
+      <TextField fx:id="tf_password" layoutX="181.0" layoutY="153.0" prefHeight="25.0" prefWidth="571.0" style="-fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-width: 3px; -fx-border-color: #1e90ff;" />
+      <Label layoutX="86.0" layoutY="51.0" style="-fx-font-weight: bold;" text="Add new user">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
