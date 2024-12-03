@@ -1,5 +1,6 @@
 package com.hunghq.librarymanagement.Controller;
 
+import com.hunghq.librarymanagement.LibraryApplication;
 import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Model.Entity.User;
@@ -23,6 +24,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
@@ -435,6 +437,7 @@ public class MainManageController extends BaseController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/Manage/AddBook.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Add Book");
+            stage.getIcons().add(new Image(Objects.requireNonNull(LibraryApplication.class.getResourceAsStream("/com/hunghq/librarymanagement/Media/logo_uet_rm.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);
@@ -503,6 +506,7 @@ public class MainManageController extends BaseController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/Manage/EditBook.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Edit Book");
+            stage.getIcons().add(new Image(Objects.requireNonNull(LibraryApplication.class.getResourceAsStream("/com/hunghq/librarymanagement/Media/logo_uet_rm.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);
@@ -560,6 +564,7 @@ public class MainManageController extends BaseController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/Manage/AddUser.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Add User");
+            stage.getIcons().add(new Image(Objects.requireNonNull(LibraryApplication.class.getResourceAsStream("/com/hunghq/librarymanagement/Media/logo_uet_rm.png"))));
             stage.initModality(Modality.APPLICATION_MODAL);
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);

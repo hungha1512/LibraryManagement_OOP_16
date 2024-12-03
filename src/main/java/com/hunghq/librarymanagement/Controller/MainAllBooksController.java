@@ -1,5 +1,6 @@
 package com.hunghq.librarymanagement.Controller;
 
+import com.hunghq.librarymanagement.LibraryApplication;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Service.CallAPIService;
@@ -11,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -18,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainAllBooksController extends BaseController {
@@ -153,6 +156,7 @@ public class MainAllBooksController extends BaseController {
 
             Stage stage = new Stage();
             stage.setTitle("Book Detail");
+            stage.getIcons().add(new Image(Objects.requireNonNull(LibraryApplication.class.getResourceAsStream("/com/hunghq/librarymanagement/Media/logo_uet_rm.png"))));
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
