@@ -1,0 +1,15 @@
+/* Đặt nền sáng cho toàn bộ ứng dụng */
+* {
+    -fx-base: white;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+Button {
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: black;
+}
+
+Label {
+    -fx-text-fill: black;
+}

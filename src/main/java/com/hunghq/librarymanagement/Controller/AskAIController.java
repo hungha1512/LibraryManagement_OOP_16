@@ -16,7 +16,6 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.security.Key;
 import java.util.ResourceBundle;
 
 public class AskAIController extends BaseController {

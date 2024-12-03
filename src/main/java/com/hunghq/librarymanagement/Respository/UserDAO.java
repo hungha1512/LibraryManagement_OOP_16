@@ -371,4 +371,19 @@ public class UserDAO implements IRepository<User> {
 
         return maxUserId;
     }
+
+    public boolean updateIsDeletedUser(int userId, int isDeleted) {
+        String sql = "UPDATE users SET isDeleted = ? WHERE userId = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, isDeleted);
+            preparedStatement.setInt(2, userId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

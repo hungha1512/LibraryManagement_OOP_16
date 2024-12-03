@@ -33,7 +33,10 @@ public class MainAllBooksController extends BaseController {
     private ObservableList<Document> allBooks;
 
     private int currentPage = 1;
+    private final int minPage = 1;
     private final int limit = 15;
+    private final int maxColumn = 5;
+
     private int totalPages;
     private DocumentDAO documentDAO = new DocumentDAO();
 
@@ -48,7 +51,7 @@ public class MainAllBooksController extends BaseController {
         loadBooks();
 
         btn_previous.setOnAction(event -> {
-            if (currentPage > 1) {
+            if (currentPage > minPage) {
                 currentPage--;
                 displayPage(allBooks);
                 updatePaginationButtons();
@@ -74,7 +77,7 @@ public class MainAllBooksController extends BaseController {
     public void updateBooks(ObservableList<Document> searchResults) {
         allBooks = searchResults;
         totalPages = (int) Math.ceil((double) searchResults.size() / limit);
-        currentPage = 1;
+        currentPage = minPage;
         displayPage(allBooks);
         updatePaginationButtons();
     }
@@ -129,7 +132,7 @@ public class MainAllBooksController extends BaseController {
             });
 
             column++;
-            if (column == 5) {
+            if (column == maxColumn) {
                 column = 0;
                 row++;
             }
@@ -158,7 +161,7 @@ public class MainAllBooksController extends BaseController {
     }
 
     private void updatePaginationButtons() {
-        btn_previous.setDisable(currentPage == 1);
+        btn_previous.setDisable(currentPage == minPage);
         btn_next.setDisable(currentPage == totalPages || allBooks.isEmpty());
     }
 }

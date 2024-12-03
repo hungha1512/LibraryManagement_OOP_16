@@ -162,7 +162,7 @@ public class MainUserController {
         txt_phone.setPromptText(AppProperties.getProperty("user.phone"));
         txt_date_of_birth.setPromptText(AppProperties.getProperty("user.dateOfBirth") + " (YYYY-MM-DD)");
 
-        if(AppProperties.getProperty("user.gender") == "MALE") {
+        if(AppProperties.getProperty("user.gender") == "male") {
             rb_male.setSelected(true);
         } else {
             rb_female.setSelected(true);
