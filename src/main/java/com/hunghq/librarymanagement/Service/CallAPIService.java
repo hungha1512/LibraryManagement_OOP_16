@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 public class CallAPIService {
 
+    private String apiKey = "";
+    // Add apiKey from project on Google Cloud Console
     private static final String GOOGLE_BOOKS_API = "https://www.googleapis.com/books/v1/volumes?q=";
     /**
      * Get image URL from document title.
@@ -19,7 +21,7 @@ public class CallAPIService {
      */
     public String getImageUrlFromTitle(String title) {
         title = title.replace(" ", "+");
-        String url = GOOGLE_BOOKS_API + title;
+        String url = GOOGLE_BOOKS_API + title + "&key=" + apiKey;
         return fetchImageUrl(url);
     }
 
@@ -64,7 +66,7 @@ public class CallAPIService {
     //Structure for dub API: https://api.dub.co/qr?url= + {link}
     public String getQR(String title) {
         title = title.replace(" ", "+");
-        String url = GOOGLE_BOOKS_API + title;
+        String url = GOOGLE_BOOKS_API + title + "&key=" + apiKey;
         return fetchInfoLink(url);
     }
     public String fetchInfoLink(String url) {
