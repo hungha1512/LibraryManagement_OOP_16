@@ -12,26 +12,16 @@ import com.hunghq.librarymanagement.Respository.RoleDAO;
 import com.hunghq.librarymanagement.Service.CallAPIService;
 import com.hunghq.librarymanagement.Service.FilterGenreService;
 import com.hunghq.librarymanagement.Service.LoadImageService;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
-import com.itextpdf.layout.element.LineSeparator;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.font.FontProvider;
-import com.itextpdf.layout.properties.Property;
-import com.itextpdf.layout.properties.TextAlignment;
+import com.hunghq.librarymanagement.Service.PrintPDFService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -290,109 +280,38 @@ public class BookDetailController extends BaseController {
 
     private void handlePrintButtonAction() {
         BorrowDocument borrowDocument = borrowDocumentDAO.getBorrowedDocumentFromBookIdAndUserId(document.getDocumentId(), user.getUserId());
-        String destinationFileName = "Bill_"
-                + borrowDocument.getUser().getUserId()
-                + "_" + borrowDocument.getDocument().getDocumentId()
-                + "_" + borrowDocument.getBorrowDate().format(DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss"))
-                + "_" + LocalDate.now()
-                + ".pdf";
+        Map<String, String> headerContent = new HashMap<>();
+        headerContent.put("Title", "VNU University of Engineering and Technology");
+        headerContent.put("Subtitle", "UET Library Management System");
 
-        try {
-            String borrowBill = "Billing";
-            File bill = new File(borrowBill);
+        List<String> bodyContent = Arrays.asList(
+                "Library Transaction",
+                "144 Xuan Thuy, Cau Giay, Hanoi, Viet Nam",
+                "Email: librarymanagementuet@gmail.com | Phone: (123) 456-7890",
+                "Invoice Date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")),
+                "Bill To:",
+                "User Name: " + user.getFullName(),
+                "User Email: " + user.getEmail(),
+                "Document Title: " + document.getTitle(),
+                "Author: " + document.getAuthor(),
+                "Borrow Date: " + borrowDocument.getBorrowDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")),
+                "Due Date: " + borrowDocument.getDueDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")),
+                "Fee: " + borrowDocument.getFee()
+        );
 
-            if (!bill.exists()) {
-                bill.mkdirs();
-            }
+        String footerContent = "Thank you for using the UET Library Management System.";
 
-            String fullPath = borrowBill + File.separator + destinationFileName;
+        PrintPDFService.printPdf(
+                "Billing",
+                "Bill_" + user.getUserId() + "_" + document.getDocumentId() + "_"
+                        + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + ".pdf",
+                headerContent,
+                bodyContent,
+                footerContent,
+                "The borrow invoice has been successfully printed to ",
+                "Failed to print the borrow invoice. Please try again."
+        );
 
-            PdfWriter pdfWriter = new PdfWriter(fullPath);
-
-            PdfDocument pdfDocument = new PdfDocument(pdfWriter);
-            com.itextpdf.layout.Document pdfDoc = new com.itextpdf.layout.Document(pdfDocument);
-            pdfDoc.setMargins(20, 20, 20, 20);
-
-            FontProvider fontProvider = new FontProvider();
-            fontProvider.addStandardPdfFonts();
-            pdfDoc.setProperty(Property.FONT_PROVIDER, fontProvider);
-
-            pdfDoc.add(new Paragraph("VNU University of Engineering and Technology")
-                    .setFontSize(20)
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginBottom(5));
-
-            pdfDoc.add(new Paragraph("UET Library Management System")
-                    .setFontSize(24)
-                    .setBold()
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginBottom(20));
-
-            LineSeparator ls = new LineSeparator(new SolidLine());
-            pdfDoc.add(ls);
-
-            pdfDoc.add(new Paragraph("Library Transaction")
-                    .setBold()
-                    .setFontSize(12)
-                    .setMarginBottom(5));
-            pdfDoc.add(new Paragraph("285 Doi Can, Ba Dinh, Ha Noi")
-                    .setFontSize(10));
-            pdfDoc.add(new Paragraph("Email: library@uet.com | Phone: (123) 456-7890")
-                    .setFontSize(10)
-                    .setMarginBottom(20));
-
-            pdfDoc.add(new Paragraph("Invoice Date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
-                    .setFontSize(10)
-                    .setTextAlignment(TextAlignment.LEFT));
-
-            pdfDoc.add(new Paragraph("\nBill To:")
-                    .setBold()
-                    .setFontSize(12)
-                    .setMarginBottom(5));
-            pdfDoc.add(new Paragraph("User Name: " + user.getFullName())
-                    .setFontSize(10));
-            pdfDoc.add(new Paragraph("User Email: " + user.getEmail())
-                    .setFontSize(10)
-                    .setMarginBottom(5));
-
-            pdfDoc.add(new LineSeparator(new SolidLine()));
-
-            pdfDoc.add(new Paragraph("Document Title: " + document.getTitle())
-                    .setFontSize(10));
-            pdfDoc.add(new Paragraph("Author: " + document.getTitle())
-                    .setFontSize(10));
-            pdfDoc.add(new Paragraph("Borrow Date: " + borrowDocument.getBorrowDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
-                    .setFontSize(10));
-            pdfDoc.add(new Paragraph("Due Date: " + borrowDocument.getDueDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
-                    .setFontSize(10));
-            pdfDoc.add(new Paragraph("Fee: " + borrowDocument.getFee())
-                    .setFontSize(10)
-                    .setMarginBottom(20));
-
-            pdfDoc.add(new LineSeparator(new SolidLine()));
-
-            pdfDoc.add(new Paragraph("Thank you for using the UET Library Management System.")
-                    .setFontSize(12)
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginTop(20));
-
-            pdfDoc.close();
-
-            showAlert(
-                    "Print Successful",
-                    "The borrow invoice has been successfully printed to " + System.getProperty("user.dir") + File.separator + fullPath,
-                    Alert.AlertType.INFORMATION
-            );
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            showAlert(
-                    "Print Failed",
-                    "Failed to print the borrow invoice. Please try again.",
-                    Alert.AlertType.ERROR
-            );
-
-        }
     }
 
     private void interactWithBorrowDocumentInDB() {
