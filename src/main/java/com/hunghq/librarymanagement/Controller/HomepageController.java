@@ -1,6 +1,7 @@
 package com.hunghq.librarymanagement.Controller;
 
 import com.hunghq.librarymanagement.Global.AppProperties;
+import com.hunghq.librarymanagement.LibraryApplication;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
 import com.hunghq.librarymanagement.Service.AuthenticationService;
@@ -19,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -27,6 +29,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class HomepageController extends BaseController implements Initializable {
@@ -168,6 +171,7 @@ public class HomepageController extends BaseController implements Initializable 
                 Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.setTitle("UET Library Management System");
+                stage.getIcons().add(new Image(Objects.requireNonNull(LibraryApplication.class.getResourceAsStream("/com/hunghq/librarymanagement/Media/logo_uet_rm.png"))));
                 stage.show();
             } catch (IOException e) {
                 throw new RuntimeException(e);
