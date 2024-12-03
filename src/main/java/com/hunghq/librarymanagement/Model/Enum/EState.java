@@ -5,20 +5,10 @@ package com.hunghq.librarymanagement.Model.Enum;
  */
 public enum EState {
 
-    /**
-     * State indicating the item is currently borrowed.
-     */
     BORROWED("Borrowed"),
-
-    /**
-     * State indicating the item has been returned.
-     */
     RETURNED("Returned"),
-
-    /**
-     * State indicating the item is overdue.
-     */
-    OVERDUE("Overdue");
+    OVERDUE("Overdue"),
+    PENDING("Pending");
 
     /**
      * String value associated with the state.

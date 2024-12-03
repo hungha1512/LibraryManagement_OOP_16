@@ -427,7 +427,6 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
     }
 
-
     public boolean updateDueDate(String documentId, int userId) {
         String sql = "UPDATE borrowdocuments SET dueDate = DATE_ADD(dueDate, INTERVAL 7 DAY) " +
                 "WHERE documentId = ? AND userId = ? AND state = 'Borrowed'";
@@ -546,6 +545,8 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
         return borrowDocument;
     }
+
+
 
 
 }
