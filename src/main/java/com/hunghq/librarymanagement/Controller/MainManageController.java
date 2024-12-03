@@ -11,6 +11,7 @@ import com.hunghq.librarymanagement.Respository.UserDAO;
 import com.hunghq.librarymanagement.Service.EmailService;
 import com.hunghq.librarymanagement.Service.FilterGenreService;
 import com.hunghq.librarymanagement.Service.ImportDataToTableViewService;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -396,7 +397,6 @@ public class MainManageController extends BaseController {
         updateTableViewBook();
     }
 
-
     public void initializeTableViewBorrowBook() {
         col_borrow_id.setCellValueFactory(new PropertyValueFactory<>("borrowId"));
         col_document_id.setCellValueFactory(cellData ->
@@ -445,6 +445,8 @@ public class MainManageController extends BaseController {
             AddBookController controller = loader.getController();
             controller.setMainManageController(this);
             stage.showAndWait();
+            updateTableViewBook();
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error loading AddBook.fxml: " + e.getMessage());
@@ -574,7 +576,7 @@ public class MainManageController extends BaseController {
             controller.initialize();
 
             stage.showAndWait();
-            tv_user.refresh();
+            updateTableViewUser();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -653,7 +655,6 @@ public class MainManageController extends BaseController {
         }
     }
 
-
     public void handleReturnBook() {
         BorrowDocument borrowDocument = tv_borrowDocument.getSelectionModel().getSelectedItem();
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -667,6 +668,8 @@ public class MainManageController extends BaseController {
             if (borrowDocument != null && !borrowDocument.getState().toString().equalsIgnoreCase("returned")) {
                 borrowDocumentDAO.updateBorrowDocumentStateToReturned(borrowDocument.getDocument().getDocumentId(), borrowDocument.getUser().getUserId());
                 documentDAO.updateBookQuantityWhenReturn(borrowDocument.getDocument().getDocumentId(), borrowDocument.getUser().getUserId());
+
+                updateTableViewBorrowedBook();
             }
             showAlert("Return Successful", null, "You have successfully returned the document.", Alert.AlertType.INFORMATION);
         } else {

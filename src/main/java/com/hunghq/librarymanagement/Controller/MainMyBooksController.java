@@ -41,7 +41,6 @@ public class MainMyBooksController extends BaseController {
     private ObservableList<BorrowDocument> allBorrowBooks;
     private ObservableList<BorrowDocument> filteredList;
 
-
     private int currentPage = 1;
     private final int minPage = 1;
     private final int limit = 10;

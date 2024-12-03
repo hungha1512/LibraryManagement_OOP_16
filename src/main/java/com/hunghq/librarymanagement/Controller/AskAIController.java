@@ -27,7 +27,7 @@ public class AskAIController extends BaseController {
     private TextArea responseArea;
 
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
-    private static final String API_KEY = "API_KEY";
+    private static final String API_KEY = "";
 
     private DocumentDAO documentDAO = new DocumentDAO();
 

@@ -153,7 +153,6 @@ public class AddBookController {
 
         List<String> emptyFields = new ArrayList<>();
 
-
         for (Control control : inputFields) {
             String value = "";
             if (control instanceof TextField) {
@@ -168,7 +167,6 @@ public class AddBookController {
                         : "Unnamed Field");
             }
         }
-
 
         if (!emptyFields.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Warning", "Empty Field(s) Found");
