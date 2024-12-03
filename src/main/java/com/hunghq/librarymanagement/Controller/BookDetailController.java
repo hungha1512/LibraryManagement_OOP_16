@@ -99,6 +99,11 @@ public class BookDetailController extends BaseController {
     private boolean isBorrowed;
     private boolean isOverdue;
 
+    private final double borrowFee = 10000.0;
+    private final int maxBorrowTime = 7;
+    private final int maxRating = 5;
+    private final int minRating = 1;
+
     @FXML
     public void initialize(Document document) {
         filterGenreService = new FilterGenreService();
@@ -155,11 +160,11 @@ public class BookDetailController extends BaseController {
         extendButton.setOnAction(_ -> handleExtendButtonAction());
         printButton.setOnAction(_ -> handlePrintButtonAction());
 
-        btnStar1.setOnAction(event -> handleStarRating(1));
+        btnStar1.setOnAction(event -> handleStarRating(minRating));
         btnStar2.setOnAction(event -> handleStarRating(2));
         btnStar3.setOnAction(event -> handleStarRating(3));
         btnStar4.setOnAction(event -> handleStarRating(4));
-        btnStar5.setOnAction(event -> handleStarRating(5));
+        btnStar5.setOnAction(event -> handleStarRating(maxRating));
 
         sendButton.setOnAction(event -> handleSendButtonAction());
         btnCancelRating.setOnAction(event -> handelCancelRating());
@@ -373,18 +378,20 @@ public class BookDetailController extends BaseController {
 
             pdfDoc.close();
 
-            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-            successAlert.setTitle("Print Successful");
-            successAlert.setHeaderText(null);
-            successAlert.setContentText("The borrow invoice has been successfully printed to " + System.getProperty("user.dir") + File.separator + fullPath);
-            successAlert.showAndWait();
+            showAlert(
+                    "Print Successful",
+                    "The borrow invoice has been successfully printed to " + System.getProperty("user.dir") + File.separator + fullPath,
+                    Alert.AlertType.INFORMATION
+            );
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setTitle("Print Failed");
-            errorAlert.setHeaderText(null);
-            errorAlert.setContentText("Failed to print the borrow invoice. Please try again.");
-            errorAlert.showAndWait();
+            showAlert(
+                    "Print Failed",
+                    "Failed to print the borrow invoice. Please try again.",
+                    Alert.AlertType.ERROR
+            );
+
         }
     }
 
@@ -394,9 +401,9 @@ public class BookDetailController extends BaseController {
                 0,
                 this.document,
                 this.user,
-                10000.0,
+                borrowFee,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusDays(7),
+                LocalDateTime.now().plusDays(maxBorrowTime),
                 null,
                 null,
                 EState.BORROWED
@@ -445,17 +452,18 @@ public class BookDetailController extends BaseController {
 
 
     private void handelCancelRating() {
-        for (int i = 1; i <= 5; i++) {
+        for (int i = minRating; i <= maxRating; i++) {
             Button starButton = (Button) hBoxStarsInactive.getChildren().get(i - 1);
             starButton.setStyle("-fx-background-color: transparent;");
             starButton.setText("☆");
             starButton.setStyle(starButton.getStyle() + "-fx-text-fill: black; -fx-font-weight: normal;");
         }
+        this.rating = 0;
     }
 
     private void handleStarRating(int rating) {
         this.rating = rating;
-        for (int i = 1; i <= 5; i++) {
+        for (int i = minRating; i <= maxRating; i++) {
             Button starButton = (Button) hBoxStarsInactive.getChildren().get(i - 1);
             starButton.setStyle("-fx-background-color: transparent;");
 

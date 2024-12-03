@@ -171,11 +171,7 @@ public class AddBookController {
 
 
         if (!emptyFields.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setHeaderText(null);
-            alert.setContentText("Empty Field(s) Found");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.WARNING, "Warning", "Empty Field(s) Found");
             return false;
         }
 
@@ -206,17 +202,9 @@ public class AddBookController {
                 tf_num_ratings.clear();
                 tf_cover_image.clear();
 
-                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Fields Cleared");
-                successAlert.setHeaderText(null);
-                successAlert.setContentText("All fields have been cleared successfully.");
-                successAlert.showAndWait();
+                showAlert(Alert.AlertType.INFORMATION, "Fields Cleared", "All fields have been cleared successfully.");
             } else {
-                Alert cancelAlert = new Alert(Alert.AlertType.INFORMATION);
-                cancelAlert.setTitle("Action Cancelled");
-                cancelAlert.setHeaderText(null);
-                cancelAlert.setContentText("No fields were cleared.");
-                cancelAlert.showAndWait();
+                showAlert(Alert.AlertType.INFORMATION, "Action Cancelled", "No fields were cleared.");
             }
         });
     }

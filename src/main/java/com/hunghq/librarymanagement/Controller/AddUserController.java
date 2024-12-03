@@ -51,9 +51,14 @@ public class AddUserController {
 
     private UserDAO userDAO;
     private RoleDAO roleDAO = new RoleDAO();
+
     private int userId;
     private String password;
     private String passwordHash;
+    private final int passwordLength = 6;
+    private final int librarianRole = 2;
+    private final int userRole = 1;
+
 
     public void initialize() {
         userDAO = new UserDAO();
@@ -87,7 +92,7 @@ public class AddUserController {
         tf_user_id.setText(String.valueOf(this.userId));
         tf_user_id.setEditable(false);
 
-        this.password = GenerateRandomPassword.generate(6);
+        this.password = GenerateRandomPassword.generate(passwordLength);
         this.passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
 
         tf_password.setText(this.passwordHash);
@@ -199,7 +204,7 @@ public class AddUserController {
         String phone = tf_phone.getText();
         String dateOfBirth = tf_date_of_birth.getText();
 
-        int roleId = rb_librarian.isSelected() ? 2 : 1;
+        int roleId = rb_librarian.isSelected() ? librarianRole : userRole;
 
         String gender = rb_male.isSelected() ? "male" : "female";
 

@@ -1,0 +1,15 @@
+/* Đặt nền tối cho toàn bộ ứng dụng */
+* {
+    -fx-base: #2b2b2b;
+    -fx-background-color: #2b2b2b;
+    -fx-text-fill: white;
+}
+
+Button {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+}
+
+Label {
+    -fx-text-fill: white;
+}

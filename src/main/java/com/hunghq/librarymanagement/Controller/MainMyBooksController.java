@@ -43,7 +43,10 @@ public class MainMyBooksController extends BaseController {
 
 
     private int currentPage = 1;
+    private final int minPage = 1;
     private final int limit = 10;
+    private final int maxColumn = 5;
+
     private int totalPages;
     private BorrowDocumentDAO borrowDocumentDAO = new BorrowDocumentDAO();
 
@@ -65,7 +68,7 @@ public class MainMyBooksController extends BaseController {
         loadBooks();
 
         btn_previous.setOnAction(event -> {
-            if (currentPage > 1) {
+            if (currentPage > minPage) {
                 currentPage--;
                 displayPage(filteredList);
                 updatePaginationButtons();
@@ -95,7 +98,7 @@ public class MainMyBooksController extends BaseController {
                     break;
         }
 
-        currentPage = 1;
+        currentPage = minPage;
         totalPages = (int) Math.ceil((double) filteredList.size() / limit);
         displayPage(filteredList);
         updatePaginationButtons();
@@ -115,7 +118,7 @@ public class MainMyBooksController extends BaseController {
     public void updateBooks(ObservableList<BorrowDocument> searchResults) {
         allBorrowBooks = searchResults;
         totalPages = (int) Math.ceil((double) searchResults.size() / limit);
-        currentPage = 1;
+        currentPage = minPage;
         displayPage(allBorrowBooks);
         updatePaginationButtons();
     }
@@ -170,7 +173,7 @@ public class MainMyBooksController extends BaseController {
             });
 
             column++;
-            if (column == 5) {
+            if (column == maxColumn) {
                 column = 0;
                 row++;
             }
@@ -200,7 +203,7 @@ public class MainMyBooksController extends BaseController {
     }
 
     private void updatePaginationButtons() {
-        btn_previous.setDisable(currentPage == 1);
+        btn_previous.setDisable(currentPage == minPage);
         btn_next.setDisable(currentPage == totalPages || allBorrowBooks.isEmpty());
     }
 }

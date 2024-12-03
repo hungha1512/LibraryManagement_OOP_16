@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 public class CallAPIService {
 
-    private String apiKey = "";
+    private String apiKey = "AIzaSyD2SEo5XrNw07RgrK7HNYGeKDqQWIe4G5c";
     // Add apiKey from project on Google Cloud Console
     private static final String GOOGLE_BOOKS_API = "https://www.googleapis.com/books/v1/volumes?q=";
     /**

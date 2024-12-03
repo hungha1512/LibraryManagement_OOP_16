@@ -3,6 +3,7 @@ package com.hunghq.librarymanagement.Controller;
 import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Model.Entity.User;
+import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
 import com.hunghq.librarymanagement.Model.Enum.EState;
 import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
@@ -447,11 +448,12 @@ public class MainManageController extends BaseController {
         Document selectedDocument = tv_book.getSelectionModel().getSelectedItem();
 
         if (selectedDocument == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setHeaderText("No Selection");
-            alert.setContentText("Please select a document to delete.");
-            alert.showAndWait();
+            showAlert(
+                    "Warning",
+                    "No Selection",
+                    "Please select a document to delete.",
+                    Alert.AlertType.WARNING
+            );
             return;
         }
 
@@ -466,17 +468,20 @@ public class MainManageController extends BaseController {
 
                 tv_book.getItems().remove(selectedDocument);
 
-                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Success");
-                successAlert.setHeaderText("Document Deleted");
-                successAlert.setContentText("The document '" + selectedDocument.getTitle() + "' has been deleted.");
-                successAlert.showAndWait();
+                showAlert(
+                        "Success",
+                        "Document Deleted",
+                        "The document '" + selectedDocument.getTitle() + "' has been deleted.",
+                        Alert.AlertType.INFORMATION
+                );
             } catch (Exception e) {
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Error");
-                errorAlert.setHeaderText("Delete Error");
-                errorAlert.setContentText("Could not delete the document. Please try again.\n" + e.getMessage());
-                errorAlert.showAndWait();
+                showAlert(
+                        "Error",
+                        "Delete Error",
+                        "Could not delete the document. Please try again.\n" + e.getMessage(),
+                        Alert.AlertType.ERROR
+                );
+
             }
         }
     }
@@ -486,11 +491,7 @@ public class MainManageController extends BaseController {
             Document selectedDocument = tv_book.getSelectionModel().getSelectedItem();
 
             if (selectedDocument == null) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("No Book Selected");
-                alert.setHeaderText(null);
-                alert.setContentText("Please select a book to edit.");
-                alert.showAndWait();
+                showAlert("No Book Selected", null, "Please select a book to edit.", Alert.AlertType.WARNING);
                 return;
             }
 
@@ -563,6 +564,7 @@ public class MainManageController extends BaseController {
             controller.initialize();
 
             stage.showAndWait();
+            tv_user.refresh();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -571,6 +573,27 @@ public class MainManageController extends BaseController {
     }
 
     public void handleDeleteUser() {
+        User selectedUser = tv_user.getSelectionModel().getSelectedItem();
+        if (selectedUser == null) {
+            showAlert("No user selected!", null, "Please select a user to delete!", Alert.AlertType.WARNING);
+            return;
+        }
+
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Delete User");
+        confirmationAlert.setHeaderText("Are you sure you want to delete this user?");
+        confirmationAlert.setContentText("This action cannot be undone.");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        if (result.isEmpty() || result.get() != ButtonType.OK) {
+            return;
+        }
+
+        if (userDAO.updateIsDeletedUser(selectedUser.getUserId(), 1)) {
+            showAlert("Success", null, "User deleted successfully.", Alert.AlertType.INFORMATION);
+        } else {
+            showAlert("Error", null, "Failed to delete user.", Alert.AlertType.ERROR);
+        }
 
     }
 
@@ -635,18 +658,10 @@ public class MainManageController extends BaseController {
                 borrowDocumentDAO.updateBorrowDocumentStateToReturned(borrowDocument.getDocument().getDocumentId(), borrowDocument.getUser().getUserId());
                 documentDAO.updateBookQuantityWhenReturn(borrowDocument.getDocument().getDocumentId(), borrowDocument.getUser().getUserId());
             }
-            showAlert("Return Successful", "You have successfully returned the document.", Alert.AlertType.INFORMATION);
+            showAlert("Return Successful", null, "You have successfully returned the document.", Alert.AlertType.INFORMATION);
         } else {
-            showAlert("Return Cancelled", "The return process has been cancelled.", Alert.AlertType.INFORMATION);
+            showAlert("Return Cancelled",null, "The return process has been cancelled.", Alert.AlertType.INFORMATION);
         }
-    }
-
-    private void showAlert(String title, String message, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     public void handleSearchBorrowBook() {
@@ -788,5 +803,13 @@ public class MainManageController extends BaseController {
     private void updatePaginationUserButtons() {
         btn_previous_borrow.setDisable(currentPageUser == 1);
         btn_next_borrow.setDisable(currentPageUser >= totalPagesUser);
+    }
+
+    private void showAlert(String title, String headerText, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
