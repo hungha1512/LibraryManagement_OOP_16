@@ -3,7 +3,6 @@ package com.hunghq.librarymanagement.Controller;
 import com.hunghq.librarymanagement.Model.Entity.BorrowDocument;
 import com.hunghq.librarymanagement.Model.Entity.Document;
 import com.hunghq.librarymanagement.Model.Entity.User;
-import com.hunghq.librarymanagement.Model.Enum.EIsDeleted;
 import com.hunghq.librarymanagement.Model.Enum.EState;
 import com.hunghq.librarymanagement.Respository.BorrowDocumentDAO;
 import com.hunghq.librarymanagement.Respository.DocumentDAO;
@@ -34,8 +33,11 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.hunghq.librarymanagement.Service.PrintPDFService.printPdf;
 
 
 public class MainManageController extends BaseController {
@@ -99,6 +101,8 @@ public class MainManageController extends BaseController {
     public Label lbl_page_info_user;
     @FXML
     public Button btn_next_user;
+    @FXML
+    public Button btn_print;
 
 
     @FXML
@@ -266,6 +270,7 @@ public class MainManageController extends BaseController {
         btn_search_user.setOnAction(_ -> handleSearchUser());
         btn_add_user.setOnAction(_ -> handleAddUser());
         btn_delete_user.setOnAction(_ -> handleDeleteUser());
+        btn_print.setOnAction(_ -> handlePrint());
 
         btn_previous_user.setOnAction(_ -> {
             if (currentPageUser > 1) {
@@ -636,7 +641,7 @@ public class MainManageController extends BaseController {
                 default:
                     body = "Unknown state. Unable to send notification.";
             }
- 
+
             if (!body.equals("Unknown state. Unable to send notification.")) {
                 EmailService.sendEmail(borrowDocument.getUser().getEmail(), subject, body);
             }
@@ -660,7 +665,7 @@ public class MainManageController extends BaseController {
             }
             showAlert("Return Successful", null, "You have successfully returned the document.", Alert.AlertType.INFORMATION);
         } else {
-            showAlert("Return Cancelled",null, "The return process has been cancelled.", Alert.AlertType.INFORMATION);
+            showAlert("Return Cancelled", null, "The return process has been cancelled.", Alert.AlertType.INFORMATION);
         }
     }
 
@@ -803,6 +808,70 @@ public class MainManageController extends BaseController {
     private void updatePaginationUserButtons() {
         btn_previous_borrow.setDisable(currentPageUser == 1);
         btn_next_borrow.setDisable(currentPageUser >= totalPagesUser);
+    }
+
+    private void handlePrint() {
+        User selectedUser = tv_user.getSelectionModel().getSelectedItem();
+
+        if (selectedUser == null) {
+            showAlert("No user selected",
+                    "Please select an user",
+                    "You need to select a user to print their borrow history.",
+                    Alert.AlertType.WARNING);
+            return;
+        }
+
+        List<BorrowDocument> borrowHistory = borrowDocumentDAO.getBorrowDocumentByUserId(selectedUser.getUserId());
+
+        if (borrowHistory.isEmpty()) {
+            showAlert("No Borrow History",
+                    "No records found",
+                    "The selected user has no borrow history to print.",
+                    Alert.AlertType.INFORMATION);
+            return;
+        }
+
+        String fileName = "Borrow_History_" + selectedUser.getUserId() + "_"
+                + LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss")) + ".pdf";
+
+        Map<String, String> headerContent = new HashMap<>();
+        headerContent.put("Title", "UET Library Management System");
+        headerContent.put("Subtitle", "VNU University of Engineering and Technology");
+        headerContent.put("Sub-title", "Borrow History Report");
+
+        List<String> bodyContent = new ArrayList<>();
+        bodyContent.add("User Information:");
+        bodyContent.add("Full Name: " + selectedUser.getFullName());
+        bodyContent.add("Email: " + selectedUser.getEmail());
+        bodyContent.add("Phone: " + selectedUser.getPhone());
+        bodyContent.add("");
+        bodyContent.add("Borrow History:");
+
+        for (BorrowDocument borrowDocument : borrowHistory) {
+            bodyContent.add("-----------------------------------------------------------------------------");
+            bodyContent.add("Document Title: " + borrowDocument.getDocument().getTitle());
+            bodyContent.add("Author: " + borrowDocument.getDocument().getAuthor());
+            bodyContent.add("Borrow Date: " + borrowDocument.getBorrowDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+            bodyContent.add("Due Date: " + borrowDocument.getDueDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+            bodyContent.add("Return Date: " + (borrowDocument.getReturnDate() != null
+                    ? borrowDocument.getReturnDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
+                    : "Not Returned"));
+            bodyContent.add("State: " + borrowDocument.getState().getState());
+            bodyContent.add("Fee: " + borrowDocument.getFee());
+        }
+
+        String footerContent = "Generated by UET Library Management System on "
+                + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+
+        printPdf(
+                "Billing",
+                fileName,
+                headerContent,
+                bodyContent,
+                footerContent,
+                "Borrow history has been successfully printed to ",
+                "Failed to print borrow history. Please try again."
+        );
     }
 
     private void showAlert(String title, String headerText, String message, Alert.AlertType alertType) {

@@ -210,10 +210,11 @@
             <content>
                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="840.0">
                   <children>
-                     <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-2.0" prefHeight="38.0" prefWidth="242.0" spacing="10.0">
+                     <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-2.0" prefHeight="38.0" prefWidth="289.0" spacing="10.0">
                         <children>
                            <Button fx:id="btn_add_user" style="-fx-background-color: #0078d7; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Add User" textFill="WHITE" />
-                           <Button fx:id="btn_delete_user" prefWidth="110.0" style="-fx-background-color: red; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Delete User" textFill="WHITE" />
+                           <Button fx:id="btn_delete_user" prefHeight="25.0" prefWidth="84.0" style="-fx-background-color: red; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Delete User" textFill="WHITE" />
+                           <Button fx:id="btn_print" mnemonicParsing="false" prefWidth="69.0" style="-fx-font-weight: bold; -fx-background-color: #168700;" text="Print Bill" textFill="WHITE" />
                         </children>
                      </HBox>
                      <HBox alignment="CENTER_LEFT" layoutX="534.0" layoutY="-2.0" prefHeight="38.0" prefWidth="290.0" spacing="10.0">
