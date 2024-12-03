@@ -25,12 +25,12 @@
       <Label layoutX="89.0" layoutY="419.0" style="-fx-font-weight: bold;" text="Gender" />
       <RadioButton fx:id="rb_male" layoutX="180.0" layoutY="419.0" mnemonicParsing="false" text="Male" />
       <RadioButton fx:id="rb_female" layoutX="308.0" layoutY="419.0" mnemonicParsing="false" text="Female" />
-      <Button fx:id="btn_delete_all" layoutX="668.0" layoutY="44.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Delete All" textFill="WHITE">
+      <Button fx:id="btn_delete_all" layoutX="668.0" layoutY="44.0" mnemonicParsing="false" style="-fx-background-color: red; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Delete All" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="btn_add" layoutX="370.0" layoutY="478.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="100.0" style="-fx-background-color: #0078d7;" text="Add" textFill="WHITE">
+      <Button fx:id="btn_add" layoutX="370.0" layoutY="478.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="100.0" style="-fx-background-color: #0078d7; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Add" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
