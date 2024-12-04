@@ -36,7 +36,6 @@ public class AuthenticationService {
      */
     public static boolean login(User user) throws Exception {
         String password = user.getPasswordHash();
-        System.out.println(password);
         User userLogged = new User();
         userLogged = UserDAO.getUserByPhoneOrEmail(user);
 
