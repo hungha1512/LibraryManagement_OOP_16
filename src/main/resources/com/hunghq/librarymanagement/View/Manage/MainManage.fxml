@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
+<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
       <TabPane prefHeight="550.0" prefWidth="838.0" tabClosingPolicy="UNAVAILABLE">
           <tabs>
          <Tab style="-fx-font-weight: bold;" text="Overview">
@@ -93,17 +93,17 @@
                               </children>
                            </AnchorPane>
                            <Line endX="100.0" layoutX="541.0" layoutY="117.0" rotate="90.0" startX="-100.0" />
-                           <TableView layoutX="612.0" layoutY="37.0" prefHeight="181.0" prefWidth="214.0">
-                             <columns>
-                               <TableColumn prefWidth="75.0" text="User ID" />
-                               <TableColumn prefWidth="136.6666259765625" text="User Name" />
-                             </columns>
-                           </TableView>
-                           <Label layoutX="612.0" layoutY="9.0" style="-fx-font-weight: bold;" text="Restricted Members">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                           </Label>
+                           <AnchorPane layoutX="592.0" layoutY="74.0">
+                              <children>
+                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="86.0" stroke="#db880a" strokeType="INSIDE" width="207.0" />
+                                 <Label layoutX="63.0" layoutY="63.0" text="Total Pending..." textFill="#000022" />
+                                 <Label fx:id="lb_total_pending" alignment="CENTER" layoutX="76.0" layoutY="28.0" prefHeight="30.0" prefWidth="56.0" style="-fx-font-weight: bold;" text="Label">
+                                    <font>
+                                       <Font size="20.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </AnchorPane>
                         </children>
                      </AnchorPane>
                   </children>

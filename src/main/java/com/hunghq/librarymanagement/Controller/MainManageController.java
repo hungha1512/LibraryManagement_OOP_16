@@ -75,6 +75,8 @@ public class MainManageController extends BaseController {
     @FXML
     public Label lb_total_overdue_book;
     @FXML
+    public Label lb_total_pending;
+    @FXML
     public Button btn_previous_book;
     @FXML
     public Label lbl_page_info_book;
@@ -106,7 +108,6 @@ public class MainManageController extends BaseController {
     public Button btn_next_user;
     @FXML
     public Button btn_print;
-
 
     @FXML
     private TableColumn<Document, String> col_book_id;
@@ -418,6 +419,7 @@ public class MainManageController extends BaseController {
         lb_total_borrowed_book.setText(String.valueOf(borrowDocumentDAO.getBorrowedDocuments().size()
                 + borrowDocumentDAO.getOverdueDocuments().size()));
         lb_total_overdue_book.setText(String.valueOf(borrowDocumentDAO.getOverdueDocuments().size()));
+        lb_total_pending.setText(String.valueOf(borrowDocumentDAO.getTotalPendingBorrowDocument()));
     }
 
     public void initializeTableViewUser() {
@@ -644,6 +646,12 @@ public class MainManageController extends BaseController {
                             + "- Returned Date: " + borrowDocument.getReturnDate().toString() + "\n"
                             + "Thank you for using our library service.";
                     break;
+                case EState.PENDING:
+                    body = "This is an email to notify that your book reservation is currently pending:\n"
+                            + "- Book: " + borrowDocument.getDocument().getTitle() + "\n"
+                            + "- ISBN: " + borrowDocument.getDocument().getIsbn() + "\n"
+                            + "Please wait for further updates regarding the availability of the book.";
+                    break;
 
                 default:
                     body = "Unknown state. Unable to send notification.";
@@ -669,6 +677,7 @@ public class MainManageController extends BaseController {
                 borrowDocumentDAO.updateBorrowDocumentStateToReturned(borrowDocument.getDocument().getDocumentId(), borrowDocument.getUser().getUserId());
                 documentDAO.updateBookQuantityWhenReturn(borrowDocument.getDocument().getDocumentId(), borrowDocument.getUser().getUserId());
 
+                updateTableViewBook();
                 updateTableViewBorrowedBook();
             }
             showAlert("Return Successful", null, "You have successfully returned the document.", Alert.AlertType.INFORMATION);

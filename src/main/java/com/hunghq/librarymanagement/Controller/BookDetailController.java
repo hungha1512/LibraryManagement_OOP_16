@@ -88,6 +88,7 @@ public class BookDetailController extends BaseController {
     private int rating;
     private boolean isBorrowed;
     private boolean isOverdue;
+    private boolean isPending;
 
     private final double borrowFee = 10000.0;
     private final int maxBorrowTime = 7;
@@ -111,8 +112,9 @@ public class BookDetailController extends BaseController {
 
         isBorrowed = borrowDocumentDAO.isDocumentBorrowed(document.getDocumentId(), user.getUserId());
         isOverdue = borrowDocumentDAO.isDocumentOverdue(document.getDocumentId(), user.getUserId());
+        isPending = borrowDocumentDAO.isDocumentPending(document.getDocumentId(), user.getUserId());
 
-        if (isBorrowed || isOverdue) {
+        if (isBorrowed || isOverdue || isPending) {
             visibleIfBorrow();
             setNotificationLabel(borrowDocumentDAO.getBorrowDate(document.getDocumentId(), user.getUserId()),
                     borrowDocumentDAO.getDueDate(document.getDocumentId(), user.getUserId()));
@@ -235,6 +237,13 @@ public class BookDetailController extends BaseController {
             return;
         }
 
+        if (isPending) {
+            showAlert("Extension Not Allowed",
+                    "Your request to return document is pending.",
+                    Alert.AlertType.WARNING);
+            return;
+        }
+
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("Extend Borrow Period");
         confirmAlert.setHeaderText("Extend Due Date");
@@ -251,7 +260,7 @@ public class BookDetailController extends BaseController {
                             Alert.AlertType.INFORMATION);
                 } else {
                     showAlert("Extension Failed",
-                            "Failed to extend the due date. Please try again.",
+                            "Failed to extend the due date. Please return your document first.",
                             Alert.AlertType.ERROR);
                 }
             } else {
@@ -272,7 +281,8 @@ public class BookDetailController extends BaseController {
         Optional<ButtonType> result = confirmAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            showAlert("Return Successful", "Coming to library to complete the process.", Alert.AlertType.INFORMATION);
+            borrowDocumentDAO.updateBorrowDocumentStateToPending(document.getDocumentId(), user.getUserId());
+            showAlert("Pending", "Coming to library to complete the process.", Alert.AlertType.INFORMATION);
         } else {
             showAlert("Return Cancelled", "The return process has been cancelled.", Alert.AlertType.INFORMATION);
         }
@@ -396,7 +406,6 @@ public class BookDetailController extends BaseController {
         }
     }
 
-
     private void setNotificationLabel(LocalDateTime borrowDate, LocalDateTime dueDate) {
         isBorrowed = borrowDocumentDAO.isDocumentBorrowed(document.getDocumentId(), user.getUserId());
         isOverdue = borrowDocumentDAO.isDocumentOverdue(document.getDocumentId(), user.getUserId());
@@ -407,6 +416,8 @@ public class BookDetailController extends BaseController {
         } else if (isOverdue) {
             long daysOverdue = Duration.between(dueDate, LocalDateTime.now()).toDays();
             noti = "Overdue for " + daysOverdue + " day(s).";
+        } else if (isPending) {
+            noti = "Your request to return this document is pending. Please wait!";
         }
 
         notiLabel.setText(noti);
