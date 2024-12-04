@@ -57,7 +57,7 @@ public class MainMyBooksController extends BaseController {
         callAPIService = new CallAPIService();
         loadImageService = new LoadImageService(callAPIService);
 
-        cb_filter_state.getItems().addAll("All", "Borrowed", "Overdue");
+        cb_filter_state.getItems().addAll("All", "Borrowed", "Overdue", "Pending");
         cb_filter_state.setValue("All");
 
         cb_filter_state.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -91,6 +91,9 @@ public class MainMyBooksController extends BaseController {
                 break;
             case "Overdue":
                 filteredList = allBorrowBooks.filtered(borrowDocument -> borrowDocument.getState().equals(EState.fromValue("Overdue")));
+                break;
+            case "Pending":
+                filteredList = allBorrowBooks.filtered(borrowDocument -> borrowDocument.getState().equals(EState.fromValue("Pending")));
                 break;
                 default:
                     filteredList = allBorrowBooks;
@@ -196,6 +199,7 @@ public class MainMyBooksController extends BaseController {
             stage.setTitle("Book Detail");
             stage.setScene(scene);
             stage.show();
+            allBorrowBooks = borrowDocumentDAO.getBorrowDocumentByUserId(parseInt(AppProperties.getProperty("user.userId")));
         } catch (IOException e) {
             e.printStackTrace();
         }

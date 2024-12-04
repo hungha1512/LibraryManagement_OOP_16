@@ -19,7 +19,8 @@ import java.util.Calendar;
  */
 @SuppressWarnings("rawtypes")
 public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
-
+    private final int canBorrowAfter = 3;
+    private final int maxExtendTime = 7;
     private static final Connection con = MySQLConnection.getConnection();
 
     /**
@@ -318,6 +319,22 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         return false;
     }
 
+    public boolean isDocumentPending(String documentId, int userId) {
+        String sql = "SELECT COUNT(*) FROM borrowDocuments WHERE documentId = ? AND userId = ? AND state = 'Pending'";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, documentId);
+            stmt.setInt(2, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     public LocalDateTime getBorrowDate(String documentId, int userId) {
         String sql = "SELECT borrowDate FROM borrowDocuments WHERE documentId = ? AND userId = ? AND state = 'Borrowed'";
@@ -413,7 +430,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(returnDate);
-                    calendar.add(Calendar.MONTH, 3);
+                    calendar.add(Calendar.MONTH, canBorrowAfter);
                     Date threeMonthsLater = new Date(calendar.getTimeInMillis());
 
                     return new Date(System.currentTimeMillis()).after(threeMonthsLater);
@@ -461,7 +478,7 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
 
     public boolean limitOverdueDocument(int userId) {
         boolean result = false;
-        String sql = "SELECT COUNT(*) FROM borrowDocuments WHERE userId = ? AND state = 'Overdue'";
+        String sql = "SELECT COUNT(*) FROM borrowDocuments WHERE userId = ? AND (state = 'Overdue' OR state = 'Pending')";
 
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
@@ -545,6 +562,54 @@ public class BorrowDocumentDAO implements IRepository<BorrowDocument> {
         }
         return borrowDocument;
     }
+
+    public void updateBorrowDocumentStateToPending(String documentId, int userId) {
+        String sql = """
+                UPDATE borrowDocuments bd
+                JOIN (
+                    SELECT MAX(borrowDate) AS maxBorrowDate 
+                    FROM borrowDocuments 
+                    WHERE documentId = ? AND userId = ?
+                ) subquery ON bd.borrowDate = subquery.maxBorrowDate
+                SET bd.state = 'Pending'
+                WHERE bd.documentId = ? AND bd.userId = ? AND bd.state != 'Returned'
+                """;
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, documentId);
+            pstmt.setInt(2, userId);
+            pstmt.setString(3, documentId);
+            pstmt.setInt(4, userId);
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("The borrow document state has been successfully updated to Returned.");
+            } else {
+                System.out.println("No matching record found or the record is not in the 'Borrowed' state.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error while updating borrow document state: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public int getTotalPendingBorrowDocument() {
+        String sql = "SELECT COUNT(*) FROM borrowDocuments WHERE state = 'Pending'";
+        int totalPending = 0;
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                totalPending = rs.getInt(1); // Get the count result from the first column
+            }
+        } catch (SQLException e) {
+            System.err.println("Error while fetching total pending borrow documents: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return totalPending;
+    }
+
 
 
 
