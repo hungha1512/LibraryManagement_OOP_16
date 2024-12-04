@@ -282,7 +282,7 @@ public class BookDetailController extends BaseController {
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
             borrowDocumentDAO.updateBorrowDocumentStateToPending(document.getDocumentId(), user.getUserId());
-            showAlert("Pending", "Coming to library to complete the process.", Alert.AlertType.INFORMATION);
+            showAlert("Pending", "Please bring book(s) to library to complete the return process.", Alert.AlertType.INFORMATION);
         } else {
             showAlert("Return Cancelled", "The return process has been cancelled.", Alert.AlertType.INFORMATION);
         }
@@ -314,7 +314,7 @@ public class BookDetailController extends BaseController {
         PrintPDFService.printPdf(
                 "Billing",
                 "Bill_" + user.getUserId() + "_" + document.getDocumentId() + "_"
-                        + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + ".pdf",
+                        + LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss")) + ".pdf",
                 headerContent,
                 bodyContent,
                 footerContent,
