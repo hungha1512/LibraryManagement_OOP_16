@@ -27,7 +27,7 @@ public class AskAIController extends BaseController {
     private TextArea responseArea;
 
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
-    private static final String API_KEY = "";
+    private static final String API_KEY = "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";
 
     private DocumentDAO documentDAO = new DocumentDAO();
 
@@ -132,8 +132,8 @@ public class AskAIController extends BaseController {
         HttpClient client = HttpClient.newHttpClient();
 
         String prompt = """
-                Please extract the main keywords related to books, authors, and genres from the following query: "%s".
-                Return only the keywords, separated by commas.
+                Please extract the main keywords related to book's title, authors, and genres from the following query: "%s".
+                Return only the keywords, separated by commas. And do not extract the common keywords like: books, authors,...
                 """.formatted(question);
 
         String requestBody = String.format("""
