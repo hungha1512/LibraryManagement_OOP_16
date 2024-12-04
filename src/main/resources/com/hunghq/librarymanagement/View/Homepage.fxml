@@ -48,7 +48,7 @@
                   <children>
                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                           <Image url="@../../../../icons/icons8-books-64.png" />
+                           <Image url="@../../../../icons/icons8-books-80.png" />
                         </image>
                      </ImageView>
                      <Label prefHeight="29.0" prefWidth="89.0" text="All Books" textFill="#fffefe">
@@ -69,7 +69,7 @@
                   <children>
                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                           <Image url="@../../../../icons/icons8-my-asus-64.png" />
+                           <Image url="@../../../../icons/icons8-books-100%20(2).png" />
                         </image>
                      </ImageView>
                      <Label prefHeight="30.0" prefWidth="105.0" text="My Books" textFill="#fffefe">
@@ -90,7 +90,7 @@
                   <children>
                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                           <Image url="@../../../../icons/icons8-ai-64.png" />
+                           <Image url="@../../../../icons/icons8-ai-64%20(1).png" />
                         </image>
                      </ImageView>
                      <Label prefHeight="30.0" prefWidth="108.0" text="Ask AI" textFill="#fffefe">
@@ -111,7 +111,7 @@
                   <children>
                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                           <Image url="@../../../../icons/icons8-user-64.png" />
+                           <Image url="@../../../../icons/icons8-user-48.png" />
                         </image>
                      </ImageView>
                      <Label prefHeight="30.0" prefWidth="117.0" text="User" textFill="#fffefe">
@@ -132,7 +132,7 @@
                   <children>
                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                           <Image url="@../../../../icons/icons8-log-out-64.png" />
+                           <Image url="@../../../../icons/icons8-log-out-48.png" />
                         </image>
                      </ImageView>
                      <Label prefHeight="30.0" prefWidth="109.0" text="Log Out" textFill="#fffefe">
@@ -149,7 +149,7 @@
                <Font name="System Bold" size="20.0" />
             </font>
          </Label>
-         <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="30.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView fitHeight="92.0" fitWidth="96.0" layoutX="34.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../../../../icons/icons8-library-64.png" />
             </image>
@@ -163,7 +163,7 @@
                   <children>
                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                           <Image url="@../../../../icons/icons8-manage-64.png" />
+                           <Image url="@../../../../icons/icons8-user-settings-48.png" />
                         </image>
                      </ImageView>
                      <Label prefHeight="30.0" prefWidth="107.0" text="Manage" textFill="#fffefe">
