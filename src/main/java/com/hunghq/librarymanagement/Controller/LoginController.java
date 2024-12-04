@@ -209,7 +209,6 @@ public class LoginController implements Initializable {
             stage.getIcons().add(new Image(Objects.requireNonNull(LibraryApplication.class.getResourceAsStream("/com/hunghq/librarymanagement/Media/logo_uet_rm.png"))));
             stage.setScene(scene);
             stage.show();
-
             Stage loginStage = (Stage) btn_sign_in.getScene().getWindow();
             if (loginStage.isShowing()) {
                 loginStage.close();
@@ -227,13 +226,13 @@ public class LoginController implements Initializable {
     @FXML
     public void handleForgotPassword(MouseEvent mouseEvent) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/hunghq/librarymanagement/View/ForgotPassword.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass()
+                    .getResource("/com/hunghq/librarymanagement/View/ForgotPassword.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
-
             Stage stage = new Stage();
             stage.setTitle("Forgot Password");
             stage.setScene(scene);
-
+            stage.getIcons().add(new Image(Objects.requireNonNull(LibraryApplication.class.getResourceAsStream("/com/hunghq/librarymanagement/Media/logo_uet_rm.png"))));
             stage.setResizable(false);
             stage.showAndWait();
         } catch (IOException e) {

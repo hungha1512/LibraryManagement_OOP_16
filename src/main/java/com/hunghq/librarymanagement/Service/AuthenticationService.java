@@ -3,17 +3,20 @@ package com.hunghq.librarymanagement.Service;
 import com.hunghq.librarymanagement.Controller.ChangePasswordController;
 import com.hunghq.librarymanagement.Global.AppProperties;
 import com.hunghq.librarymanagement.Global.Format;
+import com.hunghq.librarymanagement.LibraryApplication;
 import com.hunghq.librarymanagement.Model.Entity.Role;
 import com.hunghq.librarymanagement.Model.Entity.User;
 import com.hunghq.librarymanagement.Respository.RoleDAO;
 import com.hunghq.librarymanagement.Respository.UserDAO;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
 
@@ -36,7 +39,6 @@ public class AuthenticationService {
      */
     public static boolean login(User user) throws Exception {
         String password = user.getPasswordHash();
-        System.out.println(password);
         User userLogged = new User();
         userLogged = UserDAO.getUserByPhoneOrEmail(user);
 
@@ -187,7 +189,7 @@ public class AuthenticationService {
             Stage stage = new Stage();
             stage.setTitle("Change Password");
             stage.setScene(scene);
-
+            stage.getIcons().add(new Image(Objects.requireNonNull(LibraryApplication.class.getResourceAsStream("/com/hunghq/librarymanagement/Media/logo_uet_rm.png"))));
             ChangePasswordController controller = fxmlLoader.getController();
             controller.setEmail(email);
 

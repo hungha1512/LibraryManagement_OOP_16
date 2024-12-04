@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
+<AnchorPane prefHeight="550.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hunghq.librarymanagement.Controller.MainManageController">
       <TabPane prefHeight="550.0" prefWidth="838.0" tabClosingPolicy="UNAVAILABLE">
           <tabs>
          <Tab style="-fx-font-weight: bold;" text="Overview">
@@ -96,7 +96,7 @@
                            <AnchorPane layoutX="592.0" layoutY="74.0">
                               <children>
                                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="86.0" stroke="#db880a" strokeType="INSIDE" width="207.0" />
-                                 <Label layoutX="63.0" layoutY="63.0" text="Total Pending..." textFill="#000022" />
+                                 <Label layoutX="28.0" layoutY="64.0" prefHeight="17.0" prefWidth="152.0" text="Total Pending Return Books" textFill="#000022" />
                                  <Label fx:id="lb_total_pending" alignment="CENTER" layoutX="76.0" layoutY="28.0" prefHeight="30.0" prefWidth="56.0" style="-fx-font-weight: bold;" text="Label">
                                     <font>
                                        <Font size="20.0" />
